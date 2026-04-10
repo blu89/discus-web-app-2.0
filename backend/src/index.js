@@ -4,10 +4,12 @@ import dotenv from 'dotenv';
 import path from 'path';
 import { fileURLToPath } from 'url';
 
-// Load environment variables first
+// Load environment variables only in development
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
-dotenv.config({ path: path.join(__dirname, '../.env') });
+if (process.env.NODE_ENV !== 'production') {
+  dotenv.config({ path: path.join(__dirname, '../.env') });
+}
 
 import authRoutes from './routes/auth.js';
 import productRoutes from './routes/products.js';
@@ -24,7 +26,7 @@ const PORT = process.env.PORT || 5000;
 
 // Middleware
 app.use(cors({
-  origin: process.env.FRONTEND_URL || 'http://localhost:5173'
+  origin: process.env.FRONTEND_URL || 'https://discus-web-app-2-0.vercel.app'
 }));
 app.use(express.json());
 
@@ -41,7 +43,13 @@ app.use('/api/hero', heroRoutes);
 // System routes (health check, 404, error handler)
 systemRoutes(app);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log ('By ciphertech');
-});
+// Export for Vercel serverless
+export default app;
+
+// Only start server if not in Vercel environment
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log ('By ciphertech');
+  });
+}
