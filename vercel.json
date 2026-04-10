@@ -24,13 +24,14 @@
     }
   ],
   "env": {
-    "SUPABASE_URL": "supabase_url",
-    "SUPABASE_KEY": "supabase_key",
-    "JWT_SECRET": "jwt_secret",
-    "CLOUDINARY_CLOUD_NAME": "cloudinary_cloud_name",
-    "CLOUDINARY_API_KEY": "cloudinary_api_key",
-    "CLOUDINARY_API_SECRET": "cloudinary_api_secret",
+    "SUPABASE_URL": "@supabase_url",
+    "SUPABASE_KEY": "@supabase_key",
+    "JWT_SECRET": "@jwt_secret",
+    "CLOUDINARY_CLOUD_NAME": "@cloudinary_cloud_name",
+    "CLOUDINARY_API_KEY": "@cloudinary_api_key",
+    "CLOUDINARY_API_SECRET": "@cloudinary_api_secret",
     "VITE_API_URL": "https://discus-web-app-2-0.vercel.app/api",
-    "FRONTEND_URL": "https://discus-web-app-2-0.vercel.app"
+    "FRONTEND_URL": "https://discus-web-app-2-0.vercel.app",
+    "NODE_ENV": "production"
   }
 }

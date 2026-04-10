@@ -43,7 +43,13 @@ app.use('/api/hero', heroRoutes);
 // System routes (health check, 404, error handler)
 systemRoutes(app);
 
-app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
-  console.log ('By ciphertech');
-});
+// Export for Vercel serverless
+export default app;
+
+// Only start server if not in Vercel environment
+if (!process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
+    console.log ('By ciphertech');
+  });
+}
