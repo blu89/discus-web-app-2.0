@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useCart } from '../hooks/useCart';
 import { orderAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
+import { validateCard, formatCardNumber, formatExpiryDate, formatCVV, getCardType } from '../utils/cardValidator';
 
 export default function Checkout() {
   const [formData, setFormData] = useState({
@@ -20,20 +21,36 @@ export default function Checkout() {
   });
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
+  const [validationErrors, setValidationErrors] = useState({});
   const { cart, total, clearCart } = useCart();
   const navigate = useNavigate();
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
-      [e.target.name]: e.target.value
-    });
+    let { name, value } = e.target;
+
+    if (name === 'cardNumber') value = formatCardNumber(value);
+    else if (name === 'cardExpiry') value = formatExpiryDate(value);
+    else if (name === 'cardCVV') value = formatCVV(value);
+
+    setFormData({ ...formData, [name]: value });
+
+    if (validationErrors[name]) {
+      setValidationErrors({ ...validationErrors, [name]: '' });
+    }
   };
 
   const handleCheckout = async (e) => {
     e.preventDefault();
     setLoading(true);
     setError('');
+    setValidationErrors({});
+
+    const cardValidation = validateCard(formData);
+    if (!cardValidation.isValid) {
+      setValidationErrors(cardValidation.errors);
+      setLoading(false);
+      return;
+    }
 
     try {
       const orderItems = cart.map(item => ({
@@ -144,24 +161,26 @@ export default function Checkout() {
                   name="cardName"
                   value={formData.cardName}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                  className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.cardName ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   placeholder="John Doe"
                   required
                 />
+                {validationErrors.cardName && <p className="text-red-500 text-sm mt-1">{validationErrors.cardName}</p>}
               </div>
 
               <div className="mb-4">
-                <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">Card Number</label>
+                <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">Card Number {formData.cardNumber && <span className="text-xs text-gray-500">({getCardType(formData.cardNumber)})</span>}</label>
                 <input
                   type="text"
                   name="cardNumber"
                   value={formData.cardNumber}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                  className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.cardNumber ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   placeholder="1234 5678 9012 3456"
                   maxLength="19"
                   required
                 />
+                {validationErrors.cardNumber && <p className="text-red-500 text-sm mt-1">{validationErrors.cardNumber}</p>}
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
@@ -172,11 +191,12 @@ export default function Checkout() {
                     name="cardExpiry"
                     value={formData.cardExpiry}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                    className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.cardExpiry ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     placeholder="MM/YY"
                     maxLength="5"
                     required
                   />
+                  {validationErrors.cardExpiry && <p className="text-red-500 text-sm mt-1">{validationErrors.cardExpiry}</p>}
                 </div>
                 <div>
                   <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">CVV</label>
@@ -185,11 +205,12 @@ export default function Checkout() {
                     name="cardCVV"
                     value={formData.cardCVV}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                    className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.cardCVV ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     placeholder="123"
                     maxLength="4"
                     required
                   />
+                  {validationErrors.cardCVV && <p className="text-red-500 text-sm mt-1">{validationErrors.cardCVV}</p>}
                 </div>
               </div>
             </div>
