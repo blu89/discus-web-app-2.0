@@ -346,7 +346,7 @@ export default function Home() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             {/* Content */}
             <div>
-              <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">About Kanye West</h2>
+              <h2 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">About Charles Discus</h2>
               
               <p className="text-lg text-gray-600 dark:text-gray-400 mb-6 leading-relaxed">
                 Our mission is simple: to make online shopping convenient, affordable, and enjoyable. We partner with trusted suppliers and carefully curate our inventory to ensure you always get the best value for your money.

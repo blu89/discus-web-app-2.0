@@ -64,19 +64,19 @@ export default function TermsAndPolicy() {
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">1. Acceptance of Terms</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                By accessing and using Kanye West (the "Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
+                By accessing and using Charles Discus (the "Service"), you accept and agree to be bound by the terms and provision of this agreement. If you do not agree to abide by the above, please do not use this service.
               </p>
             </section>
 
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">2. Use License</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Permission is granted to temporarily download one copy of the materials (information or software) on Kanye West for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
+                Permission is granted to temporarily download one copy of the materials (information or software) on Charles Discus for personal, non-commercial transitory viewing only. This is the grant of a license, not a transfer of title, and under this license you may not:
               </p>
               <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2">
                 <li>Modifying or copying the materials</li>
                 <li>Using the materials for any commercial purpose or for any public display</li>
-                <li>Attempting to decompile or reverse engineer any software contained on Kanye West</li>
+                <li>Attempting to decompile or reverse engineer any software contained on Charles Discus</li>
                 <li>Removing any copyright or other proprietary notations from the materials</li>
                 <li>Transferring the materials to another person or "mirroring" the materials on any other server</li>
               </ul>
@@ -85,35 +85,35 @@ export default function TermsAndPolicy() {
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">3. Disclaimer</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                The materials on Kanye West are provided on an 'as is' basis. Kanye West makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
+                The materials on Charles Discus are provided on an 'as is' basis. Charles Discus makes no warranties, expressed or implied, and hereby disclaims and negates all other warranties including, without limitation, implied warranties or conditions of merchantability, fitness for a particular purpose, or non-infringement of intellectual property or other violation of rights.
               </p>
             </section>
 
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">4. Limitations</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                In no event shall Kanye West or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Kanye West, even if Kanye West or an authorized representative has been notified orally or in writing of the possibility of such damage.
+                In no event shall Charles Discus or its suppliers be liable for any damages (including, without limitation, damages for loss of data or profit, or due to business interruption) arising out of the use or inability to use the materials on Charles Discus, even if Charles Discus or an authorized representative has been notified orally or in writing of the possibility of such damage.
               </p>
             </section>
 
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">5. Accuracy of Materials</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                The materials appearing on Kanye West could include technical, typographical, or photographic errors. Kanye West does not warrant that any of the materials on Kanye West are accurate, complete, or current. Kanye West may make changes to the materials contained on its website at any time without notice.
+                The materials appearing on Charles Discus could include technical, typographical, or photographic errors. Charles Discus does not warrant that any of the materials on Charles Discus are accurate, complete, or current. Charles Discus may make changes to the materials contained on its website at any time without notice.
               </p>
             </section>
 
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">6. Links</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Kanye West has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Kanye West of the site. Use of any such linked website is at the user's own risk.
+                Charles Discus has not reviewed all of the sites linked to its website and is not responsible for the contents of any such linked site. The inclusion of any link does not imply endorsement by Charles Discus of the site. Use of any such linked website is at the user's own risk.
               </p>
             </section>
 
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">7. Modifications</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Kanye West may revise these terms of service for its website at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service.
+                Charles Discus may revise these terms of service for its website at any time without notice. By using this website, you are agreeing to be bound by the then current version of these terms of service.
               </p>
             </section>
 
@@ -139,7 +139,7 @@ export default function TermsAndPolicy() {
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">1. Introduction</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Kanye West ("we", "our", or "us") operates the Kanye West website. This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
+                Charles Discus ("we", "our", or "us") operates the Charles Discus website. This page informs you of our policies regarding the collection, use, and disclosure of personal data when you use our Service and the choices you have associated with that data.
               </p>
             </section>
 
@@ -162,7 +162,7 @@ export default function TermsAndPolicy() {
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">3. Use of Data</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                Kanye West uses the collected data for various purposes:
+                Charles Discus uses the collected data for various purposes:
               </p>
               <ul className="list-disc list-inside text-gray-600 dark:text-gray-400 space-y-2">
                 <li>To provide and maintain our Service</li>
@@ -202,7 +202,7 @@ export default function TermsAndPolicy() {
                 If you have any questions about this Privacy Policy, please contact us at:
               </p>
               <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p className="text-gray-900 dark:text-white font-semibold">Email: privacy@Kanye West.com</p>
+                <p className="text-gray-900 dark:text-white font-semibold">Email: privacy@Charles Discus.com</p>
                 <p className="text-gray-600 dark:text-gray-400">Phone: +1 (555) 123-4567</p>
               </div>
             </section>
@@ -295,7 +295,7 @@ export default function TermsAndPolicy() {
                 To initiate a return, please contact our customer service team:
               </p>
               <div className="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg">
-                <p className="text-gray-900 dark:text-white font-semibold">Email: returns@Kanye West.com</p>
+                <p className="text-gray-900 dark:text-white font-semibold">Email: returns@Charles Discus.com</p>
                 <p className="text-gray-600 dark:text-gray-400">Phone: +1 (555) 123-4567</p>
                 <p className="text-gray-600 dark:text-gray-400">Hours: Mon-Fri, 9am-6pm EST</p>
               </div>
@@ -309,7 +309,7 @@ export default function TermsAndPolicy() {
         <div className="max-w-4xl mx-auto px-4 text-center">
           <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Agreement</h3>
           <p className="text-gray-600 dark:text-gray-400 mb-6">
-            By using Kanye West, you agree to comply with our Terms of Service, Privacy Policy, and Shipping & Returns Policy. If you do not agree with any of these policies, please do not use our service.
+            By using Charles Discus, you agree to comply with our Terms of Service, Privacy Policy, and Shipping & Returns Policy. If you do not agree with any of these policies, please do not use our service.
           </p>
           <a 
             href="/" 

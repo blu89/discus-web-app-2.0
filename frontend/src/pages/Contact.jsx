@@ -67,8 +67,8 @@ export default function Contact() {
                 <div className="text-3xl">📧</div>
                 <div>
                   <h3 className="font-bold text-gray-900 dark:text-white mb-1">Email</h3>
-                  <p className="text-gray-600 dark:text-gray-400">support@Kanye West.com</p>
-                  <p className="text-gray-600 dark:text-gray-400">info@Kanye West.com</p>
+                  <p className="text-gray-600 dark:text-gray-400">support@Charles Discus.com</p>
+                  <p className="text-gray-600 dark:text-gray-400">info@Charles Discus.com</p>
                 </div>
               </div>
 

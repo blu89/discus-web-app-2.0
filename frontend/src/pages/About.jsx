@@ -6,7 +6,7 @@ export default function About() {
       {/* Hero Section */}
       <section className="bg-gradient-to-r from-blue-500 to-purple-600 dark:from-blue-700 dark:to-purple-800 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
-          <h1 className="text-5xl font-bold mb-4">About Kanye West</h1>
+          <h1 className="text-5xl font-bold mb-4">About Charles Discus</h1>
           <p className="text-xl">Your trusted destination for quality products</p>
         </div>
       </section>
@@ -18,7 +18,7 @@ export default function About() {
             <div>
               <h2 className="text-4xl font-bold mb-6 text-gray-900 dark:text-white">Our Story</h2>
               <p className="text-gray-600 dark:text-gray-400 mb-4 text-lg leading-relaxed">
-                Founded in 2020, Kanye West started with a simple mission: to provide customers with high-quality products at affordable prices. What began as a small startup has grown into a thriving e-commerce platform serving thousands of satisfied customers worldwide.
+                Founded in 2020, Charles Discus started with a simple mission: to provide customers with high-quality products at affordable prices. What began as a small startup has grown into a thriving e-commerce platform serving thousands of satisfied customers worldwide.
               </p>
               <p className="text-gray-600 dark:text-gray-400 mb-4 text-lg leading-relaxed">
                 We believe in putting our customers first. Every product in our catalog is carefully selected and quality-tested to ensure you receive the best value for your money. Our dedicated team works tirelessly to improve your shopping experience every day.
@@ -99,7 +99,7 @@ export default function About() {
       {/* Why Choose Us */}
       <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">Why Choose Kanye West?</h2>
+          <h2 className="text-4xl font-bold text-center mb-12 text-gray-900 dark:text-white">Why Choose Charles Discus?</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
             <div className="flex gap-4">
               <div className="text-4xl">✓</div>
@@ -196,7 +196,7 @@ export default function About() {
       <section className="bg-blue-500 dark:bg-blue-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-4xl font-bold mb-4">Join Our Community</h2>
-          <p className="text-xl mb-8">Start shopping with Kanye West today and experience the difference</p>
+          <p className="text-xl mb-8">Start shopping with Charles Discus today and experience the difference</p>
           <a 
             href="/storefront" 
             className="bg-white dark:bg-gray-200 text-blue-500 dark:text-blue-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-300 inline-block transition"
