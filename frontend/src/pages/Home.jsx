@@ -27,7 +27,7 @@ export default function Home() {
     },
     {
       id: 3,
-      url: 'https://images.unsplash.com/photo-1547949003-eb76694e3e0e?w=1200&h=600&fit=crop',
+      url: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTcaSJMGHbIoCQ6cJg3TcnrJaLzT-sKVIQ_jg&s',
       title: 'New Arrivals',
       description: 'Check out our newest collections'
     },
