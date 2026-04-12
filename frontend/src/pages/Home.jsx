@@ -222,7 +222,7 @@ export default function Home() {
                       <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                         ${product.price.toFixed(0)}
                       </span>
-                      <span className={`text-sx px-3 py-1 rounded-full ${
+                      <span className={`text-xs px-2 py-1 rounded-full ${
                         product.stock > 0 
                           ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
                           : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
