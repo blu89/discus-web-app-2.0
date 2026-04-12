@@ -135,7 +135,7 @@ export default function Home() {
         {/* Previous Button */}
         <button
           onClick={prevSlide}
-          className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-400 dark:hover:bg-gray-700 p-1 rounded-full shadow-lg transition z-10"
+          className="absolute left-4 top-1/2 transform -translate-y-1/2 text-blue-500 hover:bg-white-70 dark:text-blue-400 dark:hover:bg-gray-700 p-1 rounded-full shadow-lg transition z-10"
           aria-label="Previous slide"
         >
           &#10094;
@@ -144,7 +144,7 @@ export default function Home() {
         {/* Next Button */}
         <button
           onClick={nextSlide}
-          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-500 dark:text-blue-400 dark:hover:bg-gray-700 p-1 rounded-full shadow-lg transition z-10"
+          className="absolute right-4 top-1/2 transform -translate-y-1/2 text-blue-500 hover:bg-white-70 dark:text-blue-400 dark:hover:bg-gray-700 p-1 rounded-full shadow-lg transition z-10"
           aria-label="Next slide"
         >
           &#10095;
