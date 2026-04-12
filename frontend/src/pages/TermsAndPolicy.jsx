@@ -120,7 +120,7 @@ export default function TermsAndPolicy() {
             <section>
               <h3 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">8. Governing Law</h3>
               <p className="text-gray-600 dark:text-gray-400 mb-4">
-                These terms and conditions are governed by and construed in accordance with the laws of the Cameroon, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
+                These terms and conditions are governed by and construed in accordance with the laws of the over 90+ Countries, and you irrevocably submit to the exclusive jurisdiction of the courts in that location.
               </p>
             </section>
           </div>
