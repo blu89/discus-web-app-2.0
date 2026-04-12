@@ -156,7 +156,7 @@ export default function Home() {
             <button
               key={index}
               onClick={() => goToSlide(index)}
-              className={`w-3 h-3 rounded-full transition ${
+              className={`w-1 h-1 rounded-full transition ${
                 index === currentSlide
                   ? 'bg-white'
                   : 'bg-white bg-opacity-50 hover:bg-opacity-70'
