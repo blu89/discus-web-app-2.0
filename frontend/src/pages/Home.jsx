@@ -21,9 +21,9 @@ export default function Home() {
     },
     {
       id: 2,
-      url: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=1200&h=600&fit=crop',
-      title: 'Premium Quality',
-      description: 'Best products at unbeatable prices'
+      url: 'https://media.architecturaldigest.com/photos/65d4de9f5badec5f2682db2f/master/pass/GettyImages-1076550794.jpg',
+      title: 'Welcome to the world of aquarium',
+      description: 'Nothing beats the joy of finding the perfect fish for your aquarium'
     },
     {
       id: 3,
