@@ -33,7 +33,7 @@ export default function Home() {
     },
     {
       id: 4,
-      url: 'https://images.unsplash.com/photo-1434389468696-c6674281d066?w=1200&h=600&fit=crop',
+      url: 'https://fpsbutest.wordpress.com/wp-content/uploads/2012/12/untitled24.png?w=960',
       title: 'Special Offers',
       description: 'Limited time deals you cannot miss'
     }
