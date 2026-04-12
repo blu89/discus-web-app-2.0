@@ -121,7 +121,7 @@ export default function Home() {
               {/* Text Content */}
               <div className="absolute inset-0 flex items-center justify-center">
                 <div className="text-center text-white">
-                  <h1 className="text-5xl font-bold mb-4">{image.title}</h1>
+                  <h1 className="text-2xl font-bold mb-4">{image.title}</h1>
                   <p className="text-xl mb-8">{image.description}</p>
                   <a href="/storefront" className="bg-white dark:bg-gray-200 text-blue-500 dark:text-blue-700 px-8 py-3 rounded-lg font-bold hover:bg-gray-100 dark:hover:bg-gray-300 inline-block transition">
                     Shop Now
