@@ -286,7 +286,7 @@ export default function Home() {
                   </div>
 
                   {/* Product Info */}
-                  <div className="p-4">
+                  <div className="p-2">
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 truncate">
                       {product.name}
                     </h3>
