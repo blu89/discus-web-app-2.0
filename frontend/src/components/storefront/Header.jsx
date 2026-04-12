@@ -257,6 +257,13 @@ export default function Header() {
               Home
             </Link>
             <Link
+              to="/Storefront"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+            >
+              Search Product
+            </Link>
+            <Link
               to="/about"
               onClick={() => setMobileMenuOpen(false)}
               className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
