@@ -15,7 +15,7 @@ export default function Home() {
   const defaultHeroImages = [
     {
       id: 1,
-      url: 'https://images.samsung.com/uk/smartphones/galaxy-s25-ultra/images/galaxy-s25-ultra-features-kv.jpg?imbypass=true',
+      url: 'https://aquariumscience.org/wp-content/uploads/2022/06/Symphysodon-aequifasciatus-Discus-78e.jpg',
       title: 'Best Collection',
       description: 'Discover our Best products'
     },
