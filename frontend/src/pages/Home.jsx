@@ -290,11 +290,11 @@ export default function Home() {
                     <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 truncate">
                       {product.name}
                     </h3>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
                       {product.description || 'No description available'}
                     </p>
 
-                    <div className="flex justify-between items-center mb-4">
+                    <div className="flex justify-between items-center mb-2">
                       <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                         ${product.price.toFixed(0)}
                       </span>
