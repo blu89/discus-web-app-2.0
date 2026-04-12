@@ -231,15 +231,7 @@ export default function Home() {
                       </span>
                     </div>
 
-                    <button
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        navigate('/storefront');
-                      }}
-                      className="w-full bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white py-2 rounded-lg font-semibold transition"
-                    >
-                      View Details
-                    </button>
+                   
                   </div>
                 </div>
               ))}
