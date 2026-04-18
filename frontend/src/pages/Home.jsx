@@ -463,65 +463,84 @@ export default function Home() {
 
       {/* Partners Section */}
       <section className="py-16 bg-white dark:bg-gray-800">
+        <style>{`
+          @keyframes scroll {
+            0% {
+              transform: translateX(0);
+            }
+            100% {
+              transform: translateX(-100%);
+            }
+          }
+          
+          .carousel-container {
+            overflow: hidden;
+            position: relative;
+          }
+          
+          .carousel-track {
+            display: flex;
+            animation: scroll 30s linear infinite;
+            width: fit-content;
+          }
+          
+          .carousel-track:hover {
+            animation-play-state: paused;
+          }
+          
+          .carousel-item {
+            flex-shrink: 0;
+            width: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+          }
+        `}</style>
+        
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">Our Partners</h2>
           <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-lg">Trusted by leading companies worldwide</p>
           
-          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
-            {/* Partner 1 */}
-            <div className="flex items-center justify-center h-20">
-              <img 
-                src="https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png" 
-                alt="GitHub" 
-                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </div>
-
-            {/* Partner 2 */}
-            <div className="flex items-center justify-center h-20">
-              <img 
-                src="https://logos-download.com/wp-content/uploads/2016/09/Stripe_logo.png" 
-                alt="Stripe" 
-                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </div>
-
-            {/* Partner 3 */}
-            <div className="flex items-center justify-center h-20">
-              <img 
-                src="https://logos-download.com/wp-content/uploads/2016/09/AWS_logo.png" 
-                alt="AWS" 
-                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </div>
-
-            {/* Partner 4 */}
-            <div className="flex items-center justify-center h-20">
-              <img 
-                src="https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png" 
-                alt="Google" 
-                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </div>
-
-            {/* Partner 5 */}
-            <div className="flex items-center justify-center h-20">
-              <img 
-                src="https://logos-download.com/wp-content/uploads/2016/09/Microsoft_logo.png" 
-                alt="Microsoft" 
-                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-              />
-            </div>
-
-            {/* Partner 6 */}
-            <div className="flex items-center justify-center h-20">
-              <img 
-                src="https://logos-download.com/wp-content/uploads/2016/09/Facebook_logo.png" 
-                alt="Facebook" 
-                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
-              />
+          <div className="carousel-container">
+            <div className="carousel-track">
+              {/* Duplicate partners for infinite scroll effect */}
+              {[
+                { name: 'GitHub', url: 'https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png' },
+                { name: 'Stripe', url: 'https://logos-download.com/wp-content/uploads/2016/09/Stripe_logo.png' },
+                { name: 'AWS', url: 'https://logos-download.com/wp-content/uploads/2016/09/AWS_logo.png' },
+                { name: 'Google', url: 'https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png' },
+                { name: 'Microsoft', url: 'https://logos-download.com/wp-content/uploads/2016/09/Microsoft_logo.png' },
+                { name: 'Facebook', url: 'https://logos-download.com/wp-content/uploads/2016/09/Facebook_logo.png' }
+              ].map((partner, idx) => (
+                <div key={idx} className="carousel-item">
+                  <img
+                    src={partner.url}
+                    alt={partner.name}
+                    className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 cursor-pointer"
+                  />
+                </div>
+              ))}
+              {/* Duplicate partners again for seamless loop */}
+              {[
+                { name: 'GitHub', url: 'https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png' },
+                { name: 'Stripe', url: 'https://logos-download.com/wp-content/uploads/2016/09/Stripe_logo.png' },
+                { name: 'AWS', url: 'https://logos-download.com/wp-content/uploads/2016/09/AWS_logo.png' },
+                { name: 'Google', url: 'https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png' },
+                { name: 'Microsoft', url: 'https://logos-download.com/wp-content/uploads/2016/09/Microsoft_logo.png' },
+                { name: 'Facebook', url: 'https://logos-download.com/wp-content/uploads/2016/09/Facebook_logo.png' }
+              ].map((partner, idx) => (
+                <div key={`duplicate-${idx}`} className="carousel-item">
+                  <img
+                    src={partner.url}
+                    alt={partner.name}
+                    className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300 hover:scale-110 cursor-pointer"
+                  />
+                </div>
+              ))}
             </div>
           </div>
+          
+          <p className="text-center text-gray-500 dark:text-gray-400 text-sm mt-8">Hover to pause the carousel</p>
         </div>
       </section>
 
