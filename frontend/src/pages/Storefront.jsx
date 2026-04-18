@@ -98,30 +98,57 @@ export default function Storefront() {
                 <div
                   key={product.id}
                   onClick={() => handleSelectProduct(product)}
-                  className="bg-white dark:bg-gray-800 rounded-2xl shadow-md dark:shadow-gray-700 hover:shadow-2xl dark:hover:shadow-gray-600 transition cursor-pointer transform hover:scale-105 overflow-hidden"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
                 >
-                  <img
-                    src={product.image_url || 'https://via.placeholder.com/200'}
-                    alt={product.name}
-                    className="w-full h-48 object-cover rounded-t-2xl"
-                  />
-                  <div className="p-5">
-                    <h3 className="font-bold text-lg mb-4 text-gray-900 dark:text-white">{product.name}</h3>
-                    <div className="flex flex-row gap-2 items-center">
-                      <div className="bg-gradient-to-r from-blue-50 dark:from-blue-900/30 to-blue-100 dark:to-blue-900/50 p-1 rounded-xl border border-blue-200 dark:border-blue-700 flex-1 flex items-center">
-                        <div>
-                          <p className="text-xs text-gray-600 dark:text-gray-400 leading-none">Price</p>
-                          <p className="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 dark:from-blue-400 to-blue-700 dark:to-blue-500 leading-none">${product.price.toFixed(0)}</p>
-                        </div>
-                      </div>
+                  {/* Product Image */}
+                  <div className="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center overflow-hidden">
+                    {product.image_url ? (
+                      <img 
+                        src={product.image_url} 
+                        alt={product.name}
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="text-4xl">📦</div>
+                    )}
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="p-2">
+                    <div className="flex justify-between items-start gap-2 mb-2">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate flex-1">
+                        {product.name}
+                      </h3>
+                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
+                        ${product.price.toFixed(0)}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
+                      {product.description || 'No description available'}
+                    </p>
+
+                    <div className="flex justify-between items-center mb-3 gap-2">
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        product.stock > 0 
+                          ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
+                          : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                      }`}>
+                        {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                      </span>
+
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
                           addToCart(product);
                         }}
-                        className="bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 dark:from-blue-600 dark:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white font-bold px-3 py-2 rounded-xl transition transform hover:scale-105 active:scale-95 shadow-md dark:shadow-blue-900/50 whitespace-nowrap text-sm"
+                        disabled={product.stock <= 0}
+                        className={`flex-1 py-1 px-2 text-sm rounded-lg font-semibold transition ${
+                          product.stock > 0
+                          ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
+                          : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        }`}
                       >
-                        🛒 Add
+                        Add
                       </button>
                     </div>
                   </div>
