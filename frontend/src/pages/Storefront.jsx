@@ -99,7 +99,7 @@ export default function Storefront() {
                 <div
                   key={product.id}
                   onClick={() => handleSelectProduct(product)}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer border-0"
+                  className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden transition transform hover:-translate-y-1 cursor-pointer border-0"
                 >
                   {/* Product Image */}
                   <div className="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center overflow-hidden">
