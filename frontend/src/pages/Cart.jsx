@@ -48,6 +48,9 @@ export default function Cart() {
 
                 <div className="flex-1">
                   <h3 className="font-bold text-lg text-gray-900 dark:text-white">{item.name}</h3>
+                  {item.selectedSize && (
+                    <p className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Size: {item.selectedSize}</p>
+                  )}
                   <p className="text-gray-600 dark:text-gray-400">${item.price.toFixed(0)}</p>
                 </div>
 
@@ -56,12 +59,12 @@ export default function Cart() {
                     type="number"
                     min="1"
                     value={item.quantity}
-                    onChange={(e) => updateQuantity(item.id, parseInt(e.target.value))}
+                    onChange={(e) => updateQuantity(item.id, parseInt(e.target.value), item.selectedSize)}
                     className="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
                   />
                   <p className="w-20 text-right font-bold text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(0)}</p>
                   <button
-                    onClick={() => removeFromCart(item.id)}
+                    onClick={() => removeFromCart(item.id, item.selectedSize)}
                     className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-bold transition"
                   >
                     Remove

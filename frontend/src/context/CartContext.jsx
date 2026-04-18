@@ -5,31 +5,47 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
-  const addToCart = (product) => {
+  const addToCart = (product, size = null) => {
     setCart((prevCart) => {
-      const existing = prevCart.find((item) => item.id === product.id);
+      // Create unique key for product+size combination
+      const itemKey = size ? `${product.id}-${size}` : product.id;
+      const existing = prevCart.find((item) => 
+        size ? (item.id === product.id && item.selectedSize === size) : (item.id === product.id && !item.selectedSize)
+      );
+      
       if (existing) {
         return prevCart.map((item) =>
-          item.id === product.id
+          (size ? (item.id === product.id && item.selectedSize === size) : (item.id === product.id && !item.selectedSize))
             ? { ...item, quantity: item.quantity + 1 }
             : item
         );
       }
-      return [...prevCart, { ...product, quantity: 1 }];
+      
+      return [...prevCart, { ...product, quantity: 1, selectedSize: size || null }];
     });
   };
 
-  const removeFromCart = (productId) => {
-    setCart((prevCart) => prevCart.filter((item) => item.id !== productId));
+  const removeFromCart = (productId, selectedSize = null) => {
+    setCart((prevCart) => 
+      prevCart.filter((item) => 
+        selectedSize 
+          ? !(item.id === productId && item.selectedSize === selectedSize)
+          : !(item.id === productId && !item.selectedSize)
+      )
+    );
   };
 
-  const updateQuantity = (productId, quantity) => {
+  const updateQuantity = (productId, quantity, selectedSize = null) => {
     if (quantity <= 0) {
-      removeFromCart(productId);
+      removeFromCart(productId, selectedSize);
     } else {
       setCart((prevCart) =>
         prevCart.map((item) =>
-          item.id === productId ? { ...item, quantity } : item
+          (selectedSize 
+            ? (item.id === productId && item.selectedSize === selectedSize)
+            : (item.id === productId && !item.selectedSize))
+            ? { ...item, quantity }
+            : item
         )
       );
     }

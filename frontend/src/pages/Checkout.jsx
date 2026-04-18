@@ -315,6 +315,9 @@ export default function Checkout() {
 
                 <div className="flex-1">
                   <p className="font-semibold text-gray-900 dark:text-white">{item.name}</p>
+                  {item.selectedSize && (
+                    <p className="text-xs text-gray-600 dark:text-gray-400">Size: {item.selectedSize}</p>
+                  )}
                   <p className="text-sm text-gray-600 dark:text-gray-400">Qty: {item.quantity}</p>
                   <p className="text-sm text-gray-600 dark:text-gray-400">${item.price.toFixed(0)} each</p>
                 </div>

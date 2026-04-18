@@ -20,7 +20,8 @@ export default function AdminProducts() {
     category_id: '',
     product_type_id: '',
     supplier_id: '',
-    image_url: ''
+    image_url: '',
+    sizes: []
   });
   const { user } = useAuth();
 
@@ -51,6 +52,15 @@ export default function AdminProducts() {
     setFormData({
       ...formData,
       [e.target.name]: e.target.value
+    });
+  };
+
+  const handleSizeChange = (e) => {
+    const sizesInput = e.target.value;
+    const sizes = sizesInput.split(',').map(s => s.trim()).filter(s => s);
+    setFormData({
+      ...formData,
+      sizes: sizes
     });
   };
 
@@ -91,7 +101,7 @@ export default function AdminProducts() {
       }
       fetchData();
       setShowForm(false);
-      setFormData({ name: '', description: '', price: '', stock: '', category_id: '', supplier_id: '', image_url: '' });
+      setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', sizes: [] });
       setEditingId(null);
       setPreviewImage(null);
     } catch (err) {
@@ -100,6 +110,7 @@ export default function AdminProducts() {
   };
 
   const handleEdit = (product) => {
+    const sizes = product.sizes ? JSON.parse(product.sizes) : [];
     setFormData({
       name: product.name,
       description: product.description,
@@ -108,7 +119,8 @@ export default function AdminProducts() {
       category_id: product.category_id || '',
       product_type_id: product.product_type_id || '',
       supplier_id: product.supplier_id || '',
-      image_url: product.image_url || ''
+      image_url: product.image_url || '',
+      sizes: sizes
     });
     setPreviewImage(product.image_url);
     setEditingId(product.id);
@@ -151,7 +163,7 @@ export default function AdminProducts() {
           onClick={() => {
             setShowForm(!showForm);
             setEditingId(null);
-            setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '' });
+            setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', sizes: [] });
             setPreviewImage(null);
           }}
           className="bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 text-white px-6 py-2 rounded transition"
@@ -233,6 +245,14 @@ export default function AdminProducts() {
             value={formData.description}
             onChange={handleChange}
             rows="3"
+            className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4 transition"
+          />
+
+          <input
+            type="text"
+            placeholder="Product Sizes (comma-separated, e.g., Small, Medium, Large)"
+            value={formData.sizes.join(', ')}
+            onChange={handleSizeChange}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4 transition"
           />
 
