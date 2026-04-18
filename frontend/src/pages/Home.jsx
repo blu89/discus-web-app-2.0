@@ -461,6 +461,70 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Partners Section */}
+      <section className="py-16 bg-white dark:bg-gray-800">
+        <div className="max-w-7xl mx-auto px-4">
+          <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">Our Partners</h2>
+          <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-lg">Trusted by leading companies worldwide</p>
+          
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-8 items-center justify-items-center">
+            {/* Partner 1 */}
+            <div className="flex items-center justify-center h-20">
+              <img 
+                src="https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png" 
+                alt="GitHub" 
+                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </div>
+
+            {/* Partner 2 */}
+            <div className="flex items-center justify-center h-20">
+              <img 
+                src="https://logos-download.com/wp-content/uploads/2016/09/Stripe_logo.png" 
+                alt="Stripe" 
+                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </div>
+
+            {/* Partner 3 */}
+            <div className="flex items-center justify-center h-20">
+              <img 
+                src="https://logos-download.com/wp-content/uploads/2016/09/AWS_logo.png" 
+                alt="AWS" 
+                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </div>
+
+            {/* Partner 4 */}
+            <div className="flex items-center justify-center h-20">
+              <img 
+                src="https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png" 
+                alt="Google" 
+                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </div>
+
+            {/* Partner 5 */}
+            <div className="flex items-center justify-center h-20">
+              <img 
+                src="https://logos-download.com/wp-content/uploads/2016/09/Microsoft_logo.png" 
+                alt="Microsoft" 
+                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </div>
+
+            {/* Partner 6 */}
+            <div className="flex items-center justify-center h-20">
+              <img 
+                src="https://logos-download.com/wp-content/uploads/2016/09/Facebook_logo.png" 
+                alt="Facebook" 
+                className="max-h-16 max-w-28 object-contain grayscale hover:grayscale-0 transition-all duration-300"
+              />
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* CTA Section */}
       <section className="bg-blue-500 dark:bg-blue-700 text-white py-16">
         <div className="max-w-7xl mx-auto px-4 text-center">
