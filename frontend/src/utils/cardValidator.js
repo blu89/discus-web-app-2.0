@@ -38,7 +38,7 @@ export const validateCard = (cardData) => {
 
 // Format card number with spaces (e.g., 4111 1111 1111 1111)
 export const formatCardNumber = (value) => {
-  return value.replace(/\s+/g, '').replace(/(\d{4})/g, '$1 ').trim();
+  return value.replace(/\D/g, '').replace(/(\d{4})/g, '$1 ').trim();
 };
 
 // Format expiry date (only allow MM/YY format)
