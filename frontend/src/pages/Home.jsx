@@ -204,7 +204,7 @@ export default function Home() {
               <p className="mt-4 text-gray-600 dark:text-gray-400">Loading products...</p>
             </div>
           ) : latestProducts.length > 0 ? (
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-12">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-8 mb-12">
               {latestProducts.map((product) => (
                 <div 
                   key={product.id} 
@@ -292,7 +292,7 @@ export default function Home() {
             <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">Featured Products</h2>
             <p className="text-center text-gray-600 dark:text-gray-400 mb-12">Handpicked selection of our best products</p>
 
-            <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
               {featuredProducts.map((product) => (
                 <div 
                   key={product.id} 
