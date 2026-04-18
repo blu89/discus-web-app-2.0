@@ -30,7 +30,22 @@ export default function Cart() {
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
             {cart.map((item) => (
-              <div key={item.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow dark:shadow-gray-700 mb-4 flex justify-between items-center transition">
+              <div key={item.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow dark:shadow-gray-700 mb-4 flex gap-4 transition">
+                {/* Product Image */}
+                <div className="flex-shrink-0">
+                  {item.image_url ? (
+                    <img 
+                      src={item.image_url} 
+                      alt={item.name}
+                      className="w-24 h-24 object-cover rounded-lg"
+                    />
+                  ) : (
+                    <div className="w-24 h-24 bg-gray-200 dark:bg-gray-700 rounded-lg flex items-center justify-center text-2xl">
+                      📦
+                    </div>
+                  )}
+                </div>
+
                 <div className="flex-1">
                   <h3 className="font-bold text-lg text-gray-900 dark:text-white">{item.name}</h3>
                   <p className="text-gray-600 dark:text-gray-400">${item.price.toFixed(0)}</p>

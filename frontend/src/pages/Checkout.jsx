@@ -297,9 +297,31 @@ export default function Checkout() {
           <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 h-fit sticky top-4 transition">
             <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Order Summary</h2>
             {cart.map((item) => (
-              <div key={item.id} className="flex justify-between mb-2 pb-2 border-b dark:border-gray-700 text-gray-900 dark:text-gray-100">
-                <span>{item.name} x {item.quantity}</span>
-                <span>${(item.price * item.quantity).toFixed(0)}</span>
+              <div key={item.id} className="flex gap-4 mb-4 pb-4 border-b dark:border-gray-700">
+                {/* Product Image Thumbnail */}
+                <div className="flex-shrink-0">
+                  {item.image_url ? (
+                    <img 
+                      src={item.image_url} 
+                      alt={item.name}
+                      className="w-16 h-16 object-cover rounded"
+                    />
+                  ) : (
+                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center text-lg">
+                      📦
+                    </div>
+                  )}
+                </div>
+
+                <div className="flex-1">
+                  <p className="font-semibold text-gray-900 dark:text-white">{item.name}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">Qty: {item.quantity}</p>
+                  <p className="text-sm text-gray-600 dark:text-gray-400">${item.price.toFixed(0)} each</p>
+                </div>
+
+                <div className="flex-shrink-0 text-right">
+                  <p className="font-bold text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(0)}</p>
+                </div>
               </div>
             ))}
             <div className="flex justify-between font-bold text-lg mt-4 pt-4 border-t dark:border-gray-700 text-gray-900 dark:text-white">
