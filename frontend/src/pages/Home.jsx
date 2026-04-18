@@ -258,7 +258,7 @@ export default function Home() {
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       >
-                        {addedToCartId === product.id ? '✓' : '🛒'}
+                        {addedToCartId === product.id ? '✓' : '�️'}
                       </button>
                     </div>
                   </div>
@@ -349,7 +349,7 @@ export default function Home() {
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       >
-                        {addedToCartId === product.id ? '✓' : '🛒'}
+                        {addedToCartId === product.id ? '✓' : '�️'}
                       </button>
                     </div>
                   </div>
