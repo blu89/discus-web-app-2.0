@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { productAPI, heroAPI } from '../services/api';
 import { useCart } from '../hooks/useCart';
+import AddToCartIcon from '../components/AddToCartIcon';
 
 export default function Home() {
   const [latestProducts, setLatestProducts] = useState([]);
@@ -250,15 +251,15 @@ export default function Home() {
                         onClick={(e) => handleAddToCart(product, e)}
                         disabled={product.stock <= 0}
                         title={addedToCartId === product.id ? 'Added to cart' : product.stock > 0 ? 'Add to cart' : 'Out of stock'}
-                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center text-lg ${
+                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center ${{
                           addedToCartId === product.id
                             ? 'bg-green-500 text-white'
                             : product.stock > 0
                             ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                        }`}
+                        }}`}
                       >
-                        {addedToCartId === product.id ? '✓' : '�️'}
+                        <AddToCartIcon isAdded={addedToCartId === product.id} />
                       </button>
                     </div>
                   </div>
@@ -341,7 +342,7 @@ export default function Home() {
                         onClick={(e) => handleAddToCart(product, e)}
                         disabled={product.stock <= 0}
                         title={addedToCartId === product.id ? 'Added to cart' : product.stock > 0 ? 'Add to cart' : 'Out of stock'}
-                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center text-lg ${
+                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center ${
                           addedToCartId === product.id
                             ? 'bg-green-500 text-white'
                             : product.stock > 0
@@ -349,7 +350,7 @@ export default function Home() {
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       >
-                        {addedToCartId === product.id ? '✓' : '�️'}
+                        <AddToCartIcon isAdded={addedToCartId === product.id} />
                       </button>
                     </div>
                   </div>

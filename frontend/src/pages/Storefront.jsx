@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { productAPI, categoryAPI } from '../services/api';
 import { useCart } from '../hooks/useCart';
+import AddToCartIcon from '../components/AddToCartIcon';
 
 export default function Storefront() {
   const [products, setProducts] = useState([]);
@@ -299,13 +300,13 @@ export default function Storefront() {
                   onClick={() => handleAddToCart(selectedProduct)}
                   disabled={selectedProduct.stock <= 0}
                   title={selectedProduct.stock > 0 ? `Add to Cart (Qty: ${quantity})` : 'Out of Stock'}
-                  className={`w-14 h-14 rounded-full transition transform hover:scale-110 active:scale-95 shadow-md flex items-center justify-center text-2xl ${
+                  className={`w-14 h-14 rounded-full transition transform hover:scale-110 active:scale-95 shadow-md flex items-center justify-center ${
                     selectedProduct.stock > 0
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white cursor-pointer'
                       : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                   }`}
                 >
-                  {selectedProduct.stock > 0 ? '�️' : '✕'}
+                  <AddToCartIcon isAdded={false} />
                 </button>
                 <button
                   onClick={() => setSelectedProduct(null)}
