@@ -31,6 +31,7 @@ export default function Checkout() {
     if (name === 'cardNumber') value = formatCardNumber(value);
     else if (name === 'cardExpiry') value = formatExpiryDate(value);
     else if (name === 'cardCVV') value = formatCVV(value);
+    else if (name === 'billingZip') value = value.replace(/\D/g, '');
 
     setFormData({ ...formData, [name]: value });
 
@@ -263,6 +264,7 @@ export default function Checkout() {
                   <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">Postal Code</label>
                   <input
                     type="text"
+                    inputMode="numeric"
                     name="billingZip"
                     value={formData.billingZip}
                     onChange={handleChange}
