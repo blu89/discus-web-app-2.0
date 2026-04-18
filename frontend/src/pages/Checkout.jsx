@@ -172,6 +172,7 @@ export default function Checkout() {
                 <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">Card Number {formData.cardNumber && <span className="text-xs text-gray-500">({getCardType(formData.cardNumber)})</span>}</label>
                 <input
                   type="text"
+                  inputMode="numeric"
                   name="cardNumber"
                   value={formData.cardNumber}
                   onChange={handleChange}
