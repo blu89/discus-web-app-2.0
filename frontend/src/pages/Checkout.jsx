@@ -40,6 +40,24 @@ export default function Checkout() {
     }
   };
 
+  const isCardInfoValid = () => {
+    return (
+      formData.cardNumber.replace(/\s/g, '').length >= 13 &&
+      formData.cardName.trim().length >= 3 &&
+      /^\d{2}\/\d{2}$/.test(formData.cardExpiry) &&
+      formData.cardCVV.length >= 3 &&
+      formData.customerName.trim().length > 0 &&
+      formData.customerEmail.trim().length > 0 &&
+      formData.shippingAddress.trim().length > 0 &&
+      formData.billingAddress.trim().length > 0 &&
+      formData.billingCity.trim().length > 0 &&
+      formData.billingState.trim().length > 0 &&
+      formData.billingZip.trim().length > 0 &&
+      formData.billingCountry.trim().length > 0 &&
+      Object.keys(validationErrors).length === 0
+    );
+  };
+
   const handleCheckout = async (e) => {
     e.preventDefault();
     setLoading(true);
@@ -289,8 +307,8 @@ export default function Checkout() {
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 transition">
               <button
                 type="submit"
-                disabled={loading}
-                className="w-full bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white py-3 rounded-lg font-bold disabled:opacity-50 transition"
+                disabled={loading || !isCardInfoValid()}
+                className="w-full bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white py-3 rounded-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {loading ? 'Processing...' : 'Complete Order'}
               </button>
