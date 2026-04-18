@@ -225,17 +225,19 @@ export default function Home() {
 
                   {/* Product Info */}
                   <div className="p-2">
-                    <h3 className="text-xl font-bold text-gray-900 dark:text-white mb-2 truncate">
-                      {product.name}
-                    </h3>
+                    <div className="flex justify-between items-start gap-2 mb-2">
+                      <h3 className="text-xl font-bold text-gray-900 dark:text-white truncate flex-1">
+                        {product.name}
+                      </h3>
+                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
+                        ${product.price.toFixed(0)}
+                      </span>
+                    </div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
                       {product.description || 'No description available'}
                     </p>
 
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                        ${product.price.toFixed(0)}
-                      </span>
+                    <div className="flex justify-end items-center mb-3">
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         product.stock > 0 
                           ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
@@ -313,17 +315,19 @@ export default function Home() {
 
                   {/* Product Info */}
                   <div className="p-2">
-                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 truncate">
-                      {product.name}
-                    </h3>
+                    <div className="flex justify-between items-start gap-2 mb-2">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate flex-1">
+                        {product.name}
+                      </h3>
+                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
+                        ${product.price.toFixed(0)}
+                      </span>
+                    </div>
                     <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
                       {product.description || 'No description available'}
                     </p>
 
-                    <div className="flex justify-between items-center mb-3">
-                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
-                        ${product.price.toFixed(0)}
-                      </span>
+                    <div className="flex justify-end items-center mb-3">
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         product.stock > 0 
                           ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
