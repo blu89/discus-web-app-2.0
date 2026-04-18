@@ -57,6 +57,13 @@ export default function AdminProducts() {
 
   const handleSizeChange = (e) => {
     const sizesInput = e.target.value;
+    if (!sizesInput || sizesInput.trim() === '') {
+      setFormData({
+        ...formData,
+        sizes: []
+      });
+      return;
+    }
     // Parse "Size:Price,Size:Price" format
     const sizes = sizesInput
       .split(',')
@@ -117,7 +124,16 @@ export default function AdminProducts() {
   };
 
   const handleEdit = (product) => {
-    const sizes = product.sizes ? JSON.parse(product.sizes) : [];
+    let sizes = [];
+    if (product.sizes) {
+      try {
+        const parsed = JSON.parse(product.sizes);
+        sizes = Array.isArray(parsed) ? parsed : [];
+      } catch (e) {
+        // If parsing fails, assume it's already an array
+        sizes = Array.isArray(product.sizes) ? product.sizes : [];
+      }
+    }
     setFormData({
       name: product.name,
       description: product.description,
@@ -258,7 +274,10 @@ export default function AdminProducts() {
           <input
             type="text"
             placeholder="Product Sizes with Prices (e.g., Small:100, Medium:150, Large:200)"
-            value={formData.sizes.map(s => `${s.size}:${s.price}`).join(', ')}
+            value={Array.isArray(formData.sizes) && formData.sizes.length > 0 
+              ? formData.sizes.map(s => typeof s === 'object' ? `${s.size}:${s.price}` : s).join(', ')
+              : ''
+            }
             onChange={handleSizeChange}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4 transition"
           />
