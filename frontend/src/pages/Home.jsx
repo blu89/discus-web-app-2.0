@@ -208,7 +208,7 @@ export default function Home() {
               {latestProducts.map((product) => (
                 <div 
                   key={product.id} 
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer border-0"
                   onClick={() => navigate('/storefront', { state: { productId: product.id } })}
                 >
                   {/* Product Image */}
@@ -296,7 +296,7 @@ export default function Home() {
               {featuredProducts.map((product) => (
                 <div 
                   key={product.id} 
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer border-0"
                   onClick={() => navigate('/storefront', { state: { productId: product.id } })}
                 >
                   {/* Product Image */}
