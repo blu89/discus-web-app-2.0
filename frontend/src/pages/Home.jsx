@@ -539,8 +539,6 @@ export default function Home() {
               ))}
             </div>
           </div>
-          
-          <p className="text-center text-gray-500 dark:text-gray-400 text-sm mt-8">Hover to pause the carousel</p>
         </div>
       </section>
 
