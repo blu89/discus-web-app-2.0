@@ -171,7 +171,10 @@ export default function Checkout() {
 
             {/* Card Details Section */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 mb-6 transition">
-              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Card Details</h2>
+              <div className="flex items-center gap-3 mb-4">
+                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Card Details</h2>
+                <img src="public/stripe.png" alt="Stripe" className="w-6 h-6" />
+              </div>
 
               <div className="mb-4">
                 <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">Cardholder Name</label>
