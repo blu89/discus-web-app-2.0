@@ -249,7 +249,8 @@ export default function Home() {
                       <button
                         onClick={(e) => handleAddToCart(product, e)}
                         disabled={product.stock <= 0}
-                        className={`flex-1 py-1 px-2 text-sm rounded-lg font-semibold transition ${
+                        title={addedToCartId === product.id ? 'Added to cart' : product.stock > 0 ? 'Add to cart' : 'Out of stock'}
+                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center text-lg ${
                           addedToCartId === product.id
                             ? 'bg-green-500 text-white'
                             : product.stock > 0
@@ -257,7 +258,7 @@ export default function Home() {
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       >
-                        {addedToCartId === product.id ? '✓ Added' : 'Add'}
+                        {addedToCartId === product.id ? '✓' : '🛒'}
                       </button>
                     </div>
                   </div>
@@ -339,7 +340,8 @@ export default function Home() {
                       <button
                         onClick={(e) => handleAddToCart(product, e)}
                         disabled={product.stock <= 0}
-                        className={`flex-1 py-1 px-2 text-sm rounded-lg font-semibold transition ${
+                        title={addedToCartId === product.id ? 'Added to cart' : product.stock > 0 ? 'Add to cart' : 'Out of stock'}
+                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center text-lg ${
                           addedToCartId === product.id
                             ? 'bg-green-500 text-white'
                             : product.stock > 0
@@ -347,7 +349,7 @@ export default function Home() {
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       >
-                        {addedToCartId === product.id ? '✓ Added' : 'Add'}
+                        {addedToCartId === product.id ? '✓' : '🛒'}
                       </button>
                     </div>
                   </div>

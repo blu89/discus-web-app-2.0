@@ -298,13 +298,14 @@ export default function Storefront() {
                 <button
                   onClick={() => handleAddToCart(selectedProduct)}
                   disabled={selectedProduct.stock <= 0}
-                  className={`flex-1 font-bold py-4 px-4 rounded-xl transition transform hover:scale-105 active:scale-95 shadow-md ${
+                  title={selectedProduct.stock > 0 ? `Add to Cart (Qty: ${quantity})` : 'Out of Stock'}
+                  className={`w-14 h-14 rounded-full transition transform hover:scale-110 active:scale-95 shadow-md flex items-center justify-center text-2xl ${
                     selectedProduct.stock > 0
                       ? 'bg-gradient-to-r from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 hover:from-blue-600 hover:to-blue-700 dark:hover:from-blue-700 dark:hover:to-blue-800 text-white cursor-pointer'
                       : 'bg-gray-300 dark:bg-gray-600 text-gray-500 dark:text-gray-400 cursor-not-allowed'
                   }`}
                 >
-                  {selectedProduct.stock > 0 ? `🛒 Add to Cart (${quantity})` : 'Out of Stock'}
+                  {selectedProduct.stock > 0 ? '🛒' : '✕'}
                 </button>
                 <button
                   onClick={() => setSelectedProduct(null)}
