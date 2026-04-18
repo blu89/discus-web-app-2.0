@@ -171,12 +171,7 @@ export default function Checkout() {
 
             {/* Card Details Section */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 mb-6 transition">
-              <div className="flex items-center gap-3 mb-4">
-                <h2 className="text-2xl font-bold text-gray-900 dark:text-white">Card Details</h2>
-                <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M11.5 2C6.26344 2 2 6.26344 2 11.5C2 16.7366 6.26344 21 11.5 21C16.7366 21 21 16.7366 21 11.5C21 6.26344 16.7366 2 11.5 2ZM11.5 3.2C16.0917 3.2 19.8 6.90834 19.8 11.5C19.8 16.0917 16.0917 19.8 11.5 19.8C6.90834 19.8 3.2 16.0917 3.2 11.5C3.2 6.90834 6.90834 3.2 11.5 3.2ZM11.5 5.4C10.1193 5.4 9 6.51929 9 7.9V15.1C9 16.4807 10.1193 17.6 11.5 17.6C12.8807 17.6 14 16.4807 14 15.1V7.9C14 6.51929 12.8807 5.4 11.5 5.4Z"/>
-                </svg>
-              </div>
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Card Details</h2>
 
               <div className="mb-4">
                 <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">Cardholder Name</label>
