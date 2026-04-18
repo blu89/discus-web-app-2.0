@@ -2,38 +2,38 @@ export default function AddToCartIcon({ isAdded = false }) {
   if (isAdded) {
     return (
       <svg
+        width="24"
+        height="24"
         viewBox="0 0 24 24"
-        fill="currentColor"
-        className="w-full h-full"
+        fill="none"
+        stroke="currentColor"
+        strokeWidth="2.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       >
-        <polyline
-          points="20 6 9 17 4 12"
-          stroke="currentColor"
-          strokeWidth="2"
-          fill="none"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
+        <polyline points="20 6 9 17 4 12"></polyline>
       </svg>
     );
   }
 
   return (
     <svg
+      width="24"
+      height="24"
       viewBox="0 0 24 24"
       fill="none"
       stroke="currentColor"
-      strokeWidth="2"
+      strokeWidth="1.5"
       strokeLinecap="round"
       strokeLinejoin="round"
-      className="w-full h-full"
     >
-      {/* Shopping bag */}
-      <path d="M9 2C9 1.44772 9.44772 1 10 1H14C14.5523 1 15 1.44772 15 2V3H9V2Z" />
-      <path d="M6 3H18C19.1046 3 20 3.89543 20 5V17C20 18.1046 19.1046 19 18 19H6C4.89543 19 4 18.1046 4 17V5C4 3.89543 4.89543 3 6 3Z" />
+      {/* Shopping bag handle */}
+      <path d="M6 9a6 6 0 0 0 12 0"></path>
+      {/* Shopping bag body */}
+      <rect x="3" y="9" width="18" height="13" rx="2" ry="2"></rect>
       {/* Plus sign */}
-      <line x1="12" y1="8" x2="12" y2="15" />
-      <line x1="8.5" y1="11.5" x2="15.5" y2="11.5" />
+      <line x1="12" y1="13" x2="12" y2="19"></line>
+      <line x1="9" y1="16" x2="15" y2="16"></line>
     </svg>
   );
 }
