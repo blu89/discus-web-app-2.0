@@ -107,7 +107,7 @@ export default function Storefront() {
                       <img 
                         src={product.image_url} 
                         alt={product.name}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-b-lg"
                       />
                     ) : (
                       <div className="text-4xl">📦</div>
