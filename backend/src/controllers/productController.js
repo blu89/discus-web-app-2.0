@@ -72,10 +72,10 @@ export const createProduct = async (req, res) => {
       sizes: sizes ? JSON.stringify(sizes) : null
     };
 
-    // Add optional foreign keys if provided
-    if (category_id) insertData.category_id = category_id;
-    if (product_type_id) insertData.product_type_id = product_type_id;
-    if (supplier_id) insertData.supplier_id = supplier_id;
+    // Add optional foreign keys if provided (convert empty strings to null)
+    if (category_id && category_id.trim() !== '') insertData.category_id = category_id;
+    if (product_type_id && product_type_id.trim() !== '') insertData.product_type_id = product_type_id;
+    if (supplier_id && supplier_id.trim() !== '') insertData.supplier_id = supplier_id;
 
     const { data, error } = await supabase
       .from('products')
@@ -101,11 +101,15 @@ export const updateProduct = async (req, res) => {
 // Sanitize updates - only allow specific fields
     const allowedFields = ['name', 'description', 'price', 'stock', 'category_id', 'product_type_id', 'supplier_id', 'image_url', 'sizes'];
     const sanitizedUpdates = {};
+    const uuidFields = ['category_id', 'product_type_id', 'supplier_id'];
     
     for (const [key, value] of Object.entries(updates)) {
       if (allowedFields.includes(key)) {
         if (key === 'sizes') {
           sanitizedUpdates[key] = value ? JSON.stringify(value) : null;
+        } else if (uuidFields.includes(key)) {
+          // Convert empty strings to null for UUID fields
+          sanitizedUpdates[key] = value && value.trim() !== '' ? value : null;
         } else {
           sanitizedUpdates[key] = value;
         }
