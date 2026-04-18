@@ -12,6 +12,7 @@ export default function AdminProducts() {
   const [error, setError] = useState('');
   const [uploading, setUploading] = useState(false);
   const [previewImage, setPreviewImage] = useState(null);
+  const [sizesInput, setSizesInput] = useState(''); // Raw string input for sizes
   const [formData, setFormData] = useState({
     name: '',
     description: '',
@@ -76,17 +77,21 @@ export default function AdminProducts() {
   };
 
   const handleSizeChange = (e) => {
+    const inputValue = e.target.value;
+    setSizesInput(inputValue); // Store raw input
+    
+    // Parse and update formData
+    if (!inputValue || inputValue.trim() === '') {
+      setFormData({
+        ...formData,
+        sizes: []
+      });
+      return;
+    }
+    
     try {
-      const sizesInput = e.target.value;
-      if (!sizesInput || sizesInput.trim() === '') {
-        setFormData({
-          ...formData,
-          sizes: []
-        });
-        return;
-      }
       // Parse "Size:Price,Size:Price" format
-      const sizes = sizesInput
+      const sizes = inputValue
         .split(',')
         .map(s => {
           const trimmed = s.trim();
@@ -156,6 +161,8 @@ export default function AdminProducts() {
 
   const handleEdit = (product) => {
     let sizes = [];
+    let sizesDisplayStr = '';
+    
     if (product.sizes) {
       try {
         const parsed = JSON.parse(product.sizes);
@@ -184,6 +191,10 @@ export default function AdminProducts() {
         }
       }
     }
+    
+    // Create display string for sizes input
+    sizesDisplayStr = sizes.map(s => `${s.size}:${s.price}`).join(', ');
+    
     setFormData({
       name: product.name,
       description: product.description,
@@ -195,6 +206,7 @@ export default function AdminProducts() {
       image_url: product.image_url || '',
       sizes: sizes
     });
+    setSizesInput(sizesDisplayStr); // Set the raw input string
     setPreviewImage(product.image_url);
     setEditingId(product.id);
     setShowForm(true);
@@ -237,6 +249,7 @@ export default function AdminProducts() {
             setShowForm(!showForm);
             setEditingId(null);
             setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', sizes: [] });
+            setSizesInput(''); // Reset sizes input
             setPreviewImage(null);
           }}
           className="bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 text-white px-6 py-2 rounded transition"
@@ -326,7 +339,7 @@ export default function AdminProducts() {
             <input
               type="text"
               placeholder="Enter sizes with prices (e.g., Small:100, Medium:150, Large:200)"
-              value={getSizesDisplayValue()}
+              value={sizesInput}
               onChange={handleSizeChange}
               className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
             />
