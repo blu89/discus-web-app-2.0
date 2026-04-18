@@ -128,7 +128,7 @@ export default function Home() {
               <img
                 src={image.url}
                 alt={image.title}
-                className="w-full h-full object-cover"
+                className="w-full h-full object-cover rounded-b-lg"
               />
               {/* Overlay */}
               <div className="absolute inset-0 bg-black bg-opacity-40"></div>
@@ -208,7 +208,7 @@ export default function Home() {
               {latestProducts.map((product) => (
                 <div 
                   key={product.id} 
-                  className="bg-white dark:bg-gray-800 rounded-t-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
                   onClick={() => navigate('/storefront', { state: { productId: product.id } })}
                 >
                   {/* Product Image */}
@@ -217,7 +217,7 @@ export default function Home() {
                       <img 
                         src={product.image_url} 
                         alt={product.name}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-b-lg"
                       />
                     ) : (
                       <div className="text-4xl">📦</div>
@@ -296,7 +296,7 @@ export default function Home() {
               {featuredProducts.map((product) => (
                 <div 
                   key={product.id} 
-                  className="bg-white dark:bg-gray-800 rounded-t-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
                   onClick={() => navigate('/storefront', { state: { productId: product.id } })}
                 >
                   {/* Product Image */}
@@ -305,7 +305,7 @@ export default function Home() {
                       <img 
                         src={product.image_url} 
                         alt={product.name}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-b-lg"
                       />
                     ) : (
                       <div className="text-4xl">📦</div>
