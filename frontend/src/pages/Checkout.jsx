@@ -46,14 +46,14 @@ export default function Checkout() {
       formData.cardName.trim().length >= 3 &&
       /^\d{2}\/\d{2}$/.test(formData.cardExpiry) &&
       formData.cardCVV.length >= 3 &&
-      formData.customerName.trim().length > 0 &&
-      formData.customerEmail.trim().length > 0 &&
-      formData.shippingAddress.trim().length > 0 &&
-      formData.billingAddress.trim().length > 0 &&
-      formData.billingCity.trim().length > 0 &&
-      formData.billingState.trim().length > 0 &&
-      formData.billingZip.trim().length > 0 &&
-      formData.billingCountry.trim().length > 0 &&
+      formData.customerName.trim().length >= 3 &&
+      formData.customerEmail.includes('@') &&
+      formData.shippingAddress.trim().length >= 10 &&
+      formData.billingAddress.trim().length >= 10 &&
+      formData.billingCity.trim().length >= 2 &&
+      formData.billingState.trim().length >= 2 &&
+      formData.billingZip.trim().length >= 3 &&
+      formData.billingCountry.trim().length >= 2 &&
       Object.keys(validationErrors).length === 0
     );
   };
