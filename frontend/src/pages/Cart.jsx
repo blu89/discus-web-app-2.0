@@ -3,7 +3,7 @@ import { useCart } from '../hooks/useCart';
 import { useNavigate } from 'react-router-dom';
 
 export default function Cart() {
-  const { cart, removeFromCart, updateQuantity, total } = useCart();
+  const { cart, removeFromCart, updateQuantity, updateSize, total } = useCart();
   const navigate = useNavigate();
 
   if (cart.length === 0) {
@@ -52,6 +52,32 @@ export default function Cart() {
                     <p className="text-sm text-gray-600 dark:text-gray-400 font-semibold">Size: {item.selectedSize}</p>
                   )}
                   <p className="text-gray-600 dark:text-gray-400">${item.price.toFixed(0)}</p>
+
+                  {/* Size Selector */}
+                  {item.sizes && Array.isArray(item.sizes) && item.sizes.length > 0 && (
+                    <div className="mt-2">
+                      <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Change Size:</label>
+                      <select
+                        value={item.selectedSize || ''}
+                        onChange={(e) => {
+                          const newSize = e.target.value;
+                          if (newSize !== item.selectedSize) {
+                            updateSize(item.id, item.selectedSize, newSize);
+                          }
+                        }}
+                        className="w-full mt-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                      >
+                        {item.sizes.map((size) => {
+                          const sizeObj = typeof size === 'object' ? size : { size, price: item.price };
+                          return (
+                            <option key={sizeObj.size} value={sizeObj.size}>
+                              {sizeObj.size} ${sizeObj.price ? sizeObj.price.toFixed(0) : '0'}
+                            </option>
+                          );
+                        })}
+                      </select>
+                    </div>
+                  )}
                 </div>
 
                 <div className="flex items-center gap-4">

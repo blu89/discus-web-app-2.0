@@ -7,8 +7,17 @@ export const CartProvider = ({ children }) => {
 
   const addToCart = (product, size = null) => {
     setCart((prevCart) => {
-      // Create unique key for product+size combination
-      const itemKey = size ? `${product.id}-${size}` : product.id;
+      // For products with sizes, calculate price based on size
+      let itemPrice = product.price;
+      if (size && product.sizes && Array.isArray(product.sizes)) {
+        const sizeObj = product.sizes.find(s => 
+          typeof s === 'object' ? s.size === size : s === size
+        );
+        if (sizeObj && typeof sizeObj === 'object' && sizeObj.price) {
+          itemPrice = sizeObj.price;
+        }
+      }
+
       const existing = prevCart.find((item) => 
         size ? (item.id === product.id && item.selectedSize === size) : (item.id === product.id && !item.selectedSize)
       );
@@ -21,7 +30,7 @@ export const CartProvider = ({ children }) => {
         );
       }
       
-      return [...prevCart, { ...product, quantity: 1, selectedSize: size || null }];
+      return [...prevCart, { ...product, quantity: 1, selectedSize: size || null, price: itemPrice }];
     });
   };
 
@@ -51,6 +60,48 @@ export const CartProvider = ({ children }) => {
     }
   };
 
+  const updateSize = (productId, oldSize, newSize) => {
+    setCart((prevCart) => {
+      // Find the item with the old size
+      const itemIndex = prevCart.findIndex(
+        item => item.id === productId && item.selectedSize === oldSize
+      );
+      
+      if (itemIndex === -1) return prevCart;
+      
+      const item = prevCart[itemIndex];
+      
+      // Find price for new size
+      let newPrice = item.price;
+      if (newSize && item.sizes && Array.isArray(item.sizes)) {
+        const sizeObj = item.sizes.find(s =>
+          typeof s === 'object' ? s.size === newSize : s === newSize
+        );
+        if (sizeObj && typeof sizeObj === 'object' && sizeObj.price) {
+          newPrice = sizeObj.price;
+        }
+      }
+
+      // Check if item with new size already exists
+      const existingIndex = prevCart.findIndex(
+        item2 => item2.id === productId && item2.selectedSize === newSize
+      );
+
+      if (existingIndex !== -1) {
+        // Merge quantities
+        const newCart = [...prevCart];
+        newCart[existingIndex].quantity += item.quantity;
+        newCart.splice(itemIndex, 1);
+        return newCart;
+      }
+
+      // Update size and price
+      const newCart = [...prevCart];
+      newCart[itemIndex] = { ...item, selectedSize: newSize, price: newPrice };
+      return newCart;
+    });
+  };
+
   const clearCart = () => {
     setCart([]);
   };
@@ -64,6 +115,7 @@ export const CartProvider = ({ children }) => {
         addToCart,
         removeFromCart,
         updateQuantity,
+        updateSize,
         clearCart,
         total,
       }}

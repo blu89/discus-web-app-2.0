@@ -214,19 +214,25 @@ export default function Storefront() {
                   <div className="bg-gradient-to-br from-purple-50 dark:from-purple-900/30 to-purple-100 dark:to-purple-900/50 p-6 rounded-2xl border border-purple-200 dark:border-purple-700 transition">
                     <p className="text-gray-700 dark:text-gray-300 text-sm mb-4 font-bold">Available Sizes</p>
                     <div className="flex flex-wrap gap-3">
-                      {JSON.parse(selectedProduct.sizes).map((size) => (
-                        <button
-                          key={size}
-                          onClick={() => setSelectedSize(size)}
-                          className={`px-4 py-2 rounded-lg font-semibold transition transform hover:scale-105 active:scale-95 ${
-                            selectedSize === size
-                              ? 'bg-purple-600 dark:bg-purple-700 text-white shadow-lg'
-                              : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-2 border-purple-300 dark:border-purple-600 hover:border-purple-500 dark:hover:border-purple-500'
-                          }`}
-                        >
-                          {size}
-                        </button>
-                      ))}
+                      {JSON.parse(selectedProduct.sizes).map((sizeItem) => {
+                        const sizeObj = typeof sizeItem === 'object' ? sizeItem : { size: sizeItem, price: selectedProduct.price };
+                        return (
+                          <button
+                            key={sizeObj.size}
+                            onClick={() => setSelectedSize(sizeObj.size)}
+                            className={`px-4 py-2 rounded-lg font-semibold transition transform hover:scale-105 active:scale-95 ${
+                              selectedSize === sizeObj.size
+                                ? 'bg-purple-600 dark:bg-purple-700 text-white shadow-lg'
+                                : 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white border-2 border-purple-300 dark:border-purple-600 hover:border-purple-500 dark:hover:border-purple-500'
+                            }`}
+                          >
+                            <div className="text-center">
+                              <div>{sizeObj.size}</div>
+                              <div className="text-xs mt-1">${sizeObj.price.toFixed(0)}</div>
+                            </div>
+                          </button>
+                        );
+                      })}
                     </div>
                     {selectedSize && (
                       <p className="mt-3 text-sm text-purple-700 dark:text-purple-300 font-semibold">✓ Selected: {selectedSize}</p>

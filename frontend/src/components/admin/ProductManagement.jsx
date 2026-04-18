@@ -57,7 +57,14 @@ export default function AdminProducts() {
 
   const handleSizeChange = (e) => {
     const sizesInput = e.target.value;
-    const sizes = sizesInput.split(',').map(s => s.trim()).filter(s => s);
+    // Parse "Size:Price,Size:Price" format
+    const sizes = sizesInput
+      .split(',')
+      .map(s => {
+        const [size, price] = s.trim().split(':');
+        return size && price ? { size: size.trim(), price: parseFloat(price) || 0 } : null;
+      })
+      .filter(s => s !== null);
     setFormData({
       ...formData,
       sizes: sizes
@@ -250,8 +257,8 @@ export default function AdminProducts() {
 
           <input
             type="text"
-            placeholder="Product Sizes (comma-separated, e.g., Small, Medium, Large)"
-            value={formData.sizes.join(', ')}
+            placeholder="Product Sizes with Prices (e.g., Small:100, Medium:150, Large:200)"
+            value={formData.sizes.map(s => `${s.size}:${s.price}`).join(', ')}
             onChange={handleSizeChange}
             className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white mb-4 transition"
           />
