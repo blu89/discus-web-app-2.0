@@ -99,7 +99,7 @@ export default function Storefront() {
                 <div
                   key={product.id}
                   onClick={() => handleSelectProduct(product)}
-                  className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
+                  className="bg-white dark:bg-gray-800 rounded-t-lg shadow-lg dark:shadow-gray-700 overflow-hidden hover:shadow-xl dark:hover:shadow-gray-600 transition transform hover:-translate-y-1 cursor-pointer"
                 >
                   {/* Product Image */}
                   <div className="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center overflow-hidden">
@@ -107,7 +107,7 @@ export default function Storefront() {
                       <img 
                         src={product.image_url} 
                         alt={product.name}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-b-lg"
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300"
                       />
                     ) : (
                       <div className="text-4xl">📦</div>
