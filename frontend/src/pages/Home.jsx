@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { productAPI, heroAPI } from '../services/api';
+import { useCart } from '../hooks/useCart';
 
 export default function Home() {
   const [latestProducts, setLatestProducts] = useState([]);
@@ -9,7 +10,9 @@ export default function Home() {
   const [error, setError] = useState('');
   const [heroImages, setHeroImages] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
+  const [addedToCartId, setAddedToCartId] = useState(null);
   const navigate = useNavigate();
+  const { addToCart } = useCart();
 
   // Default hero images if none are set in database
   const defaultHeroImages = [
@@ -95,6 +98,17 @@ export default function Home() {
   const prevSlide = () => {
     const images = heroImages.length > 0 ? heroImages : defaultHeroImages;
     setCurrentSlide((prev) => (prev - 1 + images.length) % images.length);
+  };
+
+  const handleAddToCart = (product, e) => {
+    e.stopPropagation();
+    if (product.stock <= 0) {
+      alert('This product is out of stock');
+      return;
+    }
+    addToCart(product);
+    setAddedToCartId(product.id);
+    setTimeout(() => setAddedToCartId(null), 2000);
   };
 
   return (
@@ -218,7 +232,7 @@ export default function Home() {
                       {product.description || 'No description available'}
                     </p>
 
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex justify-between items-center mb-3">
                       <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                         ${product.price.toFixed(0)}
                       </span>
@@ -231,7 +245,19 @@ export default function Home() {
                       </span>
                     </div>
 
-                   
+                    <button
+                      onClick={(e) => handleAddToCart(product, e)}
+                      disabled={product.stock <= 0}
+                      className={`w-full py-2 px-4 rounded-lg font-semibold transition ${
+                        addedToCartId === product.id
+                          ? 'bg-green-500 text-white'
+                          : product.stock > 0
+                          ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
+                          : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                      }`}
+                    >
+                      {addedToCartId === product.id ? '✓ Added to Cart' : 'Add to Cart'}
+                    </button>
                   </div>
                 </div>
               ))}
@@ -294,7 +320,7 @@ export default function Home() {
                       {product.description || 'No description available'}
                     </p>
 
-                    <div className="flex justify-between items-center mb-2">
+                    <div className="flex justify-between items-center mb-3">
                       <span className="text-xl font-bold text-blue-600 dark:text-blue-400">
                         ${product.price.toFixed(0)}
                       </span>
@@ -307,7 +333,19 @@ export default function Home() {
                       </span>
                     </div>
 
-                  
+                    <button
+                      onClick={(e) => handleAddToCart(product, e)}
+                      disabled={product.stock <= 0}
+                      className={`w-full py-2 px-4 rounded-lg font-semibold transition ${
+                        addedToCartId === product.id
+                          ? 'bg-green-500 text-white'
+                          : product.stock > 0
+                          ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
+                          : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                      }`}
+                    >
+                      {addedToCartId === product.id ? '✓ Added to Cart' : 'Add to Cart'}
+                    </button>
                   </div>
                 </div>
               ))}
