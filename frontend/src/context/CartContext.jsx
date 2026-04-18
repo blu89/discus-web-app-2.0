@@ -5,12 +5,28 @@ export const CartContext = createContext();
 export const CartProvider = ({ children }) => {
   const [cart, setCart] = useState([]);
 
+  // Helper function to parse sizes
+  const parseSizes = (sizes) => {
+    if (!sizes) return null;
+    if (Array.isArray(sizes)) return sizes;
+    if (typeof sizes === 'string') {
+      try {
+        return JSON.parse(sizes);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  };
+
   const addToCart = (product, size = null) => {
     setCart((prevCart) => {
       // For products with sizes, calculate price based on size
       let itemPrice = product.price;
-      if (size && product.sizes && Array.isArray(product.sizes)) {
-        const sizeObj = product.sizes.find(s => 
+      const parsedSizes = parseSizes(product.sizes);
+      
+      if (size && parsedSizes && Array.isArray(parsedSizes)) {
+        const sizeObj = parsedSizes.find(s => 
           typeof s === 'object' ? s.size === size : s === size
         );
         if (sizeObj && typeof sizeObj === 'object' && sizeObj.price) {
@@ -73,8 +89,10 @@ export const CartProvider = ({ children }) => {
       
       // Find price for new size
       let newPrice = item.price;
-      if (newSize && item.sizes && Array.isArray(item.sizes)) {
-        const sizeObj = item.sizes.find(s =>
+      const parsedSizes = parseSizes(item.sizes);
+      
+      if (newSize && parsedSizes && Array.isArray(parsedSizes)) {
+        const sizeObj = parsedSizes.find(s =>
           typeof s === 'object' ? s.size === newSize : s === newSize
         );
         if (sizeObj && typeof sizeObj === 'object' && sizeObj.price) {

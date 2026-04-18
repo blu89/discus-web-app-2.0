@@ -6,6 +6,20 @@ export default function Cart() {
   const { cart, removeFromCart, updateQuantity, updateSize, total } = useCart();
   const navigate = useNavigate();
 
+  // Helper function to parse sizes
+  const parseSizes = (sizes) => {
+    if (!sizes) return null;
+    if (Array.isArray(sizes)) return sizes;
+    if (typeof sizes === 'string') {
+      try {
+        return JSON.parse(sizes);
+      } catch (e) {
+        return null;
+      }
+    }
+    return null;
+  };
+
   if (cart.length === 0) {
     return (
       <div className="min-h-screen bg-white dark:bg-gray-950 flex items-center justify-center transition-colors duration-200">
@@ -29,7 +43,9 @@ export default function Cart() {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           <div className="lg:col-span-2">
-            {cart.map((item) => (
+            {cart.map((item) => {
+              const parsedSizes = parseSizes(item.sizes);
+              return (
               <div key={item.id} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow dark:shadow-gray-700 mb-4 flex gap-4 transition">
                 {/* Product Image */}
                 <div className="flex-shrink-0">
@@ -54,7 +70,7 @@ export default function Cart() {
                   <p className="text-gray-600 dark:text-gray-400">${item.price.toFixed(0)}</p>
 
                   {/* Size Selector */}
-                  {item.sizes && Array.isArray(item.sizes) && item.sizes.length > 0 && (
+                  {parsedSizes && Array.isArray(parsedSizes) && parsedSizes.length > 0 && (
                     <div className="mt-2">
                       <label className="text-xs font-semibold text-gray-600 dark:text-gray-400">Change Size:</label>
                       <select
@@ -67,7 +83,7 @@ export default function Cart() {
                         }}
                         className="w-full mt-1 px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
                       >
-                        {item.sizes.map((size) => {
+                        {parsedSizes.map((size) => {
                           const sizeObj = typeof size === 'object' ? size : { size, price: item.price };
                           return (
                             <option key={sizeObj.size} value={sizeObj.size}>
@@ -97,7 +113,8 @@ export default function Cart() {
                   </button>
                 </div>
               </div>
-            ))}
+            );
+            })}
           </div>
 
           <div className="lg:col-span-1">
