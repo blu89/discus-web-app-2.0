@@ -237,7 +237,7 @@ export default function Home() {
                       {product.description || 'No description available'}
                     </p>
 
-                    <div className="flex justify-end items-center mb-3">
+                    <div className="flex justify-between items-center mb-3 gap-2">
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         product.stock > 0 
                           ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
@@ -245,21 +245,21 @@ export default function Home() {
                       }`}>
                         {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                       </span>
-                    </div>
 
-                    <button
-                      onClick={(e) => handleAddToCart(product, e)}
-                      disabled={product.stock <= 0}
-                      className={`w-full py-2 px-4 rounded-lg font-semibold transition ${
-                        addedToCartId === product.id
-                          ? 'bg-green-500 text-white'
-                          : product.stock > 0
-                          ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
-                          : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                      }`}
-                    >
-                      {addedToCartId === product.id ? '✓ Added to Cart' : 'Add to Cart'}
-                    </button>
+                      <button
+                        onClick={(e) => handleAddToCart(product, e)}
+                        disabled={product.stock <= 0}
+                        className={`flex-1 py-1 px-2 text-sm rounded-lg font-semibold transition ${
+                          addedToCartId === product.id
+                            ? 'bg-green-500 text-white'
+                            : product.stock > 0
+                            ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
+                            : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        }`}
+                      >
+                        {addedToCartId === product.id ? '✓ Added' : 'Add'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
@@ -327,7 +327,7 @@ export default function Home() {
                       {product.description || 'No description available'}
                     </p>
 
-                    <div className="flex justify-end items-center mb-3">
+                    <div className="flex justify-between items-center mb-3 gap-2">
                       <span className={`text-xs px-2 py-1 rounded-full ${
                         product.stock > 0 
                           ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
@@ -335,21 +335,21 @@ export default function Home() {
                       }`}>
                         {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
                       </span>
-                    </div>
 
-                    <button
-                      onClick={(e) => handleAddToCart(product, e)}
-                      disabled={product.stock <= 0}
-                      className={`w-full py-2 px-4 rounded-lg font-semibold transition ${
-                        addedToCartId === product.id
-                          ? 'bg-green-500 text-white'
-                          : product.stock > 0
-                          ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
-                          : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                      }`}
-                    >
-                      {addedToCartId === product.id ? '✓ Added to Cart' : 'Add to Cart'}
-                    </button>
+                      <button
+                        onClick={(e) => handleAddToCart(product, e)}
+                        disabled={product.stock <= 0}
+                        className={`flex-1 py-1 px-2 text-sm rounded-lg font-semibold transition ${
+                          addedToCartId === product.id
+                            ? 'bg-green-500 text-white'
+                            : product.stock > 0
+                            ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
+                            : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        }`}
+                      >
+                        {addedToCartId === product.id ? '✓ Added' : 'Add'}
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))}
