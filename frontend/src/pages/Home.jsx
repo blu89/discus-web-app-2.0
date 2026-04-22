@@ -505,7 +505,7 @@ export default function Home() {
             <div className="carousel-track">
               {/* Duplicate partners for infinite scroll effect */}
               {[
-                { name: 'GitHub', url: 'https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png' },
+                { name: 'GitHub', url: 'https://cdn.brandfetch.io/domain/fedex.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
                 { name: 'Stripe', url: 'https://cdn.brandfetch.io/domain/apple.com?c=1id8kHc3uuXX97EQ94d' },
                 { name: 'AWS', url: 'https://cdn.brandfetch.io/domain/ups.com/w/800/h/952/logo?c=1id8kHc3uuXX97EQ94d' },
                 { name: 'Google', url: 'https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png' },
