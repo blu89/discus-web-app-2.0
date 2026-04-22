@@ -505,12 +505,12 @@ export default function Home() {
             <div className="carousel-track">
               {/* Duplicate partners for infinite scroll effect */}
               {[
-                { name: 'GitHub', url: 'https://cdn.brandfetch.io/domain/fedex.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
-                { name: 'Stripe', url: 'https://cdn.brandfetch.io/domain/apple.com?c=1id8kHc3uuXX97EQ94d' },
-                { name: 'AWS', url: 'https://cdn.brandfetch.io/domain/ups.com/w/800/h/952/logo?c=1id8kHc3uuXX97EQ94d' },
-                { name: 'Google', url: 'https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png' },
-                { name: 'Microsoft', url: 'https://logos-download.com/wp-content/uploads/2016/09/Microsoft_logo.png' },
-                { name: 'Facebook', url: 'https://logos-download.com/wp-content/uploads/2016/09/Facebook_logo.png' }
+                { name: 'FedEx', url: 'https://cdn.brandfetch.io/domain/fedex.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'DHL', url: 'https://cdn.brandfetch.io/domain/dhl.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'UPS', url: 'https://cdn.brandfetch.io/domain/ups.com/w/800/h/952/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'Kuehne-Nagel', url: 'https://cdn.brandfetch.io/domain/kuehne-nagel.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'DSV', url: 'https://cdn.brandfetch.io/domain/dsv.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'DB Schenker', url: 'https://cdn.brandfetch.io/domain/dbschenker.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' }
               ].map((partner, idx) => (
                 <div key={idx} className="carousel-item">
                   <img
@@ -522,12 +522,12 @@ export default function Home() {
               ))}
               {/* Duplicate partners again for seamless loop */}
               {[
-                { name: 'GitHub', url: 'https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png' },
-                { name: 'Stripe', url: 'https://logos-download.com/wp-content/uploads/2016/09/Stripe_logo.png' },
-                { name: 'AWS', url: 'https://logos-download.com/wp-content/uploads/2016/09/AWS_logo.png' },
-                { name: 'Google', url: 'https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png' },
-                { name: 'Microsoft', url: 'https://logos-download.com/wp-content/uploads/2016/09/Microsoft_logo.png' },
-                { name: 'Facebook', url: 'https://logos-download.com/wp-content/uploads/2016/09/Facebook_logo.png' }
+                { name: 'FedEx', url: 'https://cdn.brandfetch.io/domain/fedex.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'DHL', url: 'https://cdn.brandfetch.io/domain/dhl.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'UPS', url: 'https://cdn.brandfetch.io/domain/ups.com/w/800/h/952/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'Kuehne-Nagel', url: 'https://cdn.brandfetch.io/domain/kuehne-nagel.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'DSV', url: 'https://cdn.brandfetch.io/domain/dsv.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' },
+                { name: 'DB Schenker', url: 'https://cdn.brandfetch.io/domain/dbschenker.com/w/800/h/220/logo?c=1id8kHc3uuXX97EQ94d' }
               ].map((partner, idx) => (
                 <div key={`duplicate-${idx}`} className="carousel-item">
                   <img
