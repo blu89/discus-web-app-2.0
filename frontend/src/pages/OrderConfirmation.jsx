@@ -36,6 +36,7 @@ export default function OrderConfirmation() {
         <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg dark:shadow-gray-700 p-8 text-center transition">
           <div className="text-6xl text-green-500 dark:text-green-400 mb-4">✓</div>
           <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Order Confirmed!</h1>
+          <h1 className="text-4xl font-bold mb-4 text-gray-900 dark:text-white">Payment pending</h1>
           <p className="text-gray-600 dark:text-gray-400 mb-8">Thank you for your purchase.</p>
 
           <div className="bg-gray-50 dark:bg-gray-700 p-6 rounded-lg mb-8 text-left transition">
