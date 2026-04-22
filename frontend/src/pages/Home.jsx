@@ -507,7 +507,7 @@ export default function Home() {
               {[
                 { name: 'GitHub', url: 'https://logos-download.com/wp-content/uploads/2016/09/GitHub_logo.png' },
                 { name: 'Stripe', url: 'https://cdn.brandfetch.io/domain/apple.com?c=1id8kHc3uuXX97EQ94d' },
-                { name: 'AWS', url: 'https://logos-download.com/wp-content/uploads/2016/09/AWS_logo.png' },
+                { name: 'AWS', url: 'https://cdn.brandfetch.io/domain/ups.com/w/800/h/952/logo?c=1id8kHc3uuXX97EQ94d' },
                 { name: 'Google', url: 'https://logos-download.com/wp-content/uploads/2016/09/Google_logo.png' },
                 { name: 'Microsoft', url: 'https://logos-download.com/wp-content/uploads/2016/09/Microsoft_logo.png' },
                 { name: 'Facebook', url: 'https://logos-download.com/wp-content/uploads/2016/09/Facebook_logo.png' }
