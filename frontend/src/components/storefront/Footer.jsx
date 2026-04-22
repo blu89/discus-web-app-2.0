@@ -9,7 +9,7 @@ export default function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
           <div>
             <h3 className="text-lg font-bold mb-4">Charles Discus</h3>
-            <p className="text-gray-400 dark:text-gray-500">Your trusted electronic Shop.</p>
+            <p className="text-gray-400 dark:text-gray-500">Your most renowned discus breeder across the globe.</p>
           </div>
 
           <div>
