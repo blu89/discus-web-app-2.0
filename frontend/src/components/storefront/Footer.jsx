@@ -23,8 +23,9 @@ export default function Footer() {
           <div>
             <h4 className="font-bold mb-4">Support</h4>
             <ul className="text-gray-400 dark:text-gray-500 space-y-2">
+              //on hold to update href
               <li><a href="/contact" className="hover:text-white dark:hover:text-gray-300 transition">Contact Us</a></li>
-              <li><a href="/" className="hover:text-white dark:hover:text-gray-300 transition">FAQ</a></li>
+              <li><a href="/term-and-policy" className="hover:text-white dark:hover:text-gray-300 transition">FAQ</a></li>
               <li><a href="/terms-and-policy" className="hover:text-white dark:hover:text-gray-300 transition">Shipping Info</a></li>
             </ul>
           </div>
