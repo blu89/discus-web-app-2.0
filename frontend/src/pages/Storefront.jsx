@@ -54,13 +54,30 @@ export default function Storefront() {
       <div className="bg-white dark:bg-gray-900 shadow dark:shadow-gray-800">
         <div className="max-w-7xl mx-auto px-4 py-6">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white">Our Store</h1>
-          <input
-            type="text"
-            placeholder="Search products..."
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-            className="mt-4 w-full md:w-1/3 px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none dark:focus:ring-blue-400 focus:ring-blue-500"
-          />
+          <div className="mt-4 flex flex-col md:flex-row gap-3 md:gap-4">
+            {/* Category Selection Menu */}
+            <select
+              value={selectedCategory || ''}
+              onChange={(e) => setSelectedCategory(e.target.value === '' ? null : e.target.value)}
+              className="px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none dark:focus:ring-blue-400 focus:ring-blue-500 cursor-pointer font-medium transition"
+            >
+              <option value="">All Categories</option>
+              {categories.map((category) => (
+                <option key={category.id} value={category.id}>
+                  {category.name}
+                </option>
+              ))}
+            </select>
+            
+            {/* Search Input */}
+            <input
+              type="text"
+              placeholder="Search products..."
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+              className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none dark:focus:ring-blue-400 focus:ring-blue-500"
+            />
+          </div>
         </div>
       </div>
 
