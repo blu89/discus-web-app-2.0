@@ -498,7 +498,7 @@ export default function Home() {
         `}</style>
         
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">Our Partners</h2>
+          <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">logistics Partners</h2>
           <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-lg">Working with the best shipping companies around the world.</p>
           
           <div className="carousel-container">
