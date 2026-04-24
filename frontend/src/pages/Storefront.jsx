@@ -7,6 +7,7 @@ export default function Storefront() {
   const [products, setProducts] = useState([]);
   const [categories, setCategories] = useState([]);
   const [selectedCategory, setSelectedCategory] = useState(null);
+  const [searchInput, setSearchInput] = useState('');
   const [search, setSearch] = useState('');
   const [loading, setLoading] = useState(true);
   const [selectedProduct, setSelectedProduct] = useState(null);
@@ -14,20 +15,32 @@ export default function Storefront() {
   const [selectedSize, setSelectedSize] = useState(null);
   const { addToCart } = useCart();
 
+  // Debounce search input
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      setSearch(searchInput);
+    }, 500); // Wait 500ms after user stops typing
+
+    return () => clearTimeout(timer);
+  }, [searchInput]);
+
+  // Fetch data when search or category changes
   useEffect(() => {
     fetchData();
   }, [selectedCategory, search]);
 
   const fetchData = async () => {
     try {
+      setLoading(true);
       const [productsRes, categoriesRes] = await Promise.all([
         productAPI.getAll(selectedCategory, search),
         categoryAPI.getAll()
       ]);
-      setProducts(productsRes.data);
-      setCategories(categoriesRes.data);
+      setProducts(productsRes.data || []);
+      setCategories(categoriesRes.data || []);
     } catch (error) {
       console.error('Failed to fetch data', error);
+      setProducts([]);
     } finally {
       setLoading(false);
     }
@@ -73,8 +86,8 @@ export default function Storefront() {
             <input
               type="text"
               placeholder="Search products..."
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
               className="flex-1 px-4 py-2 border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-lg focus:outline-none dark:focus:ring-blue-400 focus:ring-blue-500"
             />
           </div>
@@ -109,7 +122,18 @@ export default function Storefront() {
         {/* Products Grid */}
         <div className="md:col-span-3">
           {loading ? (
-            <div className="text-center py-12">Loading...</div>
+            <div className="text-center py-12">
+              <div className="inline-block">
+                <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mb-4"></div>
+                <p className="text-gray-600 dark:text-gray-400 font-medium">Loading products...</p>
+              </div>
+            </div>
+          ) : products.length === 0 ? (
+            <div className="text-center py-12">
+              <p className="text-gray-600 dark:text-gray-400 font-medium text-lg">
+                {search || selectedCategory ? 'No products found matching your search or category.' : 'No products available.'}
+              </p>
+            </div>
           ) : (
             <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-6">
               {products.map((product) => (
