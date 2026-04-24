@@ -96,18 +96,18 @@ export default function Cart() {
                   )}
                 </div>
 
-                <div className="flex items-center gap-4">
+                <div className="flex flex-col sm:flex-row sm:items-center gap-2 sm:gap-4 ml-auto">
                   <input
                     type="number"
                     min="1"
                     value={item.quantity}
                     onChange={(e) => updateQuantity(item.id, parseInt(e.target.value), item.selectedSize)}
-                    className="w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                    className="w-full sm:w-16 px-2 py-1 border border-gray-300 dark:border-gray-600 rounded bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
                   />
-                  <p className="w-20 text-right font-bold text-gray-900 dark:text-white">${(item.price * item.quantity).toFixed(0)}</p>
+                  <p className="text-right font-bold text-gray-900 dark:text-white min-w-max">${(item.price * item.quantity).toFixed(0)}</p>
                   <button
                     onClick={() => removeFromCart(item.id, item.selectedSize)}
-                    className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-bold transition"
+                    className="text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-bold transition whitespace-nowrap"
                   >
                     Remove
                   </button>
