@@ -14,6 +14,7 @@ export default function ProductDetail() {
   const [selectedSize, setSelectedSize] = useState(null);
   const [lightboxOpen, setLightboxOpen] = useState(false);
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
   const [addedToCart, setAddedToCart] = useState(false);
 
   // Get all images (primary image + any additional ones)
@@ -177,12 +178,12 @@ export default function ProductDetail() {
             {/* Main Image */}
             <div 
               className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden shadow-lg dark:shadow-gray-700 cursor-pointer group"
-              onClick={() => openLightbox(0)}
+              onClick={() => openLightbox(hoveredImageIndex !== null ? hoveredImageIndex : 0)}
             >
-              {product.image_url ? (
+              {galleryImages.length > 0 ? (
                 <div className="relative bg-gray-200 dark:bg-gray-700 h-96 flex items-center justify-center overflow-hidden">
                   <img 
-                    src={product.image_url} 
+                    src={galleryImages[hoveredImageIndex !== null ? hoveredImageIndex : 0]} 
                     alt={product.name}
                     className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                   />
@@ -206,8 +207,10 @@ export default function ProductDetail() {
                   <button
                     key={index}
                     onClick={() => openLightbox(index)}
+                    onMouseEnter={() => setHoveredImageIndex(index)}
+                    onMouseLeave={() => setHoveredImageIndex(null)}
                     className={`flex-shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition transform hover:scale-105 ${
-                      currentImageIndex === index
+                      hoveredImageIndex === index || currentImageIndex === index
                         ? 'border-blue-500 dark:border-blue-400'
                         : 'border-gray-300 dark:border-gray-600'
                     }`}
