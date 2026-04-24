@@ -17,7 +17,44 @@ export default function ProductDetail() {
   const [addedToCart, setAddedToCart] = useState(false);
 
   // Get all images (primary image + any additional ones)
-  const galleryImages = product?.image_url ? [product.image_url] : [];
+  const getGalleryImages = () => {
+    const images = [];
+    
+    // Add primary image first
+    if (product?.image_url) {
+      images.push(product.image_url);
+    }
+    
+    // Add additional images
+    if (product?.additional_images) {
+      try {
+        let additionalImages = [];
+        
+        // Try parsing if it's a JSON string
+        if (typeof product.additional_images === 'string') {
+          additionalImages = JSON.parse(product.additional_images);
+        } else if (Array.isArray(product.additional_images)) {
+          additionalImages = product.additional_images;
+        }
+        
+        // Add each additional image
+        if (Array.isArray(additionalImages)) {
+          additionalImages.forEach(img => {
+            const imageUrl = typeof img === 'string' ? img : img.url;
+            if (imageUrl) {
+              images.push(imageUrl);
+            }
+          });
+        }
+      } catch (e) {
+        console.error('Error parsing additional images:', e);
+      }
+    }
+    
+    return images;
+  };
+
+  const galleryImages = product ? getGalleryImages() : [];
 
   useEffect(() => {
     fetchProduct();

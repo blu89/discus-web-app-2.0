@@ -7,7 +7,7 @@ export const getAllProducts = async (req, res) => {
     // Start with basic select - don't reference potentially missing columns
     let query = supabase
       .from('products')
-      .select('id, name, description, price, stock, image_url, created_at, updated_at, category_id, product_type_id, supplier_id, sizes')
+      .select('id, name, description, price, stock, image_url, additional_images, created_at, updated_at, category_id, product_type_id, supplier_id, sizes')
       .limit(1000); // Prevent huge responses
 
     if (category_id) {
@@ -38,7 +38,7 @@ export const getProductById = async (req, res) => {
 
     const { data, error } = await supabase
       .from('products')
-      .select('id, name, description, price, stock, image_url, created_at, updated_at, category_id, product_type_id, supplier_id, sizes')
+      .select('id, name, description, price, stock, image_url, additional_images, created_at, updated_at, category_id, product_type_id, supplier_id, sizes')
       .eq('id', id)
       .single();
 
@@ -56,7 +56,7 @@ export const getProductById = async (req, res) => {
 
 export const createProduct = async (req, res) => {
   try {
-    const { name, description, price, stock, category_id, product_type_id, supplier_id, image_url, sizes } = req.body;
+    const { name, description, price, stock, category_id, product_type_id, supplier_id, image_url, additional_images, sizes } = req.body;
 
     if (!name || !price) {
       return res.status(400).json({ error: 'Name and price are required' });
@@ -69,6 +69,7 @@ export const createProduct = async (req, res) => {
       price: parseFloat(price),
       stock: stock ? parseInt(stock) : 0,
       image_url: image_url || null,
+      additional_images: additional_images ? JSON.stringify(additional_images) : null,
       sizes: sizes ? JSON.stringify(sizes) : null
     };
 
@@ -80,7 +81,7 @@ export const createProduct = async (req, res) => {
     const { data, error } = await supabase
       .from('products')
       .insert([insertData])
-      .select('id, name, description, price, stock, image_url, created_at, updated_at, category_id, product_type_id, supplier_id, sizes');
+      .select('id, name, description, price, stock, image_url, additional_images, created_at, updated_at, category_id, product_type_id, supplier_id, sizes');
 
     if (error) {
       console.error('Supabase createProduct error:', error);
@@ -99,13 +100,13 @@ export const updateProduct = async (req, res) => {
     const { id } = req.params;
     const updates = req.body;
 // Sanitize updates - only allow specific fields
-    const allowedFields = ['name', 'description', 'price', 'stock', 'category_id', 'product_type_id', 'supplier_id', 'image_url', 'sizes'];
+    const allowedFields = ['name', 'description', 'price', 'stock', 'category_id', 'product_type_id', 'supplier_id', 'image_url', 'additional_images', 'sizes'];
     const sanitizedUpdates = {};
     const uuidFields = ['category_id', 'product_type_id', 'supplier_id'];
     
     for (const [key, value] of Object.entries(updates)) {
       if (allowedFields.includes(key)) {
-        if (key === 'sizes') {
+        if (key === 'sizes' || key === 'additional_images') {
           sanitizedUpdates[key] = value ? JSON.stringify(value) : null;
         } else if (uuidFields.includes(key)) {
           // Convert empty strings to null for UUID fields
@@ -120,7 +121,7 @@ export const updateProduct = async (req, res) => {
       .from('products')
       .update(sanitizedUpdates)
       .eq('id', id)
-      .select('id, name, description, price, stock, image_url, created_at, updated_at, category_id, product_type_id, supplier_id, sizes');
+      .select('id, name, description, price, stock, image_url, additional_images, created_at, updated_at, category_id, product_type_id, supplier_id, sizes');
 
     if (error) {
       console.error('Supabase updateProduct error:', error);

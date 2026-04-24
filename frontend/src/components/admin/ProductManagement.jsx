@@ -22,8 +22,10 @@ export default function AdminProducts() {
     product_type_id: '',
     supplier_id: '',
     image_url: '',
+    additional_images: [],
     sizes: []
   });
+  const [additionalImagePreviews, setAdditionalImagePreviews] = useState([]);
   const { user } = useAuth();
 
   useEffect(() => {
@@ -139,6 +141,61 @@ export default function AdminProducts() {
     }
   };
 
+  const handleAdditionalImageUpload = async (e) => {
+    const files = e.target.files;
+    if (!files || files.length === 0) return;
+
+    setUploading(true);
+    try {
+      const newImages = [...(formData.additional_images || [])];
+      const newPreviews = [...additionalImagePreviews];
+
+      for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        
+        // Preview the image
+        const reader = new FileReader();
+        reader.onloadend = () => {
+          newPreviews.push({
+            url: reader.result,
+            isNew: true
+          });
+          setAdditionalImagePreviews(newPreviews);
+        };
+        reader.readAsDataURL(file);
+
+        // Upload to Cloudinary
+        const response = await uploadAPI.uploadImage(file);
+        newImages.push({
+          url: response.data.url,
+          publicId: response.data.publicId,
+          isNew: true
+        });
+      }
+
+      setFormData({
+        ...formData,
+        additional_images: newImages
+      });
+      setError('');
+    } catch (err) {
+      setError(`Image upload failed: ${err.response?.data?.error || err.message}`);
+    } finally {
+      setUploading(false);
+    }
+  };
+
+  const handleRemoveAdditionalImage = (index) => {
+    const newImages = formData.additional_images.filter((_, i) => i !== index);
+    const newPreviews = additionalImagePreviews.filter((_, i) => i !== index);
+    
+    setFormData({
+      ...formData,
+      additional_images: newImages
+    });
+    setAdditionalImagePreviews(newPreviews);
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError('');
@@ -151,9 +208,10 @@ export default function AdminProducts() {
       }
       fetchData();
       setShowForm(false);
-      setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', sizes: [] });
+      setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', additional_images: [], sizes: [] });
       setEditingId(null);
       setPreviewImage(null);
+      setAdditionalImagePreviews([]);
     } catch (err) {
       setError(err.response?.data?.error || 'Operation failed');
     }
@@ -162,6 +220,8 @@ export default function AdminProducts() {
   const handleEdit = (product) => {
     let sizes = [];
     let sizesDisplayStr = '';
+    let additionalImages = [];
+    let additionalPreviews = [];
     
     if (product.sizes) {
       try {
@@ -191,6 +251,29 @@ export default function AdminProducts() {
         }
       }
     }
+
+    // Parse additional_images
+    if (product.additional_images) {
+      try {
+        const parsed = JSON.parse(product.additional_images);
+        if (Array.isArray(parsed)) {
+          additionalImages = parsed;
+          additionalPreviews = parsed.map(img => ({
+            url: typeof img === 'string' ? img : img.url,
+            isNew: false
+          }));
+        }
+      } catch (e) {
+        // If parsing fails, try as is
+        if (Array.isArray(product.additional_images)) {
+          additionalImages = product.additional_images;
+          additionalPreviews = product.additional_images.map(img => ({
+            url: typeof img === 'string' ? img : img.url,
+            isNew: false
+          }));
+        }
+      }
+    }
     
     // Create display string for sizes input
     sizesDisplayStr = sizes.map(s => `${s.size}:${s.price}`).join(', ');
@@ -204,10 +287,12 @@ export default function AdminProducts() {
       product_type_id: product.product_type_id || '',
       supplier_id: product.supplier_id || '',
       image_url: product.image_url || '',
+      additional_images: additionalImages,
       sizes: sizes
     });
     setSizesInput(sizesDisplayStr); // Set the raw input string
     setPreviewImage(product.image_url);
+    setAdditionalImagePreviews(additionalPreviews);
     setEditingId(product.id);
     setShowForm(true);
   };
@@ -248,9 +333,10 @@ export default function AdminProducts() {
           onClick={() => {
             setShowForm(!showForm);
             setEditingId(null);
-            setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', sizes: [] });
+            setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', additional_images: [], sizes: [] });
             setSizesInput(''); // Reset sizes input
             setPreviewImage(null);
+            setAdditionalImagePreviews([]);
           }}
           className="bg-green-500 dark:bg-green-600 hover:bg-green-600 dark:hover:bg-green-700 text-white px-6 py-2 rounded transition"
         >
@@ -370,6 +456,47 @@ export default function AdminProducts() {
                 <p className="mt-2 text-green-600 dark:text-green-400">✓ Image uploaded</p>
               )}
             </div>
+          </div>
+
+          <div className="mb-4">
+            <label className="block text-gray-700 dark:text-gray-200 mb-2 font-semibold">Additional Images (Product Gallery)</label>
+            <div className="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg p-4 mb-4">
+              <input
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleAdditionalImageUpload}
+                disabled={uploading}
+                className="w-full"
+              />
+              <p className="text-xs text-gray-500 dark:text-gray-400 mt-2">You can select multiple images at once</p>
+              {uploading && <p className="mt-2 text-blue-500 dark:text-blue-400">Uploading...</p>}
+            </div>
+
+            {/* Display uploaded additional images */}
+            {additionalImagePreviews && additionalImagePreviews.length > 0 && (
+              <div>
+                <h4 className="text-gray-700 dark:text-gray-200 font-semibold mb-3">Uploaded Images ({additionalImagePreviews.length})</h4>
+                <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                  {additionalImagePreviews.map((image, index) => (
+                    <div key={index} className="relative group">
+                      <img 
+                        src={image.url} 
+                        alt={`Additional ${index}`}
+                        className="w-full h-32 object-cover rounded-lg border border-gray-300 dark:border-gray-600"
+                      />
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveAdditionalImage(index)}
+                        className="absolute top-2 right-2 bg-red-500 hover:bg-red-600 text-white rounded-full w-8 h-8 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity"
+                      >
+                        ×
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
 
           <button
