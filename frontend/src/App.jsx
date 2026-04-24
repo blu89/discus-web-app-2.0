@@ -16,6 +16,7 @@ import TermsAndPolicy from './pages/TermsAndPolicy';
 import Login from './pages/Login';
 import Register from './pages/Register';
 import Storefront from './pages/Storefront';
+import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
@@ -48,6 +49,7 @@ function AppContent() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/storefront" element={<Storefront />} />
+        <Route path="/product/:productId" element={<ProductDetail />} />
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />

@@ -209,7 +209,7 @@ export default function Home() {
                 <div 
                   key={product.id} 
                   className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden transition transform hover:-translate-y-1 cursor-pointer border-0"
-                  onClick={() => navigate('/storefront', { state: { productId: product.id } })}
+                  onClick={() => navigate(`/product/${product.id}`)}
                 >
                   {/* Product Image */}
                   <div className="bg-gray-200 dark:bg-gray-700 h-48 flex items-center justify-center overflow-hidden">
@@ -297,7 +297,7 @@ export default function Home() {
                 <div 
                   key={product.id} 
                   className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden transition transform hover:-translate-y-1 cursor-pointer border-0"
-                  onClick={() => navigate('/storefront', { state: { productId: product.id } })}
+                  onClick={() => navigate(`/product/${product.id}`)}
                 >
                   {/* Product Image */}
                   <div className="relative h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
@@ -499,7 +499,7 @@ export default function Home() {
         
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">Our Partners</h2>
-          <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-lg">Working with the best shipping companies around the world</p>
+          <p className="text-center text-gray-600 dark:text-gray-400 mb-12 text-lg">Working with the best shipping companies around the world.</p>
           
           <div className="carousel-container">
             <div className="carousel-track">
