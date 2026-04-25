@@ -2,6 +2,9 @@ import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { productAPI } from '../services/api';
 import { useCart } from '../hooks/useCart';
+import ReviewForm from '../components/ReviewForm';
+import ReviewCard from '../components/ReviewCard';
+import axios from 'axios';
 
 export default function ProductDetail() {
   const { productId } = useParams();
@@ -16,6 +19,9 @@ export default function ProductDetail() {
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [hoveredImageIndex, setHoveredImageIndex] = useState(null);
   const [addedToCart, setAddedToCart] = useState(false);
+  const [reviews, setReviews] = useState([]);
+  const [loadingReviews, setLoadingReviews] = useState(false);
+  const [averageRating, setAverageRating] = useState(0);
 
   // Get all images (primary image + any additional ones)
   const getGalleryImages = () => {
@@ -57,6 +63,12 @@ export default function ProductDetail() {
 
   const galleryImages = product ? getGalleryImages() : [];
 
+
+  useEffect(() => {
+    if (product?.id) {
+      fetchReviews();
+    }
+  }, [product?.id]);
   useEffect(() => {
     fetchProduct();
   }, [productId]);
@@ -80,7 +92,22 @@ export default function ProductDetail() {
       } else {
         setError('Product not found');
       }
+    
+
+  const fetchReviews = async () => {
+    try {
+      setLoadingReviews(true);
+      const response = await axios.get(`/api/reviews/product/${productId}`, {
+        params: { limit: 100 }
+      });
+      setReviews(response.data.data || []);
+      setAverageRating(response.data.averageRating || 0);
     } catch (err) {
+      console.error('Error fetching reviews:', err);
+    } finally {
+      setLoadingReviews(false);
+    }
+  };} catch (err) {
       console.error('Failed to fetch product:', err);
       setError('Failed to load product details');
     } finally {
@@ -414,6 +441,48 @@ export default function ProductDetail() {
           autoFocus
         />
       )}
+
+      {/* Reviews Section */}
+      <div className="max-w-7xl mx-auto px-4 py-12 border-t border-gray-200 dark:border-gray-700 mt-12">
+        <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Customer Reviews</h2>
+
+        {/* Overall Rating */}
+        {reviews.length > 0 && (
+          <div className="bg-white dark:bg-gray-800 rounded-lg shadow-md p-6 mb-8">
+            <div className="flex items-center gap-4">
+              <div>
+                <div className="text-4xl font-bold text-gray-900 dark:text-white">
+                  {averageRating}
+                </div>
+                <div className="text-yellow-400 text-2xl">
+                  {'★'.repeat(Math.round(averageRating)) + '☆'.repeat(5 - Math.round(averageRating))}
+                </div>
+              </div>
+              <p className="text-gray-600 dark:text-gray-400">
+                Based on {reviews.length} review{reviews.length !== 1 ? 's' : ''}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Review Form */}
+        <ReviewForm productId={productId} onReviewSubmitted={fetchReviews} />
+
+        {/* Reviews List */}
+        {loadingReviews ? (
+          <p className="text-center py-12 text-gray-600 dark:text-gray-400">Loading reviews...</p>
+        ) : reviews.length > 0 ? (
+          <div className="space-y-4">
+            {reviews.map((review) => (
+              <ReviewCard key={review.id} review={review} />
+            ))}
+          </div>
+        ) : (
+          <div className="text-center py-12 text-gray-600 dark:text-gray-400">
+            <p>No reviews yet. Be the first to review this product!</p>
+          </div>
+        )}
+      </div>
     </div>
   );
 }

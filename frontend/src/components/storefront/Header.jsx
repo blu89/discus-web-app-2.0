@@ -42,8 +42,14 @@ export default function Header() {
           {/* Desktop Navigation */}
           <nav className="hidden md:flex items-center gap-8">
             
+            <Link to="/storefront" className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium transition">
+              Shop
+            </Link>
             <Link to="/about" className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium transition">
               About
+            </Link>
+            <Link to="/reviews" className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium transition">
+              Reviews
             </Link>
             <Link to="/contact" className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium transition">
               Contact
@@ -59,6 +65,12 @@ export default function Header() {
                     Admin
                   </Link>
                 )}
+                <Link
+                  to="/my-reviews"
+                  className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium transition"
+                >
+                  My Reviews
+                </Link>
                 <span className="text-gray-600 dark:text-gray-400 font-medium">{user.full_name}</span>
                 <button
                   onClick={handleLogout}

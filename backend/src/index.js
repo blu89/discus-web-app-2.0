@@ -17,6 +17,7 @@ import supplierRoutes from './routes/suppliers.js';
 import orderRoutes from './routes/orders.js';
 import uploadRoutes from './routes/upload.js';
 import heroRoutes from './routes/hero.js';
+import reviewRoutes from './routes/reviews.js';
 import { systemRoutes } from './routes/system.js';
 
 const app = express();
@@ -48,6 +49,7 @@ app.use('/api/suppliers', supplierRoutes);
 app.use('/api/orders', orderRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/hero', heroRoutes);
+app.use('/api/reviews', reviewRoutes);
 
 // System routes (health check, 404, error handler)
 systemRoutes(app);

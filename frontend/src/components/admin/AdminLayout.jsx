@@ -8,6 +8,7 @@ import ProductTypeManagement from './ProductTypeManagement';
 import CategoryManagement from './CategoryManagement';
 import OrderManagement from './OrderManagement';
 import SupplierManagement from './SupplierManagement';
+import ReviewManagement from './ReviewManagement';
 
 export default function AdminLayout() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -41,6 +42,8 @@ export default function AdminLayout() {
         return <SupplierManagement />;
       case 'orders':
         return <OrderManagement />;
+      case 'reviews':
+        return <ReviewManagement />;
       default:
         return <AdminDashboard />;
     }
@@ -52,6 +55,7 @@ export default function AdminLayout() {
     { id: 'products', label: 'Products', icon: '📦' },
     { id: 'product-types', label: 'Product Types', icon: '🏷️' },
     { id: 'categories', label: 'Categories', icon: '🏷️' },
+    { id: 'reviews', label: 'Reviews', icon: '⭐' },
     { id: 'suppliers', label: 'Suppliers', icon: '🏭' },
     { id: 'orders', label: 'Orders', icon: '📋' },
   ];

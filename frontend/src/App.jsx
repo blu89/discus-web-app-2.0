@@ -20,6 +20,8 @@ import ProductDetail from './pages/ProductDetail';
 import Cart from './pages/Cart';
 import Checkout from './pages/Checkout';
 import OrderConfirmation from './pages/OrderConfirmation';
+import Reviews from './pages/Reviews';
+import MyReviews from './pages/MyReviews';
 import AdminLayout from './components/admin/AdminLayout';
 
 function ProtectedAdminRoute({ children }) {
@@ -53,6 +55,8 @@ function AppContent() {
         <Route path="/cart" element={<Cart />} />
         <Route path="/checkout" element={<Checkout />} />
         <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+        <Route path="/reviews" element={<Reviews />} />
+        <Route path="/my-reviews" element={<MyReviews />} />
 
         {/* Admin Routes */}
         <Route
