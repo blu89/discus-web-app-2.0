@@ -1,4 +1,5 @@
 import supabase from '../config/supabase.js';
+import { sendOrderNotification, sendOrderConfirmationToCustomer } from '../services/emailService.js';
 
 export const createOrder = async (req, res) => {
   try {
@@ -76,6 +77,24 @@ export const createOrder = async (req, res) => {
           .eq('id', item.product_id);
       }
     }
+
+    // Fetch order items with product details for email
+    const { data: orderItemsWithProducts } = await supabase
+      .from('order_items')
+      .select('*, products:products(name)')
+      .eq('order_id', order[0].id);
+
+    const emailOrderItems = orderItemsWithProducts?.map(item => ({
+      product_name: item.products?.name || 'Product',
+      quantity: item.quantity,
+      price: item.price
+    })) || [];
+
+    // Send emails asynchronously (don't wait for them)
+    setImmediate(async () => {
+      await sendOrderNotification(order[0], emailOrderItems);
+      await sendOrderConfirmationToCustomer(order[0], emailOrderItems);
+    });
 
     res.status(201).json(order[0]);
   } catch (error) {
