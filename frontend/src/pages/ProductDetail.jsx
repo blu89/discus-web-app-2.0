@@ -22,6 +22,8 @@ export default function ProductDetail() {
   const [reviews, setReviews] = useState([]);
   const [loadingReviews, setLoadingReviews] = useState(false);
   const [averageRating, setAverageRating] = useState(0);
+  const [relatedProducts, setRelatedProducts] = useState([]);
+  const [loadingRelated, setLoadingRelated] = useState(false);
 
   // Get all images (primary image + any additional ones)
   const getGalleryImages = () => {
@@ -67,6 +69,7 @@ export default function ProductDetail() {
   useEffect(() => {
     if (product?.id) {
       fetchReviews();
+      fetchRelatedProducts();
     }
   }, [product?.id]);
   useEffect(() => {
@@ -112,6 +115,27 @@ export default function ProductDetail() {
       console.error('Error fetching reviews:', err);
     } finally {
       setLoadingReviews(false);
+    }
+  };
+
+  const fetchRelatedProducts = async () => {
+    try {
+      setLoadingRelated(true);
+      if (!product?.category_id) {
+        setRelatedProducts([]);
+        return;
+      }
+      // Fetch all products in the same category
+      const response = await productAPI.getAll(product.category_id);
+      const products = Array.isArray(response.data) ? response.data : [];
+      // Filter out current product and limit to 4 related products
+      const related = products.filter(p => p.id !== productId).slice(0, 4);
+      setRelatedProducts(related);
+    } catch (err) {
+      console.error('Error fetching related products:', err);
+      setRelatedProducts([]);
+    } finally {
+      setLoadingRelated(false);
     }
   };
 
@@ -440,6 +464,70 @@ export default function ProductDetail() {
           tabIndex={0}
           autoFocus
         />
+      )}
+
+      {/* Related Products Section */}
+      {relatedProducts.length > 0 && (
+        <div className="max-w-7xl mx-auto px-4 py-12 border-t border-gray-200 dark:border-gray-700 mt-12">
+          <h2 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">Related Products</h2>
+          
+          {loadingRelated ? (
+            <div className="text-center py-12">
+              <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500 mx-auto"></div>
+              <p className="text-gray-600 dark:text-gray-400 mt-4">Loading related products...</p>
+            </div>
+          ) : (
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+              {relatedProducts.map((relatedProduct) => (
+                <div 
+                  key={relatedProduct.id}
+                  className="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-700 overflow-hidden hover:shadow-lg dark:hover:shadow-gray-600 transition cursor-pointer"
+                  onClick={() => navigate(`/product/${relatedProduct.id}`)}
+                >
+                  {/* Product Image */}
+                  <div className="relative bg-gray-200 dark:bg-gray-700 h-48 overflow-hidden group">
+                    {relatedProduct.image_url ? (
+                      <img 
+                        src={relatedProduct.image_url} 
+                        alt={relatedProduct.name}
+                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-4xl">📦</div>
+                    )}
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="p-4">
+                    <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                      {relatedProduct.name}
+                    </h3>
+                    
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-3 line-clamp-2">
+                      {relatedProduct.description || 'No description available'}
+                    </p>
+
+                    {/* Price */}
+                    <div className="flex items-center justify-between">
+                      <p className="text-2xl font-bold text-green-600 dark:text-green-400">
+                        ${relatedProduct.price.toFixed(0)}
+                      </p>
+                      {relatedProduct.stock > 0 ? (
+                        <span className="text-xs font-semibold text-green-600 dark:text-green-400 bg-green-50 dark:bg-green-900/30 px-2 py-1 rounded">
+                          In Stock
+                        </span>
+                      ) : (
+                        <span className="text-xs font-semibold text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/30 px-2 py-1 rounded">
+                          Out of Stock
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
+        </div>
       )}
 
       {/* Reviews Section */}
