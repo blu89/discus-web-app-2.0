@@ -92,7 +92,13 @@ export default function ProductDetail() {
       } else {
         setError('Product not found');
       }
-    
+    } catch (err) {
+      console.error('Failed to fetch product:', err);
+      setError('Failed to load product details');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   const fetchReviews = async () => {
     try {
@@ -106,12 +112,6 @@ export default function ProductDetail() {
       console.error('Error fetching reviews:', err);
     } finally {
       setLoadingReviews(false);
-    }
-  };} catch (err) {
-      console.error('Failed to fetch product:', err);
-      setError('Failed to load product details');
-    } finally {
-      setLoading(false);
     }
   };
 
