@@ -1,5 +1,8 @@
 import transporter from '../config/email.js';
 
+// Logo URL - can be customized via environment variable
+const LOGO_URL = process.env.WEBSITE_LOGO_URL || 'https://via.placeholder.com/200x50?text=Charles+Discus';
+
 /**
  * Send order notification email to admin
  * @param {Object} order - Order details
@@ -38,6 +41,8 @@ export const sendOrderNotification = async (order, orderItems) => {
           <style>
             body { font-family: Arial, sans-serif; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .logo-section { text-align: center; padding-bottom: 20px; border-bottom: 2px solid #2563eb; margin-bottom: 20px; }
+            .logo-section img { max-height: 60px; }
             .header { background-color: #2563eb; color: white; padding: 20px; border-radius: 5px 5px 0 0; }
             .content { background-color: #f9fafb; padding: 20px; border-radius: 0 0 5px 5px; }
             .section { margin-bottom: 20px; }
@@ -51,6 +56,9 @@ export const sendOrderNotification = async (order, orderItems) => {
         </head>
         <body>
           <div class="container">
+            <div class="logo-section">
+              <img src="${LOGO_URL}" alt="Charles Discus Logo" style="max-width: 200px; height: auto;">
+            </div>
             <div class="header">
               <h1 style="margin: 0;">New Order Received!</h1>
               <p style="margin: 5px 0 0 0;">Order #${order.id}</p>
@@ -170,6 +178,8 @@ export const sendOrderConfirmationToCustomer = async (order, orderItems) => {
           <style>
             body { font-family: Arial, sans-serif; color: #333; }
             .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+            .logo-section { text-align: center; padding-bottom: 20px; border-bottom: 2px solid #2563eb; margin-bottom: 20px; }
+            .logo-section img { max-height: 60px; }
             .header { background-color: #2563eb; color: white; padding: 20px; border-radius: 5px 5px 0 0; }
             .content { background-color: #f9fafb; padding: 20px; border-radius: 0 0 5px 5px; }
             .section { margin-bottom: 20px; }
@@ -183,6 +193,9 @@ export const sendOrderConfirmationToCustomer = async (order, orderItems) => {
         </head>
         <body>
           <div class="container">
+            <div class="logo-section">
+              <img src="${LOGO_URL}" alt="Charles Discus Logo" style="max-width: 200px; height: auto;">
+            </div>
             <div class="header">
               <h1 style="margin: 0;">Order Confirmation</h1>
               <p style="margin: 5px 0 0 0;">Order #${order.id}</p>
