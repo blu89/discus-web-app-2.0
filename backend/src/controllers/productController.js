@@ -1,5 +1,4 @@
 import supabase from '../config/supabase.js';
-import { generateShortId } from '../utils/idGenerator.js';
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -65,7 +64,6 @@ export const createProduct = async (req, res) => {
 
     // Build insert object - only include fields that exist
     const insertData = {
-      id: generateShortId(), // Generate short product ID
       name,
       description: description || null,
       price: parseFloat(price),
