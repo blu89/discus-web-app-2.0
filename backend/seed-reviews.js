@@ -22,10 +22,11 @@ async function seedReviews() {
     let { data: users, error: usersError } = await supabase
       .from('users')
       .select('id')
-      .limit(10);
+      .limit(20);
 
-    if (!users || users.length === 0) {
-      console.log('No users found. Creating demo users...');
+    // Always ensure we have at least 10 users for review seeding
+    if (!users || users.length < 10) {
+      console.log(`Found only ${users?.length || 0} users. Creating more demo users...`);
       
       // Create sample users
       const demoUsers = [
@@ -33,7 +34,12 @@ async function seedReviews() {
         { full_name: 'Sarah Johnson', email: 'sarah@example.com', password_hash: 'demo' },
         { full_name: 'Mike Wilson', email: 'mike@example.com', password_hash: 'demo' },
         { full_name: 'Emma Brown', email: 'emma@example.com', password_hash: 'demo' },
-        { full_name: 'David Lee', email: 'david@example.com', password_hash: 'demo' }
+        { full_name: 'David Lee', email: 'david@example.com', password_hash: 'demo' },
+        { full_name: 'Lisa Anderson', email: 'lisa@example.com', password_hash: 'demo' },
+        { full_name: 'James Martin', email: 'james@example.com', password_hash: 'demo' },
+        { full_name: 'Jennifer White', email: 'jennifer@example.com', password_hash: 'demo' },
+        { full_name: 'Robert Garcia', email: 'robert@example.com', password_hash: 'demo' },
+        { full_name: 'Maria Lopez', email: 'maria@example.com', password_hash: 'demo' }
       ];
 
       const { data: createdUsers, error: createError } = await supabase
@@ -46,8 +52,8 @@ async function seedReviews() {
         return;
       }
 
-      users = createdUsers;
-      console.log(`Created ${users.length} demo users`);
+      users = [...(users || []), ...createdUsers];
+      console.log(`Created ${createdUsers.length} demo users. Total users now: ${users.length}`);
     }
 
     console.log(`Found ${users.length} users for reviews`);
