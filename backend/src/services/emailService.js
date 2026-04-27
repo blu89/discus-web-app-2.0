@@ -1,7 +1,7 @@
 import transporter from '../config/email.js';
 
 // Logo URL - can be customized via environment variable
-const LOGO_URL = process.env.WEBSITE_LOGO_URL || 'https://via.placeholder.com/200x50?text=Charles+Discus';
+const LOGO_URL = process.env.WEBSITE_LOGO_URL || 'https://res.cloudinary.com/doqzc3md2/image/upload/v1777275813/ChatGPT_Image_Apr_26_2026_05_39_03_AM_uqxhtb.png';
 
 /**
  * Send order notification email to admin
