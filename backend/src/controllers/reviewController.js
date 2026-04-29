@@ -1,6 +1,5 @@
 import supabase from '../config/supabase.js';
 import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
-import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 
 export const getAllReviews = async (req, res) => {
   try {
