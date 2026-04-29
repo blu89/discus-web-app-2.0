@@ -10,14 +10,17 @@ import { verifyToken, verifyAdmin } from '../middleware/auth.js';
 
 const router = express.Router();
 
-// Admin routes (must come before /:id)
-router.get('/', verifyToken, verifyAdmin, getAllOrders);
+// POST /orders - Create order (public)
+router.post('/', createOrder);
 
-// User authenticated routes (must come before /:id)
+// GET /orders/user/orders - Get user's own orders (authenticated)
 router.get('/user/orders', verifyToken, getUserOrders);
 
-// Public/Specific routes
-router.post('/', createOrder);
+// Admin routes (must come before /:id)
+// GET /orders - Get all orders (admin only)
+router.get('/', verifyToken, verifyAdmin, getAllOrders);
+
+// Specific routes (must come after named routes)
 router.get('/:id', getOrderById);
 router.put('/:id/status', verifyToken, verifyAdmin, updateOrderStatus);
 

@@ -182,14 +182,17 @@ export const getUserOrders = async (req, res) => {
 
 export const getAllOrders = async (req, res) => {
   try {
+    console.log('getAllOrders called by user:', req.user?.id);
     const { data: orders, error } = await supabase
       .from('orders')
       .select('*');
 
     if (error) {
-      console.error('getAllOrders error:', error);
+      console.error('getAllOrders Supabase error:', error);
       return res.status(500).json({ error: error.message });
     }
+
+    console.log(`Found ${orders?.length || 0} orders`);
 
     // Fetch all order items for these orders at once
     if (orders && orders.length > 0) {
@@ -214,9 +217,10 @@ export const getAllOrders = async (req, res) => {
     }
 
     setStaticCacheHeaders(req, res);
+    console.log('getAllOrders returning response');
     res.json(orders || []);
   } catch (error) {
-    console.error('getAllOrders exception:', error);
+    console.error('getAllOrders exception:', error.message, error.stack);
     res.status(500).json({ error: error.message });
   }
 };

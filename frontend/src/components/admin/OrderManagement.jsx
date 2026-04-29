@@ -16,9 +16,38 @@ export default function AdminOrders() {
   const fetchOrders = async () => {
     try {
       const response = await orderAPI.getAll();
-      setOrders(response.data);
+      console.log('OrderManagement fetchOrders full response:', response);
+      console.log('Response.data:', response.data);
+      console.log('Response.data type:', typeof response.data);
+      console.log('Response.data is array?', Array.isArray(response.data));
+      
+      // Handle different response formats
+      let ordersData = response.data;
+      if (typeof ordersData === 'object' && ordersData !== null && !Array.isArray(ordersData)) {
+        // If response.data is an object (not array), try to extract orders array
+        if (ordersData.orders && Array.isArray(ordersData.orders)) {
+          ordersData = ordersData.orders;
+        } else if (ordersData.data && Array.isArray(ordersData.data)) {
+          ordersData = ordersData.data;
+        }
+      }
+      
+      const finalOrders = Array.isArray(ordersData) ? ordersData : [];
+      console.log('Final orders to display:', finalOrders);
+      setOrders(finalOrders);
+      
+      if (finalOrders.length === 0) {
+        console.warn('No orders returned from API');
+      }
     } catch (err) {
-      setError('Failed to fetch orders');
+      console.error('OrderManagement fetchOrders error:', err);
+      console.error('Error details:', {
+        message: err.message,
+        response: err.response?.data,
+        status: err.response?.status
+      });
+      setError(`Failed to fetch orders: ${err.message}`);
+      setOrders([]);
     } finally {
       setLoading(false);
     }
