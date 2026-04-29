@@ -40,6 +40,21 @@ app.use(cors({
 // Handle preflight requests
 app.options('*', cors());
 
+// Security headers middleware
+app.use((req, res, next) => {
+  // Prevent exposing sensitive information
+  res.setHeader('X-Content-Type-Options', 'nosniff');
+  res.setHeader('X-Frame-Options', 'DENY');
+  res.setHeader('X-XSS-Protection', '1; mode=block');
+  res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains');
+  
+  // Hide server info
+  res.removeHeader('Server');
+  res.removeHeader('X-Powered-By');
+  
+  next();
+});
+
 app.use(express.json());
 app.use(cookieParser());
 app.use(cacheMiddleware);

@@ -3,6 +3,13 @@ import NodeCache from 'node-cache';
 // Initialize cache with 10 minute standard TTL (600 seconds)
 const cache = new NodeCache({ stdTTL: 600, checkperiod: 120 });
 
+// Security Note: This cache is only used for:
+// - Public GET endpoints (products, categories, etc.)
+// - Never used for authenticated requests (auth middleware skips it)
+// - Never used for sensitive endpoints (debug, config, env, settings, health, version, status)
+// - Never caches error responses
+// Environment variables are never stored in cache and never exposed to clients
+
 // Cache key generators
 export const cacheKeys = {
   allProducts: 'products:all',
@@ -62,6 +69,22 @@ export const cacheMiddleware = (req, res, next) => {
     return next();
   }
 
+  // Skip cache for sensitive endpoints that might contain env variables or config
+  const sensitivePatterns = [
+    '/debug',
+    '/config',
+    '/env',
+    '/settings',
+    '/health',
+    '/version',
+    '/status'
+  ];
+
+  if (sensitivePatterns.some(pattern => req.originalUrl.includes(pattern))) {
+    console.log('Skipping cache for sensitive endpoint:', req.originalUrl);
+    return next();
+  }
+
   const key = req.originalUrl;
   const cachedData = cache.get(key);
 
@@ -75,6 +98,12 @@ export const cacheMiddleware = (req, res, next) => {
 
   // Override res.json to cache response
   res.json = function (data) {
+    // Don't cache error responses or responses with sensitive data
+    if (data && (data.error || data.message?.includes('error'))) {
+      res.setHeader('X-Cache', 'SKIP');
+      return originalJson(data);
+    }
+    
     cache.set(key, data);
     res.setHeader('X-Cache', 'MISS');
     return originalJson(data);
