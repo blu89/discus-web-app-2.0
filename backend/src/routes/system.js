@@ -40,6 +40,30 @@ export const systemRoutes = (app) => {
     }
   });
 
+  // Debug endpoint - check IP addresses of orders
+  app.get('/api/debug/orders-ip', async (req, res) => {
+    try {
+      const { data: orders, error } = await supabase
+        .from('orders')
+        .select('id, customer_name, customer_email, ip_address, created_at')
+        .order('created_at', { ascending: false })
+        .limit(20);
+
+      if (error) {
+        return res.status(500).json({ error: error.message });
+      }
+
+      res.json({
+        status: 'Orders with IP addresses',
+        total: orders?.length || 0,
+        orders: orders || [],
+        note: 'IP addresses help track customer locations and detect fraud'
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
   // 404 handler
   app.use((req, res) => {
     res.status(404).json({ 

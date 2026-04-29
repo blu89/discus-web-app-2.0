@@ -1,6 +1,7 @@
 import supabase from '../config/supabase.js';
 import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 import { sendOrderNotification, sendOrderConfirmationToCustomer } from '../services/emailService.js';
+import { getClientIpAddress } from '../utils/ipAddress.js';
 
 export const createOrder = async (req, res) => {
   try {
@@ -21,6 +22,10 @@ export const createOrder = async (req, res) => {
       billing_country
     } = req.body;
 
+    // Capture client IP address
+    const ipAddress = getClientIpAddress(req);
+    console.log('Order placed from IP:', ipAddress);
+
     const { data: order, error } = await supabase
       .from('orders')
       .insert([{
@@ -37,6 +42,7 @@ export const createOrder = async (req, res) => {
         billing_state,
         billing_zip,
         billing_country,
+        ip_address: ipAddress,
         status: 'pending',
         user_id: req.user?.id || null
       }])

@@ -102,6 +102,7 @@ export default function AdminOrders() {
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Order ID</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Customer</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Email</th>
+              <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">IP Address</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Total</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Status</th>
               <th className="px-6 py-3 text-left text-sm font-semibold text-gray-900 dark:text-white">Actions</th>
@@ -113,6 +114,7 @@ export default function AdminOrders() {
                 <td className="px-6 py-4 text-sm font-mono text-gray-600 dark:text-gray-400">{order.id.slice(0, 8)}...</td>
                 <td className="px-6 py-4 text-sm text-gray-900 dark:text-gray-100">{order.customer_name}</td>
                 <td className="px-6 py-4 text-sm text-gray-600 dark:text-gray-400">{order.customer_email}</td>
+                <td className="px-6 py-4 text-sm font-mono text-blue-600 dark:text-blue-400">{order.ip_address || 'N/A'}</td>
                 <td className="px-6 py-4 text-sm font-bold text-green-600 dark:text-green-400">${order.total_price.toFixed(0)}</td>
                 <td className="px-6 py-4 text-sm">
                   <select
@@ -192,6 +194,12 @@ export default function AdminOrders() {
                         <p className="text-sm text-gray-600 dark:text-gray-400">Email</p>
                         <p className="font-semibold text-gray-900 dark:text-white">{orderDetails.customer_email}</p>
                       </div>
+                      {orderDetails.ip_address && (
+                        <div>
+                          <p className="text-sm text-gray-600 dark:text-gray-400">IP Address</p>
+                          <p className="font-mono text-sm text-blue-600 dark:text-blue-400">{orderDetails.ip_address}</p>
+                        </div>
+                      )}
                     </div>
                   </section>
 
