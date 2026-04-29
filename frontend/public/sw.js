@@ -135,36 +135,3 @@ self.addEventListener('fetch', (event) => {
     })
   );
 });
-          return response;
-        })
-        .catch(() => {
-          // Return cached response on network error
-          return caches.match(request).then((response) => {
-            return response || new Response('Offline - resource not available', {
-              status: 503,
-              statusText: 'Service Unavailable',
-              headers: new Headers({ 'Content-Type': 'text/plain' }),
-            });
-          });
-        })
-    );
-    return;
-  }
-
-  // Handle static assets with cache-first strategy
-  event.respondWith(
-    caches.match(request).then((response) => {
-      return (
-        response ||
-        fetch(request).then((fetchResponse) => {
-          // Cache successful responses
-          if (fetchResponse && fetchResponse.status === 200) {
-            const cache = caches.open(CACHE_NAME);
-            cache.then((c) => c.put(request, fetchResponse.clone()));
-          }
-          return fetchResponse;
-        })
-      );
-    })
-  );
-});
