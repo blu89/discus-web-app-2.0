@@ -1,4 +1,5 @@
 import supabase from '../config/supabase.js';
+import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 
 export const getAllProducts = async (req, res) => {
   try {
@@ -25,6 +26,7 @@ export const getAllProducts = async (req, res) => {
       return res.status(500).json({ error: `Failed to fetch products: ${error.message}` });
     }
 
+    setStaticCacheHeaders(req, res);
     res.json(data || []);
   } catch (error) {
     console.error('getAllProducts exception:', error.message);
@@ -47,6 +49,7 @@ export const getProductById = async (req, res) => {
       return res.status(404).json({ error: 'Product not found' });
     }
 
+    setStaticCacheHeaders(req, res);
     res.json(data);
   } catch (error) {
     console.error('getProductById exception:', error.message);
@@ -88,6 +91,9 @@ export const createProduct = async (req, res) => {
       return res.status(400).json({ error: `Failed to create product: ${error.message}` });
     }
 
+    // Clear cache when new product is created
+    deleteCacheByPattern('product');
+    setNoCacheHeaders(req, res);
     res.status(201).json(data[0]);
   } catch (error) {
     console.error('createProduct exception:', error.message);
@@ -132,6 +138,9 @@ export const updateProduct = async (req, res) => {
       return res.status(404).json({ error: 'Product not found' });
     }
 
+    // Clear cache when product is updated
+    deleteCacheByPattern('product');
+    setNoCacheHeaders(req, res);
     res.json(data[0]);
   } catch (error) {
     console.error('updateProduct exception:', error.message);
@@ -157,6 +166,9 @@ export const deleteProduct = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    // Clear cache when product is deleted
+    deleteCacheByPattern('product');
+    setNoCacheHeaders(req, res);
     res.json({ message: 'Product deleted successfully' });
   } catch (error) {
     console.error('deleteProduct error:', error);

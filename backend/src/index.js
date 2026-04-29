@@ -20,6 +20,7 @@ import uploadRoutes from './routes/upload.js';
 import heroRoutes from './routes/hero.js';
 import reviewRoutes from './routes/reviews.js';
 import { systemRoutes } from './routes/system.js';
+import { cacheMiddleware } from './utils/cache.js';
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -41,6 +42,7 @@ app.options('*', cors());
 
 app.use(express.json());
 app.use(cookieParser());
+app.use(cacheMiddleware);
 
 // Routes
 app.use('/api/auth', authRoutes);

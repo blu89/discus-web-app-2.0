@@ -1,4 +1,6 @@
 import supabase from '../config/supabase.js';
+import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
+import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 
 export const getAllReviews = async (req, res) => {
   try {
@@ -24,6 +26,7 @@ export const getAllReviews = async (req, res) => {
       return res.status(500).json({ error: `Failed to fetch reviews: ${error.message}` });
     }
 
+    setStaticCacheHeaders(req, res);
     res.json({ data: data || [], total: count || 0 });
   } catch (error) {
     console.error('getAllReviews exception:', error.message);
@@ -60,6 +63,7 @@ export const getReviewsByProduct = async (req, res) => {
       ? (ratingData.reduce((sum, r) => sum + r.rating, 0) / ratingData.length).toFixed(1)
       : 0;
 
+    setStaticCacheHeaders(req, res);
     res.json({
       data: data || [],
       averageRating,
@@ -88,6 +92,7 @@ export const getUserReviews = async (req, res) => {
       return res.status(500).json({ error: `Failed to fetch user reviews: ${error.message}` });
     }
 
+    setStaticCacheHeaders(req, res);
     res.json({ data: data || [], total: count || 0 });
   } catch (error) {
     console.error('getUserReviews exception:', error.message);
@@ -137,6 +142,9 @@ export const createReview = async (req, res) => {
       return res.status(500).json({ error: `Failed to create review: ${error.message}` });
     }
 
+    // Clear review cache when new review is created
+    deleteCacheByPattern('review');
+    setNoCacheHeaders(req, res);
     res.status(201).json(data[0]);
   } catch (error) {
     console.error('createReview exception:', error.message);
@@ -167,6 +175,9 @@ export const updateReview = async (req, res) => {
       return res.status(500).json({ error: `Failed to update review: ${error.message}` });
     }
 
+    // Clear cache when review is updated
+    deleteCacheByPattern('review');
+    setNoCacheHeaders(req, res);
     res.json(data[0]);
   } catch (error) {
     console.error('updateReview exception:', error.message);
@@ -188,6 +199,9 @@ export const deleteReview = async (req, res) => {
       return res.status(500).json({ error: `Failed to delete review: ${error.message}` });
     }
 
+    // Clear cache when review is deleted
+    deleteCacheByPattern('review');
+    setNoCacheHeaders(req, res);
     res.json({ message: 'Review deleted successfully' });
   } catch (error) {
     console.error('deleteReview exception:', error.message);

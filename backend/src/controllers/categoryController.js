@@ -1,4 +1,5 @@
 import supabase from '../config/supabase.js';
+import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 
 export const getAllCategories = async (req, res) => {
   try {
@@ -10,6 +11,7 @@ export const getAllCategories = async (req, res) => {
       return res.status(500).json({ error: error.message });
     }
 
+    setStaticCacheHeaders(req, res);
     res.json(data);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -29,6 +31,9 @@ export const createCategory = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    // Clear cache when new category is created
+    deleteCacheByPattern('categor');
+    setNoCacheHeaders(req, res);
     res.status(201).json(data[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -50,6 +55,9 @@ export const updateCategory = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    // Clear cache when category is updated
+    deleteCacheByPattern('categor');
+    setNoCacheHeaders(req, res);
     res.json(data[0]);
   } catch (error) {
     res.status(500).json({ error: error.message });
@@ -69,6 +77,9 @@ export const deleteCategory = async (req, res) => {
       return res.status(400).json({ error: error.message });
     }
 
+    // Clear cache when category is deleted
+    deleteCacheByPattern('categor');
+    setNoCacheHeaders(req, res);
     res.json({ message: 'Category deleted successfully' });
   } catch (error) {
     res.status(500).json({ error: error.message });
