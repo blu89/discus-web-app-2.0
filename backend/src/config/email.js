@@ -26,9 +26,6 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
     } else {
       console.log('✅ Email service is ready to send messages');
     }
-  }).catch((err) => {
-    // Catch any unhandled promise rejection from verify
-    console.error('Email verification error:', err.message);
   });
 } else {
   console.warn('⚠️  Email credentials not configured (EMAIL_USER/EMAIL_PASSWORD). Email sending is disabled.');
