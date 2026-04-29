@@ -72,9 +72,11 @@ self.addEventListener('fetch', (event) => {
       fetch(request)
         .then((response) => {
           if (response && response.status === 200) {
-            // Cache the response
-            const cache = caches.open(RUNTIME_CACHE);
-            cache.then((c) => c.put(request, response.clone()));
+            // Clone before caching to avoid consuming the body
+            const responseToCache = response.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => {
+              cache.put(request, responseToCache);
+            });
           }
           return response;
         })
@@ -91,17 +93,19 @@ self.addEventListener('fetch', (event) => {
     event.respondWith(
       fetch(request)
         .then((response) => {
-          // Cache successful responses
+          // Clone before caching to avoid consuming the body
           if (response && response.status === 200) {
-            const cache = caches.open(RUNTIME_CACHE);
-            cache.then((c) => c.put(request, response.clone()));
+            const responseToCache = response.clone();
+            caches.open(RUNTIME_CACHE).then((cache) => {
+              cache.put(request, responseToCache);
+            });
           }
           return response;
         })
         .catch(() => {
           // Return cached response on network error
-          return caches.match(request).then((response) => {
-            return response || new Response('Offline - resource not available', {
+          return caches.match(request).then((cachedResponse) => {
+            return cachedResponse || new Response('Offline - resource not available', {
               status: 503,
               statusText: 'Service Unavailable',
               headers: new Headers({ 'Content-Type': 'text/plain' }),
@@ -114,16 +118,18 @@ self.addEventListener('fetch', (event) => {
 
   // Handle static assets with cache-first strategy
   event.respondWith(
-    caches.match(request).then((response) => {
+    caches.match(request).then((cachedResponse) => {
       return (
-        response ||
-        fetch(request).then((fetchResponse) => {
-          // Cache successful responses
-          if (fetchResponse && fetchResponse.status === 200) {
-            const cache = caches.open(CACHE_NAME);
-            cache.then((c) => c.put(request, fetchResponse.clone()));
+        cachedResponse ||
+        fetch(request).then((response) => {
+          // Clone before caching to avoid consuming the body
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(request, responseToCache);
+            });
           }
-          return fetchResponse;
+          return response;
         })
       );
     })
