@@ -1,4 +1,5 @@
 import supabase from '../config/supabase.js';
+import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 import { sendOrderNotification, sendOrderConfirmationToCustomer } from '../services/emailService.js';
 
 export const createOrder = async (req, res) => {
@@ -98,6 +99,7 @@ export const createOrder = async (req, res) => {
 
     res.status(201).json(order[0]);
   } catch (error) {
+    console.error('createOrder error:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -108,16 +110,28 @@ export const getOrderById = async (req, res) => {
 
     const { data: order, error } = await supabase
       .from('orders')
-      .select('*, order_items:order_items(product_id, quantity, price)')
+      .select('*')
       .eq('id', id)
       .single();
 
     if (error) {
+      console.error('getOrderById error:', error);
       return res.status(404).json({ error: 'Order not found' });
     }
 
+    // Fetch order items separately if order exists
+    if (order) {
+      const { data: items } = await supabase
+        .from('order_items')
+        .select('*')
+        .eq('order_id', id);
+      order.order_items = items || [];
+    }
+
+    setStaticCacheHeaders(req, res);
     res.json(order);
   } catch (error) {
+    console.error('getOrderById exception:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -126,33 +140,83 @@ export const getUserOrders = async (req, res) => {
   try {
     const userId = req.user.id;
 
-    const { data, error } = await supabase
+    const { data: orders, error } = await supabase
       .from('orders')
-      .select('*, order_items:order_items(product_id, quantity, price)')
+      .select('*')
       .eq('user_id', userId);
 
     if (error) {
+      console.error('getUserOrders error:', error);
       return res.status(500).json({ error: error.message });
     }
 
-    res.json(data);
+    // Fetch all order items for these orders at once
+    if (orders && orders.length > 0) {
+      const orderIds = orders.map(o => o.id);
+      const { data: allItems } = await supabase
+        .from('order_items')
+        .select('*')
+        .in('order_id', orderIds);
+
+      // Attach items to their orders
+      const itemsByOrderId = {};
+      (allItems || []).forEach(item => {
+        if (!itemsByOrderId[item.order_id]) {
+          itemsByOrderId[item.order_id] = [];
+        }
+        itemsByOrderId[item.order_id].push(item);
+      });
+
+      orders.forEach(order => {
+        order.order_items = itemsByOrderId[order.id] || [];
+      });
+    }
+
+    setStaticCacheHeaders(req, res);
+    res.json(orders || []);
   } catch (error) {
+    console.error('getUserOrders exception:', error);
     res.status(500).json({ error: error.message });
   }
 };
 
 export const getAllOrders = async (req, res) => {
   try {
-    const { data, error } = await supabase
+    const { data: orders, error } = await supabase
       .from('orders')
-      .select('*, order_items:order_items(product_id, quantity, price)');
+      .select('*');
 
     if (error) {
+      console.error('getAllOrders error:', error);
       return res.status(500).json({ error: error.message });
     }
 
-    res.json(data);
+    // Fetch all order items for these orders at once
+    if (orders && orders.length > 0) {
+      const orderIds = orders.map(o => o.id);
+      const { data: allItems } = await supabase
+        .from('order_items')
+        .select('*')
+        .in('order_id', orderIds);
+
+      // Attach items to their orders
+      const itemsByOrderId = {};
+      (allItems || []).forEach(item => {
+        if (!itemsByOrderId[item.order_id]) {
+          itemsByOrderId[item.order_id] = [];
+        }
+        itemsByOrderId[item.order_id].push(item);
+      });
+
+      orders.forEach(order => {
+        order.order_items = itemsByOrderId[order.id] || [];
+      });
+    }
+
+    setStaticCacheHeaders(req, res);
+    res.json(orders || []);
   } catch (error) {
+    console.error('getAllOrders exception:', error);
     res.status(500).json({ error: error.message });
   }
 };
@@ -169,11 +233,16 @@ export const updateOrderStatus = async (req, res) => {
       .select();
 
     if (error) {
+      console.error('updateOrderStatus error:', error);
       return res.status(400).json({ error: error.message });
     }
 
+    // Clear cache when order is updated
+    deleteCacheByPattern('order');
+    setNoCacheHeaders(req, res);
     res.json(data[0]);
   } catch (error) {
+    console.error('updateOrderStatus exception:', error);
     res.status(500).json({ error: error.message });
   }
 };
