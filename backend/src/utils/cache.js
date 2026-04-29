@@ -102,7 +102,7 @@ export const setCacheHeaders = (req, res, options = {}) => {
 
 // Set cache headers for static/frequently accessed data
 export const setStaticCacheHeaders = (req, res) => {
-  setCacheHeaders(res, {
+  setCacheHeaders(req, res, {
     maxAge: 3600, // 1 hour
     isPublic: true,
     mustRevalidate: false,
