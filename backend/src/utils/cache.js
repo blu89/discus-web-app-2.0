@@ -56,6 +56,12 @@ export const cacheMiddleware = (req, res, next) => {
     return next();
   }
 
+  // Skip cache for authenticated requests (admin/protected routes) or requests with Authorization header
+  if (req.user || req.headers.authorization || req.cookies.authToken) {
+    console.log('Skipping cache for authenticated request:', req.originalUrl);
+    return next();
+  }
+
   const key = req.originalUrl;
   const cachedData = cache.get(key);
 

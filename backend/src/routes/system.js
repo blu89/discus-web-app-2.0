@@ -1,4 +1,5 @@
 import express from 'express';
+import supabase from '../config/supabase.js';
 
 const router = express.Router();
 
@@ -11,6 +12,32 @@ export const systemRoutes = (app) => {
   // API version
   app.get('/api/version', (req, res) => {
     res.json({ version: '1.0.0', api: 'ecommerce-api' });
+  });
+
+  // Debug endpoint - check database
+  app.get('/api/debug/db', async (req, res) => {
+    try {
+      const { data: orders, error: ordersError } = await supabase
+        .from('orders')
+        .select('*')
+        .limit(5);
+
+      const { data: count, error: countError } = await supabase
+        .from('orders')
+        .select('id', { count: 'exact', head: true });
+
+      res.json({
+        status: 'Database check',
+        ordersCount: count?.length || 0,
+        sampleOrders: orders || [],
+        errors: {
+          ordersError,
+          countError
+        }
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
   });
 
   // 404 handler
