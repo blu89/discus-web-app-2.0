@@ -108,7 +108,7 @@ export const createOrder = async (req, res) => {
             sendOrderConfirmationToCustomer(order[0], emailOrderItems)
           ]),
           new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Email sending timeout')), 15000)
+            setTimeout(() => reject(new Error('Email sending timeout')), 30000) // 30 seconds with retries
           )
         ]);
         console.log('Order emails sent successfully');

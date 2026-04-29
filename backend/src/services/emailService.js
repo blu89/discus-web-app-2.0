@@ -4,6 +4,30 @@ import transporter from '../config/email.js';
 const LOGO_URL = process.env.WEBSITE_LOGO_URL || 'https://res.cloudinary.com/doqzc3md2/image/upload/v1777275813/ChatGPT_Image_Apr_26_2026_05_39_03_AM_uqxhtb.png';
 
 /**
+ * Retry logic with exponential backoff for email sending
+ * @param {Function} sendFn - Function that sends the email
+ * @param {number} maxRetries - Maximum number of retries
+ * @returns {Promise}
+ */
+const retryEmailSend = async (sendFn, maxRetries = 2) => {
+  let lastError;
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      return await sendFn();
+    } catch (error) {
+      lastError = error;
+      if (attempt < maxRetries) {
+        // Exponential backoff: 1s, 2s, etc.
+        const delayMs = Math.pow(2, attempt) * 1000;
+        console.warn(`Email send attempt ${attempt + 1} failed, retrying in ${delayMs}ms...`);
+        await new Promise(resolve => setTimeout(resolve, delayMs));
+      }
+    }
+  }
+  throw lastError;
+};
+
+/**
  * Send order notification email to admin
  * @param {Object} order - Order details
  * @param {Array} orderItems - Array of order items with product details
@@ -131,11 +155,11 @@ export const sendOrderNotification = async (order, orderItems) => {
       `,
     };
 
-    const info = await transporter.sendMail(mailOptions);
+    const info = await retryEmailSend(() => transporter.sendMail(mailOptions), 2);
     console.log('Order notification email sent:', info.messageId);
     return true;
   } catch (error) {
-    console.error('Error sending order notification email:', error);
+    console.error('Error sending order notification email:', error.message);
     // Don't throw error - allow order to be created even if email fails
     return false;
   }
@@ -256,11 +280,11 @@ export const sendOrderConfirmationToCustomer = async (order, orderItems) => {
       `,
     };
 
-    const info = await transporter.sendMail(mailOptions);
+    const info = await retryEmailSend(() => transporter.sendMail(mailOptions), 2);
     console.log('Order confirmation email sent to customer:', info.messageId);
     return true;
   } catch (error) {
-    console.error('Error sending order confirmation email:', error);
+    console.error('Error sending order confirmation email:', error.message);
     // Don't throw error - allow order to be created even if email fails
     return false;
   }
