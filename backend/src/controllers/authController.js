@@ -46,7 +46,8 @@ export const registerUser = async (req, res) => {
     const token = generateToken({ ...data[0], role: 'customer' });
     setAuthCookie(res, token);
     
-    res.status(201).json({ user: data[0] });
+    // Also return token in response for localStorage fallback
+    res.status(201).json({ user: data[0], token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -79,7 +80,8 @@ export const loginUser = async (req, res) => {
     const token = generateToken(user);
     setAuthCookie(res, token);
     
-    res.json({ user });
+    // Also return token in response for localStorage fallback
+    res.json({ user, token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -112,7 +114,8 @@ export const registerAdmin = async (req, res) => {
     const token = generateToken({ ...data[0], role: 'admin' });
     setAuthCookie(res, token);
     
-    res.status(201).json({ user: data[0] });
+    // Also return token in response for localStorage fallback
+    res.status(201).json({ user: data[0], token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -146,7 +149,8 @@ export const loginAdmin = async (req, res) => {
     const token = generateToken(user);
     setAuthCookie(res, token);
     
-    res.json({ user });
+    // Also return token in response for localStorage fallback
+    res.json({ user, token });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }

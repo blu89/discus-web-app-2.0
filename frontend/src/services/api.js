@@ -1,21 +1,38 @@
 import axios from 'axios';
 
 // Use environment variable for API URL, with fallback for development
-const API_URL = import.meta.env.VITE_API_URL || 'https://discus-web-app-2-0.onrender.com/api';
+const API_URL = import.meta.env.VITE_API_URL || 
+  (import.meta.env.DEV ? 'http://localhost:5000/api' : 'https://discus-web-app-2-0.onrender.com/api');
+
+console.log('API URL:', API_URL);
 
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true, // Enable sending cookies with requests
 });
 
-// Remove the token interceptor - cookies are handled automatically now
-// api.interceptors.request.use((config) => {
-//   const token = localStorage.getItem('token');
-//   if (token) {
-//     config.headers.Authorization = `Bearer ${token}`;
-//   }
-//   return config;
-// });
+// Add request interceptor to send token as fallback if cookies don't work
+api.interceptors.request.use((config) => {
+  // First try cookies (automatic with withCredentials: true)
+  // If that doesn't work, try Authorization header as fallback
+  const token = localStorage.getItem('authToken');
+  if (token && !config.headers.Authorization) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  return config;
+});
+
+// Add response interceptor to store token in localStorage as fallback
+api.interceptors.response.use(
+  (response) => {
+    // If we got a token in response, store it
+    if (response.data?.token) {
+      localStorage.setItem('authToken', response.data.token);
+    }
+    return response;
+  },
+  (error) => Promise.reject(error)
+);
 
 export const authAPI = {
   register: (email, password, fullName) =>
