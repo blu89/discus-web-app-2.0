@@ -1,5 +1,6 @@
 import express from 'express';
 import supabase from '../config/supabase.js';
+import cache from '../utils/cache.js';
 
 const router = express.Router();
 
@@ -58,6 +59,22 @@ export const systemRoutes = (app) => {
         total: orders?.length || 0,
         orders: orders || [],
         note: 'IP addresses help track customer locations and detect fraud'
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Cache control endpoint - for debugging
+  app.post('/api/debug/clear-cache', (req, res) => {
+    try {
+      // Clear backend cache
+      cache.flushAll();
+      
+      res.json({
+        status: 'Cache cleared',
+        message: 'Backend cache has been cleared. Client-side caches will update on next reload.',
+        note: 'Frontend Service Worker caches are cleared automatically on version update'
       });
     } catch (error) {
       res.status(500).json({ error: error.message });
