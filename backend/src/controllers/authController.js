@@ -6,8 +6,17 @@ const generateToken = (user) => {
   return jwt.sign(
     { id: user.id, email: user.email, role: user.role },
     process.env.JWT_SECRET,
-    { expiresIn: '1d' }
+    { expiresIn: '7d' }
   );
+};
+
+const setAuthCookie = (res, token) => {
+  res.cookie('authToken', token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === 'production',
+    sameSite: 'lax',
+    maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
+  });
 };
 
 export const registerUser = async (req, res) => {
@@ -35,7 +44,9 @@ export const registerUser = async (req, res) => {
     }
 
     const token = generateToken({ ...data[0], role: 'customer' });
-    res.status(201).json({ user: data[0], token });
+    setAuthCookie(res, token);
+    
+    res.status(201).json({ user: data[0] });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -66,7 +77,9 @@ export const loginUser = async (req, res) => {
     }
 
     const token = generateToken(user);
-    res.json({ user, token });
+    setAuthCookie(res, token);
+    
+    res.json({ user });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -97,7 +110,9 @@ export const registerAdmin = async (req, res) => {
     }
 
     const token = generateToken({ ...data[0], role: 'admin' });
-    res.status(201).json({ user: data[0], token });
+    setAuthCookie(res, token);
+    
+    res.status(201).json({ user: data[0] });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
@@ -129,8 +144,31 @@ export const loginAdmin = async (req, res) => {
     }
 
     const token = generateToken(user);
-    res.json({ user, token });
+    setAuthCookie(res, token);
+    
+    res.json({ user });
   } catch (error) {
     res.status(500).json({ error: error.message });
+  }
+};
+
+export const logout = (req, res) => {
+  res.clearCookie('authToken');
+  res.json({ message: 'Logged out successfully' });
+};
+
+export const verifyAuth = (req, res) => {
+  const token = req.cookies.authToken;
+  
+  if (!token) {
+    return res.status(401).json({ authenticated: false });
+  }
+
+  try {
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+    res.json({ authenticated: true, user: decoded });
+  } catch (error) {
+    res.clearCookie('authToken');
+    res.status(401).json({ authenticated: false });
   }
 };

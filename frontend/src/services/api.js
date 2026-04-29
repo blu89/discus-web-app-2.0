@@ -5,16 +5,17 @@ const API_URL = import.meta.env.VITE_API_URL || 'https://discus-web-app-2-0.onre
 
 const api = axios.create({
   baseURL: API_URL,
+  withCredentials: true, // Enable sending cookies with requests
 });
 
-// Add token to requests
-api.interceptors.request.use((config) => {
-  const token = localStorage.getItem('token');
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-  return config;
-});
+// Remove the token interceptor - cookies are handled automatically now
+// api.interceptors.request.use((config) => {
+//   const token = localStorage.getItem('token');
+//   if (token) {
+//     config.headers.Authorization = `Bearer ${token}`;
+//   }
+//   return config;
+// });
 
 export const authAPI = {
   register: (email, password, fullName) =>
@@ -25,6 +26,10 @@ export const authAPI = {
     api.post('/auth/admin/register', { email, password, fullName, adminSecret }),
   adminLogin: (email, password) =>
     api.post('/auth/admin/login', { email, password }),
+  logout: () =>
+    api.post('/auth/logout'),
+  verify: () =>
+    api.get('/auth/verify'),
 };
 
 export const productAPI = {

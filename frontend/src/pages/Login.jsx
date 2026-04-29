@@ -18,7 +18,7 @@ export default function Login() {
 
     try {
       const response = await authAPI.login(email, password);
-      login(response.data.user, response.data.token);
+      login(response.data.user);
       
       if (response.data.user.role === 'admin') {
         navigate('/admin/dashboard');

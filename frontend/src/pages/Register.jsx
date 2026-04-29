@@ -39,7 +39,7 @@ export default function Register() {
         formData.password,
         formData.fullName
       );
-      login(response.data.user, response.data.token);
+      login(response.data.user);
       navigate('/');
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed');
