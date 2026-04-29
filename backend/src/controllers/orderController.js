@@ -97,10 +97,25 @@ export const createOrder = async (req, res) => {
       price: item.price
     })) || [];
 
-    // Send emails asynchronously (don't wait for them)
+    // Send emails asynchronously (don't wait for them, don't block order creation)
+    // Wrap in setTimeout to ensure it doesn't interfere with response
     setImmediate(async () => {
-      await sendOrderNotification(order[0], emailOrderItems);
-      await sendOrderConfirmationToCustomer(order[0], emailOrderItems);
+      try {
+        console.log('Sending order confirmation emails...');
+        await Promise.race([
+          Promise.all([
+            sendOrderNotification(order[0], emailOrderItems),
+            sendOrderConfirmationToCustomer(order[0], emailOrderItems)
+          ]),
+          new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('Email sending timeout')), 15000)
+          )
+        ]);
+        console.log('Order emails sent successfully');
+      } catch (emailError) {
+        console.error('Failed to send emails:', emailError.message);
+        // Don't throw - order was already created successfully
+      }
     });
 
     res.status(201).json(order[0]);

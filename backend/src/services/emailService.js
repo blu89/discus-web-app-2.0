@@ -70,6 +70,7 @@ export const sendOrderNotification = async (order, orderItems) => {
                 <div class="section-title">Customer Information</div>
                 <p><strong>Name:</strong> ${order.customer_name}</p>
                 <p><strong>Email:</strong> ${order.customer_email}</p>
+                <p><strong>IP Address:</strong> ${order.ip_address || 'N/A'}</p>
               </div>
 
               <!-- Order Details -->
