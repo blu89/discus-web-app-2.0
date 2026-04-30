@@ -182,7 +182,7 @@ export const sendOrderConfirmationEmail = async (order, items) => {
     `;
 
     const response = await resend.emails.send({
-      from: process.env.RESEND_FROM_EMAIL || 'noreply@discus.com',
+      from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
       to: order.customer_email,
       subject: `Order Confirmation - Order #${order.id}`,
       html: htmlContent,
