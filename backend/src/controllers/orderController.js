@@ -1,6 +1,7 @@
 import supabase from '../config/supabase.js';
 import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 import { getClientIpAddress } from '../utils/ipAddress.js';
+import { sendOrderConfirmationEmail, resendOrderConfirmationEmail } from '../services/emailService.js';
 
 export const createOrder = async (req, res) => {
   try {
@@ -83,6 +84,17 @@ export const createOrder = async (req, res) => {
           .eq('id', item.product_id);
       }
     }
+
+    // Send order confirmation email asynchronously (non-blocking)
+    const emailItems = items.map(item => ({
+      product_name: item.product_name || 'Product',
+      quantity: item.quantity,
+      price: item.price
+    }));
+    
+    sendOrderConfirmationEmail(order[0], emailItems).catch(err => {
+      console.error('Failed to send order confirmation email:', err);
+    });
 
     res.status(201).json(order[0]);
   } catch (error) {
@@ -234,6 +246,69 @@ export const updateOrderStatus = async (req, res) => {
     res.json(data[0]);
   } catch (error) {
     console.error('updateOrderStatus exception:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const resendConfirmationEmail = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+
+    // Fetch the order
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
+      .single();
+
+    if (orderError || !order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Fetch order items
+    const { data: items, error: itemsError } = await supabase
+      .from('order_items')
+      .select('*')
+      .eq('order_id', orderId);
+
+    if (itemsError) {
+      return res.status(400).json({ error: 'Failed to fetch order items' });
+    }
+
+    // Fetch product details for better email display
+    const enrichedItems = [];
+    for (const item of items) {
+      const { data: product } = await supabase
+        .from('products')
+        .select('name')
+        .eq('id', item.product_id)
+        .single();
+
+      enrichedItems.push({
+        product_name: product?.name || 'Product',
+        quantity: item.quantity,
+        price: item.price
+      });
+    }
+
+    // Send email
+    const emailResult = await resendOrderConfirmationEmail(order, enrichedItems);
+
+    if (!emailResult.success) {
+      return res.status(500).json({ 
+        error: 'Failed to resend confirmation email',
+        details: emailResult.error 
+      });
+    }
+
+    setNoCacheHeaders(req, res);
+    res.json({ 
+      success: true, 
+      message: 'Confirmation email resent successfully',
+      messageId: emailResult.messageId 
+    });
+  } catch (error) {
+    console.error('resendConfirmationEmail exception:', error);
     res.status(500).json({ error: error.message });
   }
 };

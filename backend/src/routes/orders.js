@@ -4,7 +4,8 @@ import {
   getOrderById,
   getUserOrders,
   getAllOrders,
-  updateOrderStatus
+  updateOrderStatus,
+  resendConfirmationEmail
 } from '../controllers/orderController.js';
 import { verifyToken, verifyAdmin } from '../middleware/auth.js';
 
@@ -15,6 +16,9 @@ router.post('/', createOrder);
 
 // GET /orders/user/orders - Get user's own orders (authenticated)
 router.get('/user/orders', verifyToken, getUserOrders);
+
+// POST /orders/:orderId/resend-confirmation - Resend confirmation email (public)
+router.post('/:orderId/resend-confirmation', resendConfirmationEmail);
 
 // Admin routes (must come before /:id)
 // GET /orders - Get all orders (admin only)

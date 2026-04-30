@@ -8,6 +8,9 @@ export default function AdminOrders() {
   const [selectedOrder, setSelectedOrder] = useState(null);
   const [orderDetails, setOrderDetails] = useState(null);
   const [detailsLoading, setDetailsLoading] = useState(false);
+  const [resending, setResending] = useState(false);
+  const [resendMessage, setResendMessage] = useState('');
+  const [resendError, setResendError] = useState('');
 
   useEffect(() => {
     fetchOrders();
@@ -75,6 +78,23 @@ export default function AdminOrders() {
       }
     } catch (err) {
       setError('Failed to update order status');
+    }
+  };
+
+  const handleResendEmail = async () => {
+    setResending(true);
+    setResendMessage('');
+    setResendError('');
+    
+    try {
+      const response = await orderAPI.resendConfirmationEmail(selectedOrder);
+      setResendMessage('Confirmation email resent successfully!');
+      setTimeout(() => setResendMessage(''), 5000);
+    } catch (err) {
+      setResendError(err.response?.data?.error || 'Failed to resend email. Please try again.');
+      console.error('Failed to resend confirmation email', err);
+    } finally {
+      setResending(false);
     }
   };
 
@@ -316,16 +336,39 @@ export default function AdminOrders() {
                   </section>
 
                   {/* Action Buttons */}
-                  <div className="flex gap-3 pt-4 border-t dark:border-gray-700">
-                    <button
-                      onClick={() => {
-                        setSelectedOrder(null);
-                        setOrderDetails(null);
-                      }}
-                      className="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-2 rounded-lg transition"
-                    >
-                      Close
-                    </button>
+                  <div className="space-y-3">
+                    {resendMessage && (
+                      <div className="bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-200 p-4 rounded-lg border border-green-200 dark:border-green-700 transition">
+                        {resendMessage}
+                      </div>
+                    )}
+                    
+                    {resendError && (
+                      <div className="bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-200 p-4 rounded-lg border border-red-200 dark:border-red-700 transition">
+                        {resendError}
+                      </div>
+                    )}
+
+                    <div className="flex gap-3 pt-4 border-t dark:border-gray-700">
+                      <button
+                        onClick={handleResendEmail}
+                        disabled={resending}
+                        className="flex-1 bg-purple-600 dark:bg-purple-700 hover:bg-purple-700 dark:hover:bg-purple-600 text-white font-bold py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                      >
+                        {resending ? 'Resending...' : 'Resend Email'}
+                      </button>
+                      <button
+                        onClick={() => {
+                          setSelectedOrder(null);
+                          setOrderDetails(null);
+                          setResendMessage('');
+                          setResendError('');
+                        }}
+                        className="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-2 rounded-lg transition"
+                      >
+                        Close
+                      </button>
+                    </div>
                   </div>
                 </div>
               </>
