@@ -11,9 +11,15 @@
  * 
  * All email-related endpoints (/api/debug/email, etc.) are protected by cache
  * middleware to prevent caching of credentials or configuration.
+ * 
+ * 📧 Cache Protection:
+ * - Email cache is automatically cleared on module initialization
+ * - Email cache is cleared via /api/admin/cache/clear-email endpoint
+ * - Email endpoints are protected by 5-layer cache defense system
  */
 
 import nodemailer from 'nodemailer';
+import { clearEmailCache } from '../utils/cache.js';
 
 // Only create transporter if email credentials are configured
 let transporter = null;
@@ -84,5 +90,9 @@ if (process.env.EMAIL_USER && process.env.EMAIL_PASSWORD) {
     }
   };
 }
+
+// Clear email cache on module initialization to ensure fresh config
+// This ensures the latest email configuration is always available
+clearEmailCache();
 
 export default transporter;

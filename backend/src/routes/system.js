@@ -1,6 +1,6 @@
 import express from 'express';
 import supabase from '../config/supabase.js';
-import cache from '../utils/cache.js';
+import { clearAllCache, clearEmailCache, deleteCacheByPattern } from '../utils/cache.js';
 import transporter from '../config/email.js';
 
 const router = express.Router();
@@ -98,16 +98,52 @@ export const systemRoutes = (app) => {
     }
   });
 
-  // Cache control endpoint - for debugging
+  // Cache management endpoint - clear email cache
+  // Clears any cached email responses (/email, /debug/email endpoints)
+  app.post('/api/admin/cache/clear-email', (req, res) => {
+    try {
+      clearEmailCache();
+      res.json({
+        status: 'Email cache cleared',
+        message: '📧 All email-related cached responses have been removed',
+        note: 'Next email endpoint request will fetch fresh data'
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Cache management endpoint - clear all cache
+  // Clears the entire backend response cache
   app.post('/api/debug/clear-cache', (req, res) => {
     try {
-      // Clear backend cache
-      cache.flushAll();
+      clearAllCache();
       
       res.json({
-        status: 'Cache cleared',
-        message: 'Backend cache has been cleared. Client-side caches will update on next reload.',
-        note: 'Frontend Service Worker caches are cleared automatically on version update'
+        status: 'All cache cleared',
+        message: '🗑️  Backend cache has been completely cleared',
+        note: 'Client-side caches and Service Worker will update on next request'
+      });
+    } catch (error) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Cache management endpoint - clear specific pattern
+  // Clears cache for endpoints matching the pattern (e.g., /products, /reviews)
+  app.post('/api/debug/clear-cache/:pattern', (req, res) => {
+    try {
+      const { pattern } = req.params;
+      if (!pattern) {
+        return res.status(400).json({ error: 'Pattern parameter required' });
+      }
+      
+      deleteCacheByPattern(pattern);
+      
+      res.json({
+        status: 'Cache pattern cleared',
+        pattern: pattern,
+        message: `Cleared cache for endpoints matching: ${pattern}`
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

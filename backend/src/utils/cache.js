@@ -154,9 +154,17 @@ export const deleteCacheByPattern = (pattern) => {
   });
 };
 
+// Clear email-related cache
+// Clears any cached responses from email endpoints (/email, /debug/email, etc.)
+export const clearEmailCache = () => {
+  deleteCacheByPattern('/email');
+  console.log('📧 Email cache cleared');
+};
+
 // Clear all cache
 export const clearAllCache = () => {
   cache.flushAll();
+  console.log('🗑️  All cache cleared');
 };
 
 // Cache middleware for GET requests
