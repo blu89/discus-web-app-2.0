@@ -1,7 +1,6 @@
 import express from 'express';
 import supabase from '../config/supabase.js';
-import { clearAllCache, clearEmailCache, deleteCacheByPattern } from '../utils/cache.js';
-import transporter from '../config/email.js';
+import { clearAllCache, deleteCacheByPattern } from '../utils/cache.js';
 
 const router = express.Router();
 
@@ -14,38 +13,6 @@ export const systemRoutes = (app) => {
   // API version
   app.get('/api/version', (req, res) => {
     res.json({ version: '1.0.0', api: 'ecommerce-api' });
-  });
-
-  // Debug endpoint - check email configuration status
-  // NEVER CACHED - Used to diagnose email connectivity issues
-  app.get('/api/debug/email', (req, res) => {
-    const emailConfigured = !!(process.env.EMAIL_USER && process.env.EMAIL_PASSWORD);
-    const hasTransporter = !!transporter;
-    const isNoOpTransporter = transporter?.sendMail?.toString().includes('would be sent');
-    
-    res.json({
-      status: 'Email configuration check',
-      configured: emailConfigured,
-      hasTransporter,
-      isNoOpTransporter,
-      settings: {
-        email_user_set: !!process.env.EMAIL_USER,
-        email_password_set: !!process.env.EMAIL_PASSWORD,
-        email_host: process.env.EMAIL_HOST || 'smtp.gmail.com',
-        email_port: process.env.EMAIL_PORT || 587,
-        email_secure: process.env.EMAIL_SECURE === 'true' ? 'true' : 'false',
-        admin_email_set: !!process.env.ADMIN_EMAIL
-      },
-      warnings: [],
-      recommendations: emailConfigured ? [] : [
-        'Set EMAIL_USER environment variable',
-        'Set EMAIL_PASSWORD environment variable',
-        'Set EMAIL_HOST (default: smtp.gmail.com)',
-        'Set EMAIL_PORT (default: 587)',
-        'Set ADMIN_EMAIL for notifications',
-        'For Gmail: Enable "Less secure app access" or use App Passwords'
-      ]
-    });
   });
 
   // Debug endpoint - check database
@@ -92,21 +59,6 @@ export const systemRoutes = (app) => {
         total: orders?.length || 0,
         orders: orders || [],
         note: 'IP addresses help track customer locations and detect fraud'
-      });
-    } catch (error) {
-      res.status(500).json({ error: error.message });
-    }
-  });
-
-  // Cache management endpoint - clear email cache
-  // Clears any cached email responses (/email, /debug/email endpoints)
-  app.post('/api/admin/cache/clear-email', (req, res) => {
-    try {
-      clearEmailCache();
-      res.json({
-        status: 'Email cache cleared',
-        message: '📧 All email-related cached responses have been removed',
-        note: 'Next email endpoint request will fetch fresh data'
       });
     } catch (error) {
       res.status(500).json({ error: error.message });

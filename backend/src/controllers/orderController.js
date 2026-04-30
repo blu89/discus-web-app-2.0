@@ -1,6 +1,5 @@
 import supabase from '../config/supabase.js';
 import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
-import { sendOrderNotification, sendOrderConfirmationToCustomer } from '../services/emailService.js';
 import { getClientIpAddress } from '../utils/ipAddress.js';
 
 export const createOrder = async (req, res) => {
@@ -84,39 +83,6 @@ export const createOrder = async (req, res) => {
           .eq('id', item.product_id);
       }
     }
-
-    // Fetch order items with product details for email
-    const { data: orderItemsWithProducts } = await supabase
-      .from('order_items')
-      .select('*, products:products(name)')
-      .eq('order_id', order[0].id);
-
-    const emailOrderItems = orderItemsWithProducts?.map(item => ({
-      product_name: item.products?.name || 'Product',
-      quantity: item.quantity,
-      price: item.price
-    })) || [];
-
-    // Send emails asynchronously (don't wait for them, don't block order creation)
-    // Wrap in setTimeout to ensure it doesn't interfere with response
-    setImmediate(async () => {
-      try {
-        console.log('Sending order confirmation emails...');
-        await Promise.race([
-          Promise.all([
-            sendOrderNotification(order[0], emailOrderItems),
-            sendOrderConfirmationToCustomer(order[0], emailOrderItems)
-          ]),
-          new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('Email sending timeout')), 30000) // 30 seconds with retries
-          )
-        ]);
-        console.log('Order emails sent successfully');
-      } catch (emailError) {
-        console.error('Failed to send emails:', emailError.message);
-        // Don't throw - order was already created successfully
-      }
-    });
 
     res.status(201).json(order[0]);
   } catch (error) {
