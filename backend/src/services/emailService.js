@@ -174,7 +174,7 @@ export const sendOrderConfirmationEmail = async (order, items) => {
             </p>
           </div>
           <div class="footer">
-            <p>&copy; 2024 Discus. All rights reserved.</p>
+            <p>&copy; 2026 CharlesDiscus. All rights reserved.</p>
           </div>
         </div>
       </body>
