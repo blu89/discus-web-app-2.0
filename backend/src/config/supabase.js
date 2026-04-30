@@ -1,3 +1,18 @@
+/**
+ * SUPABASE CONFIGURATION MODULE
+ * 
+ * ⚠️  ENVIRONMENT VARIABLE PROTECTION
+ * This module handles Supabase credentials. Environment variables are:
+ * - Loaded from .env file at module initialization only
+ * - NEVER cached or stored in response cache
+ * - NEVER exposed in API responses
+ * - NEVER logged with actual values
+ * - Only used internally to create database client
+ * 
+ * The cache middleware (cache.js) includes 5 defense layers to prevent
+ * caching of any responses containing Supabase keys or credentials.
+ */
+
 import { createClient } from '@supabase/supabase-js';
 import dotenv from 'dotenv';
 
