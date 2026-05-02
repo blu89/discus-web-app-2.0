@@ -28,7 +28,7 @@ const PORT = process.env.PORT || 5000;
 // Middleware - CORS configuration for global access
 app.use(cors({
   origin: [
-    process.env.FRONTEND_URL || 'https://discus-web-app-2-0.vercel.app',
+    process.env.FRONTEND_URL || 'https://charlesthompsondiscus.com',
     'http://localhost:3000',
     'http://localhost:5173' // Vite dev server
   ],
