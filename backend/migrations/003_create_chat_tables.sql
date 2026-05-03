@@ -35,71 +35,7 @@ CREATE INDEX idx_conversations_guest_email ON conversations(guest_email);
 CREATE INDEX idx_messages_conversation_id ON chat_messages(conversation_id);
 CREATE INDEX idx_messages_created_at ON chat_messages(created_at DESC);
 
--- Enable RLS (Row Level Security)
-ALTER TABLE conversations ENABLE ROW LEVEL SECURITY;
-ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
-
--- RLS Policies for conversations
-CREATE POLICY "Users can view their own conversations"
-  ON conversations FOR SELECT
-  USING (customer_id = auth.uid() OR admin_id = auth.uid());
-
--- Allow guests to view their conversations via guest_id (handled in application)
--- This policy is permissive for RLS, actual verification happens in backend logic
-CREATE POLICY "Guests can view conversations"
-  ON conversations FOR SELECT
-  USING (guest_id IS NOT NULL);
-
-CREATE POLICY "Authenticated customers can create conversations"
-  ON conversations FOR INSERT
-  WITH CHECK (customer_id = auth.uid());
-
--- Allow guest conversations to be created (handled in application with guest_id)
-CREATE POLICY "Create guest conversations"
-  ON conversations FOR INSERT
-  WITH CHECK (guest_id IS NOT NULL);
-
-CREATE POLICY "Admins can update conversation status"
-  ON conversations FOR UPDATE
-  USING (admin_id = auth.uid())
-  WITH CHECK (admin_id = auth.uid());
-
--- RLS Policies for messages
-CREATE POLICY "Authenticated users can view messages"
-  ON chat_messages FOR SELECT
-  USING (
-    conversation_id IN (
-      SELECT id FROM conversations 
-      WHERE customer_id = auth.uid() OR admin_id = auth.uid()
-    )
-  );
-
--- Allow guests to view their messages (verification in backend)
-CREATE POLICY "Guests can view messages"
-  ON chat_messages FOR SELECT
-  USING (
-    conversation_id IN (
-      SELECT id FROM conversations WHERE guest_id IS NOT NULL
-    )
-  );
-
-CREATE POLICY "Authenticated users can insert messages"
-  ON chat_messages FOR INSERT
-  WITH CHECK (
-    sender_id = auth.uid() AND
-    conversation_id IN (
-      SELECT id FROM conversations 
-      WHERE customer_id = auth.uid() OR admin_id = auth.uid()
-    )
-  );
-
--- Allow guests to insert messages (verification in backend)
-CREATE POLICY "Guests can insert messages"
-  ON chat_messages FOR INSERT
-  WITH CHECK (
-    sender_type = 'guest' AND
-    conversation_id IN (
-      SELECT id FROM conversations WHERE guest_id IS NOT NULL
-    )
-  );
+-- Note: RLS is disabled - access control is handled by backend authentication (verifyToken middleware)
+-- This allows admins to query all conversations and ensures better performance
+-- The backend verifyToken middleware ensures only admins can access /chat/admin/* endpoints
 
