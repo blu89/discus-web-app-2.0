@@ -204,6 +204,17 @@ const ChatSupport = () => {
       const senderType = user ? 'customer' : 'guest';
       const guestNameForMsg = !user ? (sessionStorage.getItem('guestName') || 'Guest') : null;
 
+      // Add message to UI immediately (optimistic update)
+      const optimisticMessage = {
+        id: Date.now(), // Temporary ID
+        message: messageText,
+        senderType,
+        sender_id: user?.id || conversation.guest_id,
+        guest_name: guestNameForMsg,
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, optimisticMessage]);
+
       // Save to database
       await api.post(`/chat/conversations/${conversation.id}/messages`, {
         message: messageText,
