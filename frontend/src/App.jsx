@@ -8,6 +8,7 @@ import { useAuth } from './hooks/useAuth';
 
 import Header from './components/storefront/Header';
 import Footer from './components/storefront/Footer';
+import ChatSupport from './components/ChatSupport';
 
 import Home from './pages/Home';
 import About from './pages/About';
@@ -70,6 +71,7 @@ function AppContent() {
         <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>} />
       </Routes>
       <Footer />
+      <ChatSupport />
     </>
   );
 }

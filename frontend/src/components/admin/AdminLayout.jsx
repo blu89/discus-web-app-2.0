@@ -9,6 +9,7 @@ import CategoryManagement from './CategoryManagement';
 import OrderManagement from './OrderManagement';
 import SupplierManagement from './SupplierManagement';
 import ReviewManagement from './ReviewManagement';
+import ChatManagement from './ChatManagement';
 
 export default function AdminLayout() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -44,6 +45,8 @@ export default function AdminLayout() {
         return <OrderManagement />;
       case 'reviews':
         return <ReviewManagement />;
+      case 'chat':
+        return <ChatManagement />;
       default:
         return <AdminDashboard />;
     }
@@ -58,6 +61,7 @@ export default function AdminLayout() {
     { id: 'reviews', label: 'Reviews', icon: '⭐' },
     { id: 'suppliers', label: 'Suppliers', icon: '🏭' },
     { id: 'orders', label: 'Orders', icon: '📋' },
+    { id: 'chat', label: 'Support Chat', icon: '💬' },
   ];
 
   return (
