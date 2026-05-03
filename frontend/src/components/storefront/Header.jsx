@@ -30,7 +30,7 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-white dark:bg-gray-900 shadow-sm fixed top-0 left-0 right-0 w-screen z-50 transition-colors duration-200">
+      <header style={{position: 'fixed', top: 0, left: 0, right: 0, width: '100%', zIndex: 50}} className="bg-white dark:bg-gray-900 shadow-sm transition-colors duration-200">
         <div className="w-full h-auto">
           <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <div className="flex justify-between items-center h-16">
