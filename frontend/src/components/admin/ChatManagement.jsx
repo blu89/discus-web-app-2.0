@@ -128,6 +128,16 @@ const ChatManagement = () => {
     setInputValue('');
 
     try {
+      // Add message to UI immediately (optimistic update)
+      const optimisticMessage = {
+        id: Date.now(), // Temporary ID
+        message_text: messageText,
+        sender_type: 'admin',
+        sender_id: user.id,
+        created_at: new Date().toISOString(),
+      };
+      setMessages((prev) => [...prev, optimisticMessage]);
+
       // Save to database
       await api.post(
         `/chat/conversations/${selectedConversation.id}/messages`,
