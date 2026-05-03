@@ -207,8 +207,8 @@ const ChatSupport = () => {
       // Add message to UI immediately (optimistic update)
       const optimisticMessage = {
         id: Date.now(), // Temporary ID
-        message: messageText,
-        senderType,
+        message_text: messageText,
+        sender_type: senderType,
         sender_id: user?.id || conversation.guest_id,
         guest_name: guestNameForMsg,
         created_at: new Date().toISOString(),
