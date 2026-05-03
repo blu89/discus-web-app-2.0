@@ -342,7 +342,6 @@ export default function Header() {
           </nav>
         )}
         </div>
-      </div>
       </header>
       {/* Add padding to body when header is fixed to prevent content overlap */}
       <div className="h-16"></div>
