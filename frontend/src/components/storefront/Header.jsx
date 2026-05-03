@@ -29,9 +29,10 @@ export default function Header() {
   };
 
   return (
-    <header className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 transition-colors duration-200 ">
-      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-        <div className="flex justify-between items-center h-16">
+    <>
+      <header className="bg-white dark:bg-gray-900 shadow-sm fixed md:sticky top-0 left-0 right-0 z-50 transition-colors duration-200">
+        <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+          <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
@@ -338,7 +339,9 @@ export default function Header() {
             )}
           </nav>
         )}
-      </div>
-    </header>
+      </header>
+      {/* Add padding to body when header is fixed on mobile to prevent content overlap */}
+      <div className="md:hidden h-16"></div>
+    </>
   );
 }
