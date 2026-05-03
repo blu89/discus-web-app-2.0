@@ -80,30 +80,32 @@
   position: fixed;
   bottom: 24px;
   right: 24px;
-  width: 56px;
-  height: 56px;
-  background-color: #3b82f6;
+  width: 48px;
+  height: 48px;
+  background-color: #1f2937;
   color: white;
   border: none;
   border-radius: 50%;
-  font-size: 28px;
+  font-size: 24px;
   cursor: pointer;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: none;
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
+  transition: opacity 0.2s ease;
   z-index: 40;
 }
 
 .chat-floating-btn:hover {
-  background-color: #2563eb;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
-  transform: scale(1.1);
+  background-color: #111827;
+  box-shadow: none;
+  transform: none;
+  opacity: 0.9;
 }
 
 .chat-floating-btn:active {
-  transform: scale(0.95);
+  transform: none;
+  opacity: 0.8;
 }
 
 .chat-modal {
@@ -361,9 +363,11 @@
   }
 
   .chat-floating-btn {
-    width: 48px;
-    height: 48px;
-    font-size: 24px;
+    width: 40px;
+    height: 40px;
+    font-size: 20px;
+    bottom: 16px;
+    right: 16px;
   }
 
   .chat-message-content {
