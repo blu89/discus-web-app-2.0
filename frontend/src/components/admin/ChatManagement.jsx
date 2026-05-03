@@ -11,13 +11,14 @@ const ChatManagement = () => {
   const [messages, setMessages] = useState([]);
   const [inputValue, setInputValue] = useState('');
   const [socket, setSocket] = useState(null);
+  const [globalSocket, setGlobalSocket] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isTyping, setIsTyping] = useState(false);
   const [otherUserTyping, setOtherUserTyping] = useState(false);
   const messagesEndRef = useRef(null);
   const typingTimeoutRef = useRef(null);
 
-  // Load all conversations
+  // Load all conversations and setup global socket listener
   useEffect(() => {
     const loadConversations = async () => {
       try {
@@ -32,7 +33,34 @@ const ChatManagement = () => {
     };
 
     loadConversations();
-  }, []);
+
+    // Setup global socket listener for all conversations
+    const newGlobalSocket = io(import.meta.env.VITE_API_URL || 'http://localhost:5000', {
+      reconnection: true,
+      reconnectionDelay: 1000,
+      reconnectionDelayMax: 5000,
+      reconnectionAttempts: 5,
+    });
+
+    newGlobalSocket.emit('user_connect', user.id);
+
+    // Listen for new messages and refresh conversations list
+    newGlobalSocket.on('receive_message', async (message) => {
+      // Reload conversations to update the list with latest messages
+      try {
+        const response = await api.get('/chat/admin/conversations');
+        setConversations(response.data);
+      } catch (error) {
+        console.error('Error refreshing conversations:', error);
+      }
+    });
+
+    setGlobalSocket(newGlobalSocket);
+
+    return () => {
+      newGlobalSocket.disconnect();
+    };
+  }, [user.id]);
 
   // Load messages and connect socket when conversation selected
   useEffect(() => {
@@ -205,12 +233,17 @@ const ChatManagement = () => {
               >
                 <div className="conversation-item-header">
                   <p className="conversation-customer">
-                    Customer {conv.customer_id.slice(0, 8)}
+                    {conv.is_guest
+                      ? `Guest: ${conv.guest_name}`
+                      : `Customer ${conv.customer_id?.slice(0, 8) || 'Unknown'}`}
                   </p>
                   <span className={`status-badge ${conv.status}`}>
                     {conv.status}
                   </span>
                 </div>
+                {conv.is_guest && (
+                  <p className="conversation-email">{conv.guest_email}</p>
+                )}
                 <p className="conversation-time">
                   {new Date(conv.updated_at).toLocaleDateString()} at{' '}
                   {new Date(conv.updated_at).toLocaleTimeString()}
@@ -227,7 +260,14 @@ const ChatManagement = () => {
           <>
             <div className="chat-admin-header">
               <div>
-                <h3>Customer {selectedConversation.customer_id.slice(0, 8)}</h3>
+                <h3>
+                  {selectedConversation.is_guest
+                    ? `Guest: ${selectedConversation.guest_name}`
+                    : `Customer ${selectedConversation.customer_id?.slice(0, 8) || 'Unknown'}`}
+                </h3>
+                {selectedConversation.is_guest && (
+                  <p className="guest-email">{selectedConversation.guest_email}</p>
+                )}
                 <p className="status-text">
                   Status: <span className={selectedConversation.status}>{selectedConversation.status}</span>
                 </p>
