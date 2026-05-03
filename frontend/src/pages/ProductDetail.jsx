@@ -379,6 +379,22 @@ export default function ProductDetail() {
               {addedToCart ? '✓ Added to Cart' : product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}
             </button>
 
+            {/* Checkout Button */}
+            <button
+              onClick={() => {
+                handleAddToCart();
+                navigate('/checkout');
+              }}
+              disabled={product.stock <= 0}
+              className={`w-full py-4 px-6 rounded-lg font-bold text-white text-lg transition transform hover:scale-105 active:scale-95 ${
+                product.stock > 0
+                  ? 'bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-800'
+                  : 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed'
+              }`}
+            >
+              {product.stock > 0 ? 'Add to Cart & Checkout' : 'Out of Stock'}
+            </button>
+
             {/* Continue Shopping */}
             <button
               onClick={() => navigate('/storefront')}
