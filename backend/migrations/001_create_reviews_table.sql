@@ -1,62 +1,74 @@
 -- Create reviews table for product reviews and store reviews
-CREATE TABLE IF NOT EXISTS reviews (
-  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  product_id UUID NOT NULL REFERENCES products(id) ON DELETE CASCADE,
-  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-  rating INTEGER NOT NULL CHECK (rating >= 1 AND rating <= 5),
-  title VARCHAR(255) NOT NULL,
-  comment TEXT,
-  status VARCHAR(50) DEFAULT 'pending' CHECK (status IN ('pending', 'approved', 'rejected')),
-  helpful_count INTEGER DEFAULT 0,
-  created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  updated_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP,
-  UNIQUE(product_id, user_id) -- One review per user per product
-);
+CREATE TABLE IF NOT EXISTS public.reviews (
+  id uuid not null default gen_random_uuid (),
+  product_id uuid not null,
+  user_id uuid not null,
+  rating integer not null,
+  title character varying(255) not null,
+  comment text null,
+  status character varying(50) null default 'pending'::character varying,
+  helpful_count integer null default 0,
+  created_at timestamp with time zone null default CURRENT_TIMESTAMP,
+  updated_at timestamp with time zone null default CURRENT_TIMESTAMP,
+  constraint reviews_pkey primary key (id),
+  constraint reviews_product_id_user_id_key unique (product_id, user_id),
+  constraint reviews_user_id_fkey foreign KEY (user_id) references public.users (id) on delete CASCADE,
+  constraint reviews_product_id_fkey foreign KEY (product_id) references public.products (id) on delete CASCADE,
+  constraint reviews_rating_check check (
+    (
+      (rating >= 1)
+      and (rating <= 5)
+    )
+  ),
+  constraint reviews_status_check check (
+    (
+      (status)::text = any (
+        (
+          array[
+            'pending'::character varying,
+            'approved'::character varying,
+            'rejected'::character varying
+          ]
+        )::text[]
+      )
+    )
+  )
+) TABLESPACE pg_default;
 
--- Create index on product_id for faster queries
-CREATE INDEX IF NOT EXISTS idx_reviews_product_id ON reviews(product_id);
+-- Create indexes for faster queries
+CREATE INDEX IF NOT EXISTS idx_reviews_product_id ON public.reviews using btree (product_id) TABLESPACE pg_default;
 
--- Create index on user_id for faster queries
-CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON reviews(user_id);
+CREATE INDEX IF NOT EXISTS idx_reviews_user_id ON public.reviews using btree (user_id) TABLESPACE pg_default;
 
--- Create index on status for filtering approved reviews
-CREATE INDEX IF NOT EXISTS idx_reviews_status ON reviews(status);
+CREATE INDEX IF NOT EXISTS idx_reviews_status ON public.reviews using btree (status) TABLESPACE pg_default;
 
--- Create index on created_at for sorting by date
-CREATE INDEX IF NOT EXISTS idx_reviews_created_at ON reviews(created_at);
+CREATE INDEX IF NOT EXISTS idx_reviews_created_at ON public.reviews using btree (created_at) TABLESPACE pg_default;
 
 -- Enable Row Level Security (RLS) for reviews
-ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.reviews ENABLE ROW LEVEL SECURITY;
 
 -- Policy: Anyone can view approved reviews
-CREATE POLICY "View approved reviews" ON reviews
+CREATE POLICY "View approved reviews" ON public.reviews
   FOR SELECT
   USING (status = 'approved');
 
--- Policy: Users can view their own pending/rejected reviews
-CREATE POLICY "View own reviews" ON reviews
+-- Policy: Authenticated users can view their own reviews (any status)
+CREATE POLICY "View own reviews" ON public.reviews
   FOR SELECT
-  USING (user_id = auth.uid());
+  USING (auth.uid() IS NOT NULL AND user_id = auth.uid());
 
--- Policy: Users can create reviews
-CREATE POLICY "Users can create reviews" ON reviews
+-- Policy: Authenticated users can create reviews
+CREATE POLICY "Users can create reviews" ON public.reviews
   FOR INSERT
-  WITH CHECK (user_id = auth.uid());
+  WITH CHECK (auth.uid() IS NOT NULL AND user_id = auth.uid());
 
 -- Policy: Users can update their own reviews
-CREATE POLICY "Update own reviews" ON reviews
+CREATE POLICY "Update own reviews" ON public.reviews
   FOR UPDATE
-  USING (user_id = auth.uid())
-  WITH CHECK (user_id = auth.uid());
+  USING (auth.uid() IS NOT NULL AND user_id = auth.uid())
+  WITH CHECK (auth.uid() IS NOT NULL AND user_id = auth.uid());
 
 -- Policy: Users can delete their own reviews
-CREATE POLICY "Delete own reviews" ON reviews
+CREATE POLICY "Delete own reviews" ON public.reviews
   FOR DELETE
-  USING (user_id = auth.uid());
-
--- Policy: Admin can manage all reviews
-CREATE POLICY "Admin manage reviews" ON reviews
-  FOR ALL
-  USING (EXISTS (
-    SELECT 1 FROM users WHERE users.id = auth.uid() AND users.role = 'admin'
-  ));
+  USING (auth.uid() IS NOT NULL AND user_id = auth.uid());
