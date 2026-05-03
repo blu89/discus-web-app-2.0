@@ -48,6 +48,14 @@ export const sendOrderConfirmationEmail = async (order, items) => {
             padding: 20px;
             background-color: #f9fafb;
           }
+          .logo {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .logo img {
+            height: 60px;
+            width: auto;
+          }
           .header {
             background: linear-gradient(135deg, #3b82f6 0%, #1e40af 100%);
             color: white;
@@ -117,6 +125,9 @@ export const sendOrderConfirmationEmail = async (order, items) => {
       </head>
       <body>
         <div class="container">
+          <div class="logo">
+            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Charles Discus Logo">
+          </div>
           <div class="header">
             <h1>Order Confirmation</h1>
             <p>Thank you for your purchase!</p>
@@ -198,6 +209,14 @@ export const sendOrderConfirmationEmail = async (order, items) => {
             padding: 20px;
             background-color: #f9fafb;
           }
+          .logo {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .logo img {
+            height: 60px;
+            width: auto;
+          }
           .header {
             background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             color: white;
@@ -261,6 +280,9 @@ export const sendOrderConfirmationEmail = async (order, items) => {
       </head>
       <body>
         <div class="container">
+          <div class="logo">
+            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Charles Discus Logo">
+          </div>
           <div class="header">
             <h1>New Order Notification</h1>
             <p>A new order has been received</p>
