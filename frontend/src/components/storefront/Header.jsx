@@ -247,6 +247,15 @@ export default function Header() {
         {mobileMenuOpen && (
           <nav className="md:hidden pb-4 space-y-3 animate-in fade-in duration-200 border-t border-gray-200 dark:border-gray-700 pt-4">
             {/* Theme Toggle in Mobile Menu */}
+            
+
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+            >
+              Home
+            </Link>
             <button
               onClick={toggleTheme}
               className="w-full text-left text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition flex items-center gap-2"
@@ -269,13 +278,6 @@ export default function Header() {
               )}
             </button>
 
-            <Link
-              to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-            >
-              Home
-            </Link>
             <Link
               to="/Storefront"
               onClick={() => setMobileMenuOpen(false)}
