@@ -156,26 +156,11 @@ export default function Header() {
 
           {/* Mobile Cart + Menu Button */}
           <div className="md:hidden flex items-center gap-4">
-            {/* Theme Toggle */}
-            <button
-              onClick={toggleTheme}
-              className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
-              aria-label="Toggle theme"
-            >
-              {isDark ? (
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
-                </svg>
-              ) : (
-                <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
-                  <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1h0zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" clipRule="evenodd" />
-                </svg>
-              )}
-            </button>
-
             {/* Search Icon */}
             <button
-              
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition p-2"
+              aria-label="Search"
             >
               <svg
                 className="w-6 h-6"
@@ -261,6 +246,29 @@ export default function Header() {
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
           <nav className="md:hidden pb-4 space-y-3 animate-in fade-in duration-200 border-t border-gray-200 dark:border-gray-700 pt-4">
+            {/* Theme Toggle in Mobile Menu */}
+            <button
+              onClick={toggleTheme}
+              className="w-full text-left text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition flex items-center gap-2"
+              aria-label="Toggle theme"
+            >
+              {isDark ? (
+                <>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path d="M17.293 13.293A8 8 0 016.707 2.707a8.001 8.001 0 1010.586 10.586z" />
+                  </svg>
+                  <span>Light Mode</span>
+                </>
+              ) : (
+                <>
+                  <svg className="w-6 h-6" fill="currentColor" viewBox="0 0 20 20">
+                    <path fillRule="evenodd" d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1h0zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.707.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM10 15a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1z" clipRule="evenodd" />
+                  </svg>
+                  <span>Dark Mode</span>
+                </>
+              )}
+            </button>
+
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
