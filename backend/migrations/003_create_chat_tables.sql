@@ -1,11 +1,11 @@
 -- Create conversations table (supports both authenticated users and guests)
 CREATE TABLE conversations (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  customer_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  customer_id UUID,
   guest_id VARCHAR(255), -- For guest visitors (generated session ID)
   guest_email VARCHAR(255), -- Guest email for identification
   guest_name VARCHAR(255), -- Guest name
-  admin_id UUID REFERENCES auth.users(id) ON DELETE SET NULL,
+  admin_id UUID,
   status VARCHAR DEFAULT 'open' CHECK (status IN ('open', 'closed', 'pending')),
   is_guest BOOLEAN DEFAULT FALSE,
   created_at TIMESTAMP DEFAULT NOW(),
@@ -18,7 +18,7 @@ CREATE TABLE conversations (
 CREATE TABLE chat_messages (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   conversation_id UUID NOT NULL REFERENCES conversations(id) ON DELETE CASCADE,
-  sender_id UUID REFERENCES auth.users(id) ON DELETE CASCADE,
+  sender_id UUID,
   sender_type VARCHAR NOT NULL CHECK (sender_type IN ('customer', 'admin', 'guest')),
   sender_name VARCHAR(255), -- For guests without auth
   message_text TEXT,
