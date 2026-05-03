@@ -279,7 +279,7 @@ const ChatSupport = () => {
           className="chat-floating-btn"
           title="Open support chat"
         >
-          ?
+          💬
         </button>
       )}
 
