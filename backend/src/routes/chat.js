@@ -1,5 +1,5 @@
 import express from 'express';
-import { verifyAuth } from '../middleware/auth.js';
+import { verifyToken } from '../middleware/auth.js';
 import supabase from '../config/supabase.js';
 
 const router = express.Router();
@@ -8,7 +8,7 @@ const router = express.Router();
  * Get or create conversation for authenticated customer
  * POST /api/chat/conversations
  */
-router.post('/conversations', verifyAuth, async (req, res) => {
+router.post('/conversations', verifyToken, async (req, res) => {
   try {
     const userId = req.user.id;
     
@@ -67,7 +67,7 @@ router.get('/conversations/:conversationId/messages', async (req, res) => {
  * Save a new message to the database
  * POST /api/chat/conversations/:conversationId/messages
  */
-router.post('/conversations/:conversationId/messages', verifyAuth, async (req, res) => {
+router.post('/conversations/:conversationId/messages', verifyToken, async (req, res) => {
   try {
     const { conversationId } = req.params;
     const { message, imageUrl, senderType } = req.body;
@@ -102,7 +102,7 @@ router.post('/conversations/:conversationId/messages', verifyAuth, async (req, r
  * List all conversations for admin dashboard
  * GET /api/chat/admin/conversations
  */
-router.get('/admin/conversations', verifyAuth, async (req, res) => {
+router.get('/admin/conversations', verifyToken, async (req, res) => {
   try {
     const { data: conversations, error } = await supabase
       .from('conversations')
@@ -122,7 +122,7 @@ router.get('/admin/conversations', verifyAuth, async (req, res) => {
  * Get a specific conversation with its messages
  * GET /api/chat/admin/conversations/:conversationId
  */
-router.get('/admin/conversations/:conversationId', verifyAuth, async (req, res) => {
+router.get('/admin/conversations/:conversationId', verifyToken, async (req, res) => {
   try {
     const { conversationId } = req.params;
 
@@ -156,7 +156,7 @@ router.get('/admin/conversations/:conversationId', verifyAuth, async (req, res) 
  * Update conversation status (admin only)
  * PATCH /api/chat/admin/conversations/:conversationId
  */
-router.patch('/admin/conversations/:conversationId', verifyAuth, async (req, res) => {
+router.patch('/admin/conversations/:conversationId', verifyToken, async (req, res) => {
   try {
     const { conversationId } = req.params;
     const { status, adminId } = req.body;
