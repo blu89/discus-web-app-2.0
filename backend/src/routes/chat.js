@@ -1,6 +1,6 @@
 import express from 'express';
 import { v4 as uuidv4 } from 'uuid';
-import { verifyToken } from '../middleware/auth.js';
+import { verifyToken, optionalAuth } from '../middleware/auth.js';
 import supabase from '../config/supabase.js';
 
 const router = express.Router();
@@ -10,7 +10,7 @@ const router = express.Router();
  * POST /api/chat/conversations
  * Body: { guestEmail?, guestName? } for guests
  */
-router.post('/conversations', async (req, res) => {
+router.post('/conversations', optionalAuth, async (req, res) => {
   try {
     const { guestEmail, guestName } = req.body;
     const isGuest = !req.user; // No user means guest visitor
@@ -81,7 +81,7 @@ router.post('/conversations', async (req, res) => {
  * Get messages for a specific conversation
  * GET /api/chat/conversations/:conversationId/messages
  */
-router.get('/conversations/:conversationId/messages', async (req, res) => {
+router.get('/conversations/:conversationId/messages', optionalAuth, async (req, res) => {
   try {
     const { conversationId } = req.params;
     
@@ -104,7 +104,7 @@ router.get('/conversations/:conversationId/messages', async (req, res) => {
  * Save a new message to the database (works for both users and guests)
  * POST /api/chat/conversations/:conversationId/messages
  */
-router.post('/conversations/:conversationId/messages', async (req, res) => {
+router.post('/conversations/:conversationId/messages', optionalAuth, async (req, res) => {
   try {
     const { conversationId } = req.params;
     const { message, imageUrl, senderType, guestName } = req.body;

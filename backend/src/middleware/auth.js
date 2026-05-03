@@ -26,6 +26,31 @@ export const verifyToken = (req, res, next) => {
   }
 };
 
+export const optionalAuth = (req, res, next) => {
+  // Try to verify token if present, but don't fail if missing (for guests)
+  let token = req.cookies.authToken;
+  
+  if (!token) {
+    token = req.headers.authorization?.split(' ')[1];
+  }
+
+  if (token) {
+    try {
+      const decoded = jwt.verify(token, process.env.JWT_SECRET);
+      console.log('Token verified for user:', decoded.id);
+      req.user = decoded;
+    } catch (error) {
+      console.log('Token verification failed:', error.message);
+      // Don't fail - this allows guests to continue
+      req.user = null;
+    }
+  } else {
+    req.user = null;
+  }
+  
+  next();
+};
+
 export const verifyAdmin = (req, res, next) => {
   if (!req.user || req.user.role !== 'admin') {
     return res.status(403).json({ error: 'Admin access required' });
