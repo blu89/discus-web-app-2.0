@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../hooks/useAuth';
-import axios from 'axios';
+import api from '../services/api';
 
 export default function ReviewForm({ productId, onReviewSubmitted }) {
   const [rating, setRating] = useState(5);
@@ -31,7 +31,7 @@ export default function ReviewForm({ productId, onReviewSubmitted }) {
       setError('');
       setSuccess('');
 
-      const response = await axios.post('/api/reviews', {
+      const response = await api.post('/reviews', {
         product_id: productId,
         user_id: user.id,
         rating: parseInt(rating),

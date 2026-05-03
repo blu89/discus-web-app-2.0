@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../../services/api';
 
 export default function ReviewManagement() {
   const [reviews, setReviews] = useState([]);
@@ -23,7 +23,7 @@ export default function ReviewManagement() {
     try {
       setLoading(true);
       setError('');
-      const response = await axios.get('/api/reviews', {
+      const response = await api.get('/reviews', {
         params: { limit: 1000 }
       });
       setReviews(response.data.data || []);
@@ -56,7 +56,7 @@ export default function ReviewManagement() {
 
   const handleApprove = async (reviewId) => {
     try {
-      await axios.put(`/api/reviews/${reviewId}`, { status: 'approved' });
+      await api.put(`/reviews/${reviewId}`, { status: 'approved' });
       setReviews(reviews.map(r => r.id === reviewId ? { ...r, status: 'approved' } : r));
     } catch (err) {
       console.error('Error approving review:', err);
@@ -66,7 +66,7 @@ export default function ReviewManagement() {
 
   const handleReject = async (reviewId) => {
     try {
-      await axios.put(`/api/reviews/${reviewId}`, { status: 'rejected' });
+      await api.put(`/reviews/${reviewId}`, { status: 'rejected' });
       setReviews(reviews.map(r => r.id === reviewId ? { ...r, status: 'rejected' } : r));
     } catch (err) {
       console.error('Error rejecting review:', err);
@@ -78,7 +78,7 @@ export default function ReviewManagement() {
     if (!window.confirm('Delete this review permanently?')) return;
 
     try {
-      await axios.delete(`/api/reviews/${reviewId}`);
+      await api.delete(`/reviews/${reviewId}`);
       setReviews(reviews.filter(r => r.id !== reviewId));
     } catch (err) {
       console.error('Error deleting review:', err);
@@ -93,7 +93,7 @@ export default function ReviewManagement() {
 
   const saveEdit = async (reviewId) => {
     try {
-      await axios.put(`/api/reviews/${reviewId}`, editData);
+      await api.put(`/reviews/${reviewId}`, editData);
       setReviews(reviews.map(r => r.id === reviewId ? editData : r));
       setEditingReview(null);
     } catch (err) {

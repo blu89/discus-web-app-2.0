@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../services/api';
 import ReviewCard from '../components/ReviewCard';
 
 export default function Reviews() {
@@ -20,7 +20,7 @@ export default function Reviews() {
       setLoading(true);
       setError('');
       const offset = (page - 1) * limit;
-      const response = await axios.get('/api/reviews/store', {
+      const response = await api.get('/reviews/store', {
         params: { limit, offset }
       });
 

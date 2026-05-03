@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { productAPI } from '../services/api';
+import api from '../services/api';
 import { useCart } from '../hooks/useCart';
 import ReviewForm from '../components/ReviewForm';
 import ReviewCard from '../components/ReviewCard';
-import axios from 'axios';
 
 export default function ProductDetail() {
   const { productId } = useParams();
@@ -106,7 +106,7 @@ export default function ProductDetail() {
   const fetchReviews = async () => {
     try {
       setLoadingReviews(true);
-      const response = await axios.get(`/api/reviews/product/${productId}`, {
+      const response = await api.get(`/reviews/product/${productId}`, {
         params: { limit: 100 }
       });
       setReviews(response.data.data || []);

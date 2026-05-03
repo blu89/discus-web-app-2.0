@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import axios from 'axios';
+import api from '../services/api';
 import ReviewCard from '../components/ReviewCard';
 
 export default function MyReviews() {
@@ -23,7 +23,7 @@ export default function MyReviews() {
       setLoading(true);
       setError('');
       const offset = (page - 1) * limit;
-      const response = await axios.get(`/api/reviews/user/${user.id}`, {
+      const response = await api.get(`/reviews/user/${user.id}`, {
         params: { limit, offset }
       });
 
@@ -41,7 +41,7 @@ export default function MyReviews() {
     if (!window.confirm('Are you sure you want to delete this review?')) return;
 
     try {
-      await axios.delete(`/api/reviews/${reviewId}`);
+      await api.delete(`/reviews/${reviewId}`);
       setReviews(reviews.filter(r => r.id !== reviewId));
     } catch (err) {
       console.error('Error deleting review:', err);
