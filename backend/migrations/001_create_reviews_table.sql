@@ -31,11 +31,7 @@ ALTER TABLE reviews ENABLE ROW LEVEL SECURITY;
 -- Policy: Anyone can view approved reviews
 CREATE POLICY "View approved reviews" ON reviews
   FOR SELECT
-  USING (status = 'approved' OR EXISTS (
-    SELECT 1 FROM users WHERE users.id = auth.uid()
-    UNION
-    SELECT 1 FROM users WHERE users.role = 'admin' AND users.id = auth.uid()
-  ));
+  USING (status = 'approved');
 
 -- Policy: Users can view their own pending/rejected reviews
 CREATE POLICY "View own reviews" ON reviews
