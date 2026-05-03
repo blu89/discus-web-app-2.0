@@ -1,33 +1,70 @@
 import express from 'express';
+import { v4 as uuidv4 } from 'uuid';
 import { verifyToken } from '../middleware/auth.js';
 import supabase from '../config/supabase.js';
 
 const router = express.Router();
 
 /**
- * Get or create conversation for authenticated customer
+ * Get or create conversation (works for both authenticated users and guests)
  * POST /api/chat/conversations
+ * Body: { guestEmail?, guestName? } for guests
  */
-router.post('/conversations', verifyToken, async (req, res) => {
+router.post('/conversations', async (req, res) => {
   try {
-    const userId = req.user.id;
+    const { guestEmail, guestName } = req.body;
+    const isGuest = !req.user; // No user means guest visitor
     
+    let userId, guestId;
+    
+    if (isGuest) {
+      // Generate guest session ID
+      guestId = uuidv4();
+      
+      if (!guestEmail || !guestName) {
+        return res.status(400).json({ 
+          error: 'Guest email and name are required' 
+        });
+      }
+    } else {
+      userId = req.user.id;
+    }
+
     // Check if conversation already exists
-    const { data: existing, error: selectError } = await supabase
+    let query = supabase
       .from('conversations')
       .select('*')
-      .eq('customer_id', userId)
-      .eq('status', 'open')
-      .single();
+      .eq('status', 'open');
+    
+    if (isGuest) {
+      query = query.eq('guest_email', guestEmail);
+    } else {
+      query = query.eq('customer_id', userId);
+    }
+
+    const { data: existing, error: selectError } = await query.single();
 
     if (existing) {
       return res.json(existing);
     }
 
     // Create new conversation
+    const conversationData = {
+      status: 'open',
+      is_guest: isGuest,
+      ...(isGuest && {
+        guest_id: guestId,
+        guest_email: guestEmail,
+        guest_name: guestName
+      }),
+      ...(!isGuest && {
+        customer_id: userId
+      })
+    };
+
     const { data: newConversation, error } = await supabase
       .from('conversations')
-      .insert([{ customer_id: userId, status: 'open' }])
+      .insert([conversationData])
       .select()
       .single();
 
@@ -64,17 +101,30 @@ router.get('/conversations/:conversationId/messages', async (req, res) => {
 });
 
 /**
- * Save a new message to the database
+ * Save a new message to the database (works for both users and guests)
  * POST /api/chat/conversations/:conversationId/messages
  */
-router.post('/conversations/:conversationId/messages', verifyToken, async (req, res) => {
+router.post('/conversations/:conversationId/messages', async (req, res) => {
   try {
     const { conversationId } = req.params;
-    const { message, imageUrl, senderType } = req.body;
-    const senderId = req.user.id;
-
+    const { message, imageUrl, senderType, guestName } = req.body;
+    
     if (!message && !imageUrl) {
       return res.status(400).json({ error: 'Message or image required' });
+    }
+
+    let senderId, finalSenderType, senderNameField;
+    
+    if (senderType === 'guest' || !req.user) {
+      // Guest message
+      senderId = null;
+      finalSenderType = 'guest';
+      senderNameField = guestName || 'Guest';
+    } else {
+      // Authenticated user message
+      senderId = req.user.id;
+      finalSenderType = senderType || 'customer';
+      senderNameField = null;
     }
 
     const { data: newMessage, error } = await supabase
@@ -82,7 +132,8 @@ router.post('/conversations/:conversationId/messages', verifyToken, async (req, 
       .insert([{
         conversation_id: conversationId,
         sender_id: senderId,
-        sender_type: senderType || 'customer',
+        sender_type: finalSenderType,
+        sender_name: senderNameField,
         message_text: message,
         image_url: imageUrl,
       }])
@@ -119,7 +170,7 @@ router.get('/admin/conversations', verifyToken, async (req, res) => {
 });
 
 /**
- * Get a specific conversation with its messages
+ * Get a specific conversation with its messages (admin only)
  * GET /api/chat/admin/conversations/:conversationId
  */
 router.get('/admin/conversations/:conversationId', verifyToken, async (req, res) => {
