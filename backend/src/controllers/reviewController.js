@@ -214,7 +214,7 @@ export const getStoreReviews = async (req, res) => {
 
     const { data, error, count } = await supabase
       .from('reviews')
-      .select('*, users(id, full_name), products(id, name)', { count: 'exact' })
+      .select('*, users(id, full_name)', { count: 'exact' })
       .eq('status', 'approved')
       .order('created_at', { ascending: false })
       .range(parseInt(offset), parseInt(offset) + parseInt(limit) - 1);
