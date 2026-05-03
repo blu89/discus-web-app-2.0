@@ -30,9 +30,10 @@ export default function Header() {
 
   return (
     <>
-      <header className="bg-white dark:bg-gray-900 shadow-sm fixed top-0 left-0 right-0 w-full z-50 transition-colors duration-200">
-        <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
+      <header className="bg-white dark:bg-gray-900 shadow-sm fixed top-0 left-0 right-0 w-screen z-50 transition-colors duration-200">
+        <div className="w-full h-auto">
+          <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
@@ -232,7 +233,7 @@ export default function Header() {
 
         {/* Search Bar */}
         {searchOpen && (
-          <div className="pb-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pb-4 border-t border-gray-200 dark:border-gray-700">
             <form onSubmit={handleSearch} className="flex gap-2">
               <input
                 type="text"
@@ -261,7 +262,8 @@ export default function Header() {
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <nav className="md:hidden pb-4 space-y-3 animate-in fade-in duration-200 border-t border-gray-200 dark:border-gray-700 pt-4">
+          <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+            <nav className="md:hidden pb-4 space-y-3 animate-in fade-in duration-200 border-t border-gray-200 dark:border-gray-700 pt-4">
             <Link
               to="/"
               onClick={() => setMobileMenuOpen(false)}
@@ -338,7 +340,9 @@ export default function Header() {
               </>
             )}
           </nav>
+          </div>
         )}
+        </div>
       </header>
       {/* Add padding to body when header is fixed to prevent content overlap */}
       <div className="h-16"></div>
