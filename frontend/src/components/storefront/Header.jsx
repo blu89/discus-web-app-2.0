@@ -177,7 +177,9 @@ export default function Header() {
 
             {/* Search Icon */}
             <button
-              
+              onClick={() => setSearchOpen(!searchOpen)}
+              className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition p-2"
+              aria-label="Search"
             >
               <svg
                 className="w-6 h-6"
@@ -264,87 +266,88 @@ export default function Header() {
         {mobileMenuOpen && (
           <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
             <nav className="md:hidden pb-4 space-y-3 animate-in fade-in duration-200 border-t border-gray-200 dark:border-gray-700 pt-4">
-            <Link
-              to="/"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-            >
-              Home
-            </Link>
-            <Link
-              to="/Storefront"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-            >
-              Search Product
-            </Link>
-            <Link
-              to="/about"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-            >
-              About
-            </Link>
-            <Link
-              to="/contact"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-            >
-              Contact
-            </Link>
-            <Link
-              to="/terms-and-policy"
-              onClick={() => setMobileMenuOpen(false)}
-              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-            >
-              Terms & Policy
-            </Link>
+              <Link
+                to="/"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+              >
+                Home
+              </Link>
+              <Link
+                to="/Storefront"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+              >
+                Search Product
+              </Link>
+              <Link
+                to="/about"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+              >
+                About
+              </Link>
+              <Link
+                to="/contact"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+              >
+                Contact
+              </Link>
+              <Link
+                to="/terms-and-policy"
+                onClick={() => setMobileMenuOpen(false)}
+                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+              >
+                Terms & Policy
+              </Link>
 
-            {user ? (
-              <>
-                {user.role === 'admin' && (
+              {user ? (
+                <>
+                  {user.role === 'admin' && (
+                    <Link
+                      to="/admin/dashboard"
+                      onClick={() => setMobileMenuOpen(false)}
+                      className="block bg-purple-600 dark:bg-purple-700 text-white px-3 py-2 rounded-lg hover:bg-purple-700 dark:hover:bg-purple-800 font-medium transition"
+                    >
+                      Admin Panel
+                    </Link>
+                  )}
+                  <div className="py-2 border-t border-gray-200 dark:border-gray-700">
+                    <p className="text-gray-600 dark:text-gray-400 font-medium mb-3">{user.full_name}</p>
+                    <button
+                      onClick={handleLogout}
+                      className="w-full text-left text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition py-2"
+                    >
+                      Logout
+                    </button>
+                  </div>
+                </>
+              ) : (
+                <>
                   <Link
-                    to="/admin/dashboard"
+                    to="/login"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block bg-purple-600 dark:bg-purple-700 text-white px-3 py-2 rounded-lg hover:bg-purple-700 dark:hover:bg-purple-800 font-medium transition"
+                    className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
                   >
-                    Admin Panel
+                    Login
                   </Link>
-                )}
-                <div className="py-2 border-t border-gray-200 dark:border-gray-700">
-                  <p className="text-gray-600 dark:text-gray-400 font-medium mb-3">{user.full_name}</p>
-                  <button
-                    onClick={handleLogout}
-                    className="w-full text-left text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition py-2"
+                  <Link
+                    to="/register"
+                    onClick={() => setMobileMenuOpen(false)}
+                    className="block bg-blue-500 dark:bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 font-medium transition text-center"
                   >
-                    Logout
-                  </button>
-                </div>
-              </>
-            ) : (
-              <>
-                <Link
-                  to="/login"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-                >
-                  Login
-                </Link>
-                <Link
-                  to="/register"
-                  onClick={() => setMobileMenuOpen(false)}
-                  className="block bg-blue-500 dark:bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 font-medium transition text-center"
-                >
-                  Register
-                </Link>
-              </>
-            )}
-          </nav>
+                    Register
+                  </Link>
+                </>
+              )}
+            </nav>
+          </div>  {/* ← closes the mobileMenuOpen wrapper div */}
         )}
-        </div>
+        </div>  {/* ← closes w-full h-auto overflow-visible */}
       </header>
       {/* Add padding to body when header is fixed to prevent content overlap */}
       <div className="h-16"></div>
-    </div>
+    </>  {/* ← closes the fragment, not a div */}
   );
 }
