@@ -29,11 +29,9 @@ export default function Header() {
   };
 
   return (
-    <>
-      <header style={{position: 'fixed', top: 0, left: 0, right: 0, width: '100%', zIndex: 9999, overflow: 'visible'}} className="bg-white dark:bg-gray-900 shadow-sm transition-colors duration-200">
-        <div className="w-full h-auto overflow-visible">
-          <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <div className="flex justify-between items-center h-16">
+    <header className="bg-white dark:bg-gray-900 shadow-sm sticky top-0 z-50 transition-colors duration-200 ">
+      <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <Link to="/" className="flex-shrink-0">
             <span className="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-blue-500 to-blue-700 bg-clip-text text-transparent">
@@ -177,9 +175,7 @@ export default function Header() {
 
             {/* Search Icon */}
             <button
-              onClick={() => setSearchOpen(!searchOpen)}
-              className="text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 transition p-2"
-              aria-label="Search"
+              
             >
               <svg
                 className="w-6 h-6"
@@ -235,7 +231,7 @@ export default function Header() {
 
         {/* Search Bar */}
         {searchOpen && (
-          <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 pb-4 border-t border-gray-200 dark:border-gray-700">
+          <div className="pb-4 border-t border-gray-200 dark:border-gray-700">
             <form onSubmit={handleSearch} className="flex gap-2">
               <input
                 type="text"
@@ -264,90 +260,85 @@ export default function Header() {
 
         {/* Mobile Navigation Menu */}
         {mobileMenuOpen && (
-          <div className="w-full max-w-7xl mx-auto px-2 sm:px-6 lg:px-8">
-            <nav className="md:hidden pb-4 space-y-3 animate-in fade-in duration-200 border-t border-gray-200 dark:border-gray-700 pt-4">
-              <Link
-                to="/"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-              >
-                Home
-              </Link>
-              <Link
-                to="/Storefront"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-              >
-                Search Product
-              </Link>
-              <Link
-                to="/about"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-              >
-                About
-              </Link>
-              <Link
-                to="/contact"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-              >
-                Contact
-              </Link>
-              <Link
-                to="/terms-and-policy"
-                onClick={() => setMobileMenuOpen(false)}
-                className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
-              >
-                Terms & Policy
-              </Link>
+          <nav className="md:hidden pb-4 space-y-3 animate-in fade-in duration-200 border-t border-gray-200 dark:border-gray-700 pt-4">
+            <Link
+              to="/"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+            >
+              Home
+            </Link>
+            <Link
+              to="/Storefront"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+            >
+              Search Product
+            </Link>
+            <Link
+              to="/about"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+            >
+              About
+            </Link>
+            <Link
+              to="/contact"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+            >
+              Contact
+            </Link>
+            <Link
+              to="/terms-and-policy"
+              onClick={() => setMobileMenuOpen(false)}
+              className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+            >
+              Terms & Policy
+            </Link>
 
-              {user ? (
-                <>
-                  {user.role === 'admin' && (
-                    <Link
-                      to="/admin/dashboard"
-                      onClick={() => setMobileMenuOpen(false)}
-                      className="block bg-purple-600 dark:bg-purple-700 text-white px-3 py-2 rounded-lg hover:bg-purple-700 dark:hover:bg-purple-800 font-medium transition"
-                    >
-                      Admin Panel
-                    </Link>
-                  )}
-                  <div className="py-2 border-t border-gray-200 dark:border-gray-700">
-                    <p className="text-gray-600 dark:text-gray-400 font-medium mb-3">{user.full_name}</p>
-                    <button
-                      onClick={handleLogout}
-                      className="w-full text-left text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition py-2"
-                    >
-                      Logout
-                    </button>
-                  </div>
-                </>
-              ) : (
-                <>
+            {user ? (
+              <>
+                {user.role === 'admin' && (
                   <Link
-                    to="/login"
+                    to="/admin/dashboard"
                     onClick={() => setMobileMenuOpen(false)}
-                    className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+                    className="block bg-purple-600 dark:bg-purple-700 text-white px-3 py-2 rounded-lg hover:bg-purple-700 dark:hover:bg-purple-800 font-medium transition"
                   >
-                    Login
+                    Admin Panel
                   </Link>
-                  <Link
-                    to="/register"
-                    onClick={() => setMobileMenuOpen(false)}
-                    className="block bg-blue-500 dark:bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 font-medium transition text-center"
+                )}
+                <div className="py-2 border-t border-gray-200 dark:border-gray-700">
+                  <p className="text-gray-600 dark:text-gray-400 font-medium mb-3">{user.full_name}</p>
+                  <button
+                    onClick={handleLogout}
+                    className="w-full text-left text-red-500 dark:text-red-400 hover:text-red-700 dark:hover:text-red-300 font-medium transition py-2"
                   >
-                    Register
-                  </Link>
-                </>
-              )}
-            </nav>
-          </div>
+                    Logout
+                  </button>
+                </div>
+              </>
+            ) : (
+              <>
+                <Link
+                  to="/login"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block text-gray-700 dark:text-gray-300 hover:text-blue-500 dark:hover:text-blue-400 font-medium py-2 transition"
+                >
+                  Login
+                </Link>
+                <Link
+                  to="/register"
+                  onClick={() => setMobileMenuOpen(false)}
+                  className="block bg-blue-500 dark:bg-blue-600 text-white px-3 py-2 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 font-medium transition text-center"
+                >
+                  Register
+                </Link>
+              </>
+            )}
+          </nav>
         )}
-        </div>
-      </header>
-      {/* Add padding to body when header is fixed to prevent content overlap */}
-      <div className="h-16"></div>
-    </>
+      </div>
+    </header>
   );
 }
