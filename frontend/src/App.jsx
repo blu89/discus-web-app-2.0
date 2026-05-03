@@ -1,6 +1,6 @@
 import './index.css';
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
@@ -37,6 +37,16 @@ function ProtectedAdminRoute({ children }) {
   return children;
 }
 
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function AppContent() {
   const { user } = useAuth();
   const isAdmin = user?.role === 'admin';
@@ -44,6 +54,7 @@ function AppContent() {
   return (
     <>
       <Header />
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
