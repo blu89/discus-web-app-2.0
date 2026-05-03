@@ -40,6 +40,52 @@ export default function Checkout() {
     }
   };
 
+  const validateAllFields = () => {
+    const errors = {};
+
+    // Validate customer name
+    if (!formData.customerName || formData.customerName.trim().length < 3) {
+      errors.customerName = 'Full name must be at least 3 characters';
+    }
+
+    // Validate email
+    if (!formData.customerEmail || !formData.customerEmail.includes('@')) {
+      errors.customerEmail = 'Please enter a valid email address';
+    }
+
+    // Validate shipping address
+    if (!formData.shippingAddress || formData.shippingAddress.trim().length < 10) {
+      errors.shippingAddress = 'Shipping address must be at least 10 characters';
+    }
+
+    // Validate billing address
+    if (!formData.billingAddress || formData.billingAddress.trim().length < 10) {
+      errors.billingAddress = 'Billing address must be at least 10 characters';
+    }
+
+    // Validate billing city
+    if (!formData.billingCity || formData.billingCity.trim().length < 2) {
+      errors.billingCity = 'City must be at least 2 characters';
+    }
+
+    // Validate billing state
+    if (!formData.billingState || formData.billingState.trim().length < 2) {
+      errors.billingState = 'State/Region must be at least 2 characters';
+    }
+
+    // Validate billing zip
+    if (!formData.billingZip || formData.billingZip.trim().length < 3) {
+      errors.billingZip = 'Postal code must be at least 3 characters';
+    }
+
+    // Validate billing country
+    if (!formData.billingCountry || formData.billingCountry.trim().length < 2) {
+      errors.billingCountry = 'Country must be at least 2 characters';
+    }
+
+    return errors;
+  };
+
   const isCardInfoValid = () => {
     return (
       formData.cardNumber.replace(/\s/g, '').length >= 13 &&
@@ -63,6 +109,14 @@ export default function Checkout() {
     setLoading(true);
     setError('');
     setValidationErrors({});
+
+    // Validate all fields first
+    const allFieldsErrors = validateAllFields();
+    if (Object.keys(allFieldsErrors).length > 0) {
+      setValidationErrors(allFieldsErrors);
+      setLoading(false);
+      return;
+    }
 
     const cardValidation = validateCard(formData);
     if (!cardValidation.isValid) {
@@ -139,9 +193,10 @@ export default function Checkout() {
                   name="customerName"
                   value={formData.customerName}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                  className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.customerName ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   required
                 />
+                {validationErrors.customerName && <p className="text-red-500 text-sm mt-1">{validationErrors.customerName}</p>}
               </div>
 
               <div className="mb-4">
@@ -151,9 +206,10 @@ export default function Checkout() {
                   name="customerEmail"
                   value={formData.customerEmail}
                   onChange={handleChange}
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                  className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.customerEmail ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   required
                 />
+                {validationErrors.customerEmail && <p className="text-red-500 text-sm mt-1">{validationErrors.customerEmail}</p>}
               </div>
 
               <div className="mb-4">
@@ -163,9 +219,10 @@ export default function Checkout() {
                   value={formData.shippingAddress}
                   onChange={handleChange}
                   rows="4"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                  className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.shippingAddress ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   required
                 />
+                {validationErrors.shippingAddress && <p className="text-red-500 text-sm mt-1">{validationErrors.shippingAddress}</p>}
               </div>
             </div>
 
@@ -249,10 +306,11 @@ export default function Checkout() {
                   value={formData.billingAddress}
                   onChange={handleChange}
                   rows="3"
-                  className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                  className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingAddress ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   placeholder="Street address"
                   required
                 />
+                {validationErrors.billingAddress && <p className="text-red-500 text-sm mt-1">{validationErrors.billingAddress}</p>}
               </div>
 
               <div className="grid grid-cols-2 gap-4 mb-4">
@@ -263,9 +321,10 @@ export default function Checkout() {
                     name="billingCity"
                     value={formData.billingCity}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                    className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingCity ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
+                  {validationErrors.billingCity && <p className="text-red-500 text-sm mt-1">{validationErrors.billingCity}</p>}
                 </div>
                 <div>
                   <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">State/Region</label>
@@ -274,9 +333,10 @@ export default function Checkout() {
                     name="billingState"
                     value={formData.billingState}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                    className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingState ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
+                  {validationErrors.billingState && <p className="text-red-500 text-sm mt-1">{validationErrors.billingState}</p>}
                 </div>
               </div>
 
@@ -289,9 +349,10 @@ export default function Checkout() {
                     name="billingZip"
                     value={formData.billingZip}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                    className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingZip ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
+                  {validationErrors.billingZip && <p className="text-red-500 text-sm mt-1">{validationErrors.billingZip}</p>}
                 </div>
                 <div>
                   <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">Country</label>
@@ -300,9 +361,10 @@ export default function Checkout() {
                     name="billingCountry"
                     value={formData.billingCountry}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition"
+                    className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingCountry ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
+                  {validationErrors.billingCountry && <p className="text-red-500 text-sm mt-1">{validationErrors.billingCountry}</p>}
                 </div>
               </div>
             </div>
