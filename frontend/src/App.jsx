@@ -55,32 +55,34 @@ function AppContent() {
     <>
       <Header />
       <ScrollToTop />
-      <Routes>
-        <Route path="/" element={<Home />} />
-        <Route path="/about" element={<About />} />
-        <Route path="/contact" element={<Contact />} />
-        <Route path="/terms-and-policy" element={<TermsAndPolicy />} />
-        <Route path="/login" element={<Login />} />
-        <Route path="/register" element={<Register />} />
-        <Route path="/storefront" element={<Storefront />} />
-        <Route path="/product/:productId" element={<ProductDetail />} />
-        <Route path="/cart" element={<Cart />} />
-        <Route path="/checkout" element={<Checkout />} />
-        <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
-        <Route path="/reviews" element={<Reviews />} />
-        <Route path="/my-reviews" element={<MyReviews />} />
+      <main className="pt-16">
+        <Routes>
+          <Route path="/" element={<Home />} />
+          <Route path="/about" element={<About />} />
+          <Route path="/contact" element={<Contact />} />
+          <Route path="/terms-and-policy" element={<TermsAndPolicy />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/storefront" element={<Storefront />} />
+          <Route path="/product/:productId" element={<ProductDetail />} />
+          <Route path="/cart" element={<Cart />} />
+          <Route path="/checkout" element={<Checkout />} />
+          <Route path="/order-confirmation/:orderId" element={<OrderConfirmation />} />
+          <Route path="/reviews" element={<Reviews />} />
+          <Route path="/my-reviews" element={<MyReviews />} />
 
-        {/* Admin Routes */}
-        <Route
-          path="/admin/*"
-          element={
-            <ProtectedAdminRoute>
-              <AdminLayout />
-            </ProtectedAdminRoute>
-          }
-        />
-        <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>} />
-      </Routes>
+          {/* Admin Routes */}
+          <Route
+            path="/admin/*"
+            element={
+              <ProtectedAdminRoute>
+                <AdminLayout />
+              </ProtectedAdminRoute>
+            }
+          />
+          <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>} />
+        </Routes>
+      </main>
       <Footer />
       <ChatSupport />
     </>
