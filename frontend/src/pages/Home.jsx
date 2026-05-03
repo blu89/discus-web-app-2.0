@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { productAPI, heroAPI } from '../services/api';
 import api from '../services/api';
 import { useCart } from '../hooks/useCart';
-import AddToCartIcon from '../components/AddToCartIcon';
+import addToCartSvg from './add-to-cart.svg';
 
 export default function Home() {
   const [latestProducts, setLatestProducts] = useState([]);
@@ -274,7 +274,13 @@ export default function Home() {
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       >
-                        <AddToCartIcon isAdded={addedToCartId === product.id} />
+                        {addedToCartId === product.id ? (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        ) : (
+                          <img src={addToCartSvg} alt="Add to cart" className="w-5 h-5" style={{ filter: 'brightness(0) invert(1)' }} />
+                        )}
                       </button>
                     </div>
                   </div>
@@ -365,7 +371,13 @@ export default function Home() {
                             : 'bg-gray-400 text-gray-600 cursor-not-allowed'
                         }`}
                       >
-                        <AddToCartIcon isAdded={addedToCartId === product.id} />
+                        {addedToCartId === product.id ? (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        ) : (
+                          <img src={addToCartSvg} alt="Add to cart" className="w-5 h-5" style={{ filter: 'brightness(0) invert(1)' }} />
+                        )}
                       </button>
                     </div>
                   </div>
