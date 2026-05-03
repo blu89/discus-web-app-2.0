@@ -342,12 +342,12 @@ export default function Header() {
                 </>
               )}
             </nav>
-          </div>  {/* ← closes the mobileMenuOpen wrapper div */}
+          </div>
         )}
-        </div>  {/* ← closes w-full h-auto overflow-visible */}
+        </div>
       </header>
       {/* Add padding to body when header is fixed to prevent content overlap */}
       <div className="h-16"></div>
-    </>  {/* ← closes the fragment, not a div */}
+    </>
   );
 }
