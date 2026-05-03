@@ -1,12 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { productAPI, heroAPI } from '../services/api';
+import api from '../services/api';
 import { useCart } from '../hooks/useCart';
 import AddToCartIcon from '../components/AddToCartIcon';
 
 export default function Home() {
   const [latestProducts, setLatestProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
+  const [reviews, setReviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
   const [heroImages, setHeroImages] = useState([]);
@@ -46,6 +48,7 @@ export default function Home() {
   useEffect(() => {
     fetchLatestProducts();
     fetchHeroImages();
+    fetchReviews();
   }, []);
 
   useEffect(() => {
@@ -84,6 +87,18 @@ export default function Home() {
     } catch (err) {
       console.error('Failed to fetch hero images:', err);
       // Use default images on error
+    }
+  };
+
+  const fetchReviews = async () => {
+    try {
+      const response = await api.get('/reviews/store', {
+        params: { limit: 6, offset: 0 }
+      });
+      setReviews(response.data.data || []);
+    } catch (err) {
+      console.error('Failed to fetch reviews:', err);
+      // Continue without reviews if fetch fails
     }
   };
 
@@ -436,6 +451,66 @@ export default function Home() {
           </div>
         </div>
       </section>
+
+      {/* Reviews Section */}
+      {reviews.length > 0 && (
+        <section className="py-16 bg-white dark:bg-gray-950">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-4xl font-bold text-center mb-4 text-gray-900 dark:text-white">Customer Reviews</h2>
+            <p className="text-center text-gray-600 dark:text-gray-400 mb-12">See what our customers have to say about their purchases</p>
+
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mb-12">
+              {reviews.map((review) => (
+                <div 
+                  key={review.id} 
+                  className="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg dark:hover:shadow-gray-700 transition"
+                >
+                  {/* Rating Stars */}
+                  <div className="flex items-center gap-2 mb-3">
+                    <div className="text-yellow-400 text-lg">
+                      {'★'.repeat(review.rating) + '☆'.repeat(5 - review.rating)}
+                    </div>
+                    <span className="text-sm text-gray-600 dark:text-gray-400">
+                      {review.rating} out of 5
+                    </span>
+                  </div>
+
+                  {/* Review Title */}
+                  <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-2">
+                    {review.title}
+                  </h3>
+
+                  {/* Review Comment */}
+                  <p className="text-gray-600 dark:text-gray-400 mb-4 line-clamp-3">
+                    {review.comment}
+                  </p>
+
+                  {/* Product & Author Info */}
+                  <div className="border-t border-gray-200 dark:border-gray-700 pt-4">
+                    {review.products && (
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                        <span className="font-semibold">Product:</span> {review.products.name}
+                      </p>
+                    )}
+                    <p className="text-sm text-gray-600 dark:text-gray-400">
+                      <span className="font-semibold">By:</span> {review.users?.full_name || 'Anonymous'}
+                    </p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center">
+              <a 
+                href="/reviews" 
+                className="inline-block bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition"
+              >
+                Read All Reviews
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Features */}
       <section className="py-16 bg-gray-50 dark:bg-gray-900">
