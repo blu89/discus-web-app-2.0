@@ -193,6 +193,7 @@ export default function Checkout() {
                   name="customerName"
                   value={formData.customerName}
                   onChange={handleChange}
+                  placeholder="e.g., John Smith"
                   className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.customerName ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   required
                 />
@@ -206,6 +207,7 @@ export default function Checkout() {
                   name="customerEmail"
                   value={formData.customerEmail}
                   onChange={handleChange}
+                  placeholder="e.g., john@example.com"
                   className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.customerEmail ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   required
                 />
@@ -218,6 +220,7 @@ export default function Checkout() {
                   name="shippingAddress"
                   value={formData.shippingAddress}
                   onChange={handleChange}
+                  placeholder="e.g., 123 Main Street, Apartment 4B, New York, NY 10001"
                   rows="4"
                   className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.shippingAddress ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                   required
@@ -305,9 +308,9 @@ export default function Checkout() {
                   name="billingAddress"
                   value={formData.billingAddress}
                   onChange={handleChange}
+                  placeholder="e.g., 123 Main Street, Apartment 4B"
                   rows="3"
                   className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingAddress ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
-                  placeholder="Street address"
                   required
                 />
                 {validationErrors.billingAddress && <p className="text-red-500 text-sm mt-1">{validationErrors.billingAddress}</p>}
@@ -321,6 +324,7 @@ export default function Checkout() {
                     name="billingCity"
                     value={formData.billingCity}
                     onChange={handleChange}
+                    placeholder="e.g., New York"
                     className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingCity ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
@@ -333,6 +337,7 @@ export default function Checkout() {
                     name="billingState"
                     value={formData.billingState}
                     onChange={handleChange}
+                    placeholder="e.g., NY"
                     className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingState ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
@@ -349,6 +354,7 @@ export default function Checkout() {
                     name="billingZip"
                     value={formData.billingZip}
                     onChange={handleChange}
+                    placeholder="e.g., 10001"
                     className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingZip ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
@@ -361,6 +367,7 @@ export default function Checkout() {
                     name="billingCountry"
                     value={formData.billingCountry}
                     onChange={handleChange}
+                    placeholder="e.g., United States"
                     className={`w-full px-4 py-2 border rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white transition ${validationErrors.billingCountry ? 'border-red-500' : 'border-gray-300 dark:border-gray-600'}`}
                     required
                   />
@@ -372,7 +379,7 @@ export default function Checkout() {
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 transition">
               <button
                 type="submit"
-                disabled={loading || !isCardInfoValid()}
+                disabled={loading}
                 className="w-full bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white py-3 rounded-lg font-bold disabled:opacity-50 disabled:cursor-not-allowed transition"
               >
                 {loading ? 'Processing...' : 'Complete Order'}
