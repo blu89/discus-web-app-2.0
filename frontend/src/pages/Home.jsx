@@ -21,7 +21,7 @@ export default function Home() {
   const defaultHeroImages = [
     {
       id: 1,
-      url: 'https://aquariumscience.org/wp-content/uploads/2022/06/Symphysodon-aequifasciatus-Discus-78e.jpg',
+      url: 'https://res.cloudinary.com/doqzc3md2/image/upload/v1777824283/Gemini_Generated_Image_iqqzaiiqqzaiiqqz_wcchcm.png',
       title: 'Best Collection',
       description: 'Discover our Best products'
     },
