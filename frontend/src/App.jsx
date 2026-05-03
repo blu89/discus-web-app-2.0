@@ -52,10 +52,11 @@ function AppContent() {
   const isAdmin = user?.role === 'admin';
 
   return (
-    <>
+    <div style={{width: '100%', overflow: 'hidden'}}>
       <Header />
-      <ScrollToTop />
-      <Routes>
+      <div style={{width: '100%'}}>
+        <ScrollToTop />
+        <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/about" element={<About />} />
         <Route path="/contact" element={<Contact />} />
@@ -81,9 +82,10 @@ function AppContent() {
         />
         <Route path="/admin/dashboard" element={<ProtectedAdminRoute><AdminLayout /></ProtectedAdminRoute>} />
       </Routes>
-      <Footer />
-      <ChatSupport />
-    </>
+        <Footer />
+        <ChatSupport />
+      </div>
+    </div>
   );
 }
 
