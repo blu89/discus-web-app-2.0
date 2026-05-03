@@ -217,7 +217,7 @@ export const getStoreReviews = async (req, res) => {
       .select('*, users(id, full_name), products(id, name)', { count: 'exact' })
       .eq('status', 'approved')
       .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1);
+      .range(parseInt(offset), parseInt(offset) + parseInt(limit) - 1);
 
     if (error) {
       console.error('Supabase getStoreReviews error:', error);
@@ -234,6 +234,7 @@ export const getStoreReviews = async (req, res) => {
       ? (ratingData.reduce((sum, r) => sum + r.rating, 0) / ratingData.length).toFixed(1)
       : 0;
 
+    setStaticCacheHeaders(req, res);
     res.json({
       data: data || [],
       averageRating,

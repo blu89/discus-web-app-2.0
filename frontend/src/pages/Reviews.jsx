@@ -20,16 +20,19 @@ export default function Reviews() {
       setLoading(true);
       setError('');
       const offset = (page - 1) * limit;
+      console.log('Fetching reviews with:', { limit, offset, page });
+      
       const response = await api.get('/reviews/store', {
         params: { limit, offset }
       });
 
+      console.log('Reviews response:', response.data);
       setReviews(response.data.data || []);
       setAverageRating(response.data.averageRating || 0);
       setHasMore((response.data.total || 0) > page * limit);
     } catch (err) {
       console.error('Error fetching reviews:', err);
-      setError('Failed to load reviews');
+      setError('Failed to load reviews. Please try again later.');
     } finally {
       setLoading(false);
     }
