@@ -130,7 +130,7 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-white dark:bg-gray-950 transition-colors duration-200">
       {/* Hero Section with Image Carousel */}
-      <section className="relative w-full h-64 md:h-96 overflow-hidden pt-13">
+      <section className="relative w-full h-64 md:h-96 overflow-hidden">
         {/* Slides Container */}
         <div className="relative w-full h-full">
           {(heroImages.length > 0 ? heroImages : defaultHeroImages).map((image, index) => (
