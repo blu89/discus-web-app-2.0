@@ -12,7 +12,10 @@ module.exports = {
       colors: {
         primary: '#3B82F6',
         secondary: '#1F2937',
-      }
+      },
+      spacing: {
+        13: '3.25rem',
+      },
     },
   },
   plugins: [],
