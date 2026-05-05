@@ -162,7 +162,12 @@ export const logout = (req, res) => {
 };
 
 export const verifyAuth = (req, res) => {
-  const token = req.cookies.authToken;
+  // Try multiple sources for token (in order of preference)
+  let token = req.cookies.authToken; // First: HTTP-only cookie (most secure)
+  
+  if (!token) {
+    token = req.headers.authorization?.split(' ')[1]; // Second: Authorization header
+  }
   
   if (!token) {
     return res.status(401).json({ authenticated: false });
