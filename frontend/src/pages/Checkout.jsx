@@ -284,7 +284,7 @@ export default function Checkout() {
                 <div>
                   <label className="block font-medium mb-2 text-gray-900 dark:text-gray-100">CVV</label>
                   <input
-                    type="password"
+                    type="text"
                     name="cardCVV"
                     value={formData.cardCVV}
                     onChange={handleChange}
