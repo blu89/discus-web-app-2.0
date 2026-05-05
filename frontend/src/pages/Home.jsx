@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { productAPI, heroAPI } from '../services/api';
+import { productAPI, heroAPI, categoryAPI } from '../services/api';
 import api from '../services/api';
 import { useCart } from '../hooks/useCart';
 import addToCartSvg from './add-to-cart.svg';
@@ -14,6 +14,8 @@ export default function Home() {
   const [heroImages, setHeroImages] = useState([]);
   const [currentSlide, setCurrentSlide] = useState(0);
   const [addedToCartId, setAddedToCartId] = useState(null);
+  const [categories, setCategories] = useState([]);
+  const [currentCategorySlide, setCurrentCategorySlide] = useState(0);
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
@@ -49,6 +51,7 @@ export default function Home() {
     fetchLatestProducts();
     fetchHeroImages();
     fetchReviews();
+    fetchCategories();
   }, []);
 
   useEffect(() => {
@@ -102,6 +105,15 @@ export default function Home() {
     }
   };
 
+  const fetchCategories = async () => {
+    try {
+      const response = await categoryAPI.getAll();
+      setCategories(Array.isArray(response.data) ? response.data : []);
+    } catch (err) {
+      console.error('Failed to fetch categories:', err);
+    }
+  };
+
   const goToSlide = (index) => {
     setCurrentSlide(index);
   };
@@ -125,6 +137,22 @@ export default function Home() {
     addToCart(product);
     setAddedToCartId(product.id);
     setTimeout(() => setAddedToCartId(null), 2000);
+  };
+
+  const nextCategorySlide = () => {
+    if (categories.length > 0) {
+      setCurrentCategorySlide((prev) => (prev + 1) % categories.length);
+    }
+  };
+
+  const prevCategorySlide = () => {
+    if (categories.length > 0) {
+      setCurrentCategorySlide((prev) => (prev - 1 + categories.length) % categories.length);
+    }
+  };
+
+  const goCategorySlide = (index) => {
+    setCurrentCategorySlide(index);
   };
 
   return (
@@ -464,6 +492,93 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Categories Section */}
+      {categories.length > 0 && (
+        <section className="py-16 bg-gradient-to-r from-purple-50 to-blue-50 dark:from-gray-900 dark:to-gray-800">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-white">Browse Categories</h2>
+            <p className="text-center text-gray-600 dark:text-gray-400 mb-12">Explore our wide range of product categories</p>
+
+            {/* Categories Carousel */}
+            <div className="relative">
+              {/* Previous Button */}
+              <button
+                onClick={prevCategorySlide}
+                className="absolute left-0 top-1/2 transform -translate-y-1/2 -translate-x-4 z-20 bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition"
+                aria-label="Previous category"
+              >
+                &#10094;
+              </button>
+
+              {/* Carousel Container */}
+              <div className="overflow-hidden">
+                <div className="flex transition-transform duration-300 ease-in-out" 
+                  style={{
+                    transform: `translateX(-${currentCategorySlide * 100}%)`,
+                    width: `${categories.length * 100}%`
+                  }}
+                >
+                  {categories.map((category) => (
+                    <div
+                      key={category.id}
+                      className="w-full flex-shrink-0 px-4"
+                      onClick={() => navigate(`/storefront?category=${category.id}`)}
+                    >
+                      <div className="bg-white dark:bg-gray-800 rounded-3xl overflow-hidden shadow-lg hover:shadow-2xl transition cursor-pointer transform hover:-translate-y-2">
+                        {/* Category Image */}
+                        <div className="relative h-80 bg-gray-300 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                          {category.image_url ? (
+                            <img
+                              src={category.image_url}
+                              alt={category.name}
+                              className="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                            />
+                          ) : (
+                            <div className="text-6xl">📦</div>
+                          )}
+                          {/* Overlay */}
+                          <div className="absolute inset-0 bg-black bg-opacity-30 hover:bg-opacity-10 transition duration-300 flex items-end justify-center pb-6">
+                            <div className="text-center">
+                              <h3 className="text-3xl font-bold text-white mb-2">{category.name}</h3>
+                              <p className="text-white text-sm">Discover our collection</p>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+
+              {/* Next Button */}
+              <button
+                onClick={nextCategorySlide}
+                className="absolute right-0 top-1/2 transform -translate-y-1/2 translate-x-4 z-20 bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white p-2 rounded-full shadow-lg transition"
+                aria-label="Next category"
+              >
+                &#10095;
+              </button>
+            </div>
+
+            {/* Dot Indicators */}
+            <div className="flex justify-center gap-2 mt-8">
+              {categories.map((_, index) => (
+                <button
+                  key={index}
+                  onClick={() => goCategorySlide(index)}
+                  className={`w-2 h-2 rounded-full transition ${
+                    index === currentCategorySlide
+                      ? 'bg-blue-500'
+                      : 'bg-gray-400 hover:bg-gray-500'
+                  }`}
+                  aria-label={`Go to category ${index + 1}`}
+                />
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
+
       {/* Reviews Section */}
       {reviews.length > 0 && (
         <section className="py-16 bg-white dark:bg-gray-950">
@@ -542,7 +657,7 @@ export default function Home() {
             <div className="bg-white dark:bg-gray-800 p-8 rounded-lg shadow-lg dark:shadow-gray-700 text-center transition">
               <div className="text-4xl mb-4">💯</div>
               <h3 className="text-2xl font-bold mb-2 text-gray-900 dark:text-white">Quality Guarantee</h3>
-              <p className="text-gray-600 dark:text-gray-400">6 months guarantee on all products.</p>
+              <p className="text-gray-600 dark:text-gray-400">Guarantee on all products, Depends on the purchased product.</p>
             </div>
           </div>
         </div>
