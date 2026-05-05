@@ -29,7 +29,7 @@ export default function Home() {
     },
     {
       id: 2,
-      url: 'https://media.architecturaldigest.com/photos/65d4de9f5badec5f2682db2f/master/pass/GettyImages-1076550794.jpg',
+      url: 'https://res.cloudinary.com/doqzc3md2/image/upload/v1777991145/1f011726db08e5ecfadfd2a653b76832-oceanografic_spain_aquarium_kb1lot.jpg',
       title: 'Welcome to the world of aquarium',
       description: 'Nothing beats the joy of finding the perfect fish for your aquarium'
     },
