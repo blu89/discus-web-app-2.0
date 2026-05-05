@@ -55,7 +55,7 @@ function AppContent() {
     <>
       <Header />
       <ScrollToTop />
-      <main className="pt-13">
+      <main>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
