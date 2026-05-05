@@ -396,3 +396,200 @@ export const sendOrderConfirmationEmail = async (order, items) => {
 export const resendOrderConfirmationEmail = async (order, items) => {
   return sendOrderConfirmationEmail(order, items);
 };
+
+/**
+ * Send payment confirmation email to customer
+ * @param {Object} order - Order object with customer_email, customer_name, total_price
+ * @param {String} paymentStatus - 'successful' or 'unsuccessful'
+ */
+export const sendPaymentConfirmationEmail = async (order, paymentStatus) => {
+  try {
+    // Validate required fields
+    if (!order.customer_email || !order.customer_name) {
+      console.error('Missing required order fields for payment confirmation email');
+      return { success: false, error: 'Invalid order data' };
+    }
+
+    const isSuccessful = paymentStatus === 'successful';
+    const headerGradient = isSuccessful 
+      ? 'linear-gradient(135deg, #10b981 0%, #059669 100%)' 
+      : 'linear-gradient(135deg, #ef4444 0%, #dc2626 100%)';
+    const headerColor = isSuccessful ? '#10b981' : '#ef4444';
+    const statusMessage = isSuccessful 
+      ? 'Your payment has been successfully processed!' 
+      : 'We were unable to process your payment.';
+    const statusTitle = isSuccessful 
+      ? 'Payment Successful' 
+      : 'Payment Failed';
+    const headerTitle = isSuccessful 
+      ? 'Payment Confirmation' 
+      : 'Payment Status Update';
+
+    const customerHtmlContent = `
+    <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+        <style>
+          body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+          }
+          .container {
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f9fafb;
+          }
+          .logo {
+            text-align: center;
+            margin-bottom: 20px;
+          }
+          .logo img {
+            height: 60px;
+            width: auto;
+          }
+          .header {
+            background: ${headerGradient};
+            color: white;
+            padding: 30px;
+            border-radius: 8px 8px 0 0;
+            text-align: center;
+          }
+          .content {
+            background-color: white;
+            padding: 30px;
+            border-radius: 0 0 8px 8px;
+          }
+          .order-id {
+            background-color: #f3f4f6;
+            padding: 10px 15px;
+            border-radius: 4px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #666;
+          }
+          .status-badge {
+            display: inline-block;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-weight: bold;
+            font-size: 16px;
+            margin: 20px 0;
+            background-color: ${isSuccessful ? '#d1fae5' : '#fee2e2'};
+            color: ${isSuccessful ? '#065f46' : '#7f1d1d'};
+          }
+          .info-box {
+            background-color: ${isSuccessful ? '#f0fdf4' : '#fef2f2'};
+            padding: 20px;
+            border-left: 4px solid ${headerColor};
+            border-radius: 4px;
+            margin: 20px 0;
+          }
+          .info-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid ${isSuccessful ? '#d1fae5' : '#fee2e2'};
+          }
+          .info-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+          }
+          .info-label {
+            font-weight: 600;
+            color: #666;
+          }
+          .info-value {
+            font-weight: bold;
+            color: ${headerColor};
+          }
+          .footer {
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+            margin-top: 30px;
+            padding-top: 20px;
+            border-top: 1px solid #e5e7eb;
+          }
+          .action-needed {
+            background-color: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 4px;
+            margin: 20px 0;
+            color: #856404;
+          }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <div class="logo">
+            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Charles Discus Logo">
+          </div>
+          <div class="header">
+            <h1>${headerTitle}</h1>
+            <p>${statusMessage}</p>
+          </div>
+          <div class="content">
+            <p>Hi <strong>${order.customer_name}</strong>,</p>
+            
+            <div class="status-badge">
+              ${statusTitle}
+            </div>
+
+            <div class="info-box">
+              <div class="info-row">
+                <span class="info-label">Order ID:</span>
+                <span class="info-value">${order.id}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Order Amount:</span>
+                <span class="info-value">$${order.total_price.toFixed(2)}</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Payment Status:</span>
+                <span class="info-value">${isSuccessful ? 'Processed' : 'Failed'}</span>
+              </div>
+            </div>
+
+            ${isSuccessful 
+              ? `<p>Your order is now being prepared for shipment. You will receive a tracking number once your items are dispatched.</p>
+                 <p>Thank you for your purchase! If you have any questions about your order, please contact our support team.</p>` 
+              : `<p class="action-needed">
+                   <strong>Action Required:</strong> Your payment could not be processed. Please contact us or try an alternative payment method to complete your order.
+                 </p>
+                 <p>If you believe this is an error, please reach out to our support team and reference your Order ID: <strong>${order.id}</strong></p>`
+            }
+          </div>
+          <div class="footer">
+            <p>&copy; 2026 CharlesDiscus. All rights reserved.</p>
+          </div>
+        </div>
+      </body>
+    </html>
+    `;
+
+    // Send email to customer
+    const response = await resend.emails.send({
+      from: process.env.RESEND_FROM_EMAIL || 'onboarding@resend.dev',
+      to: order.customer_email,
+      subject: `${isSuccessful ? 'Payment Confirmed' : 'Payment Status Update'} - Order #${order.id}`,
+      html: customerHtmlContent,
+    });
+
+    if (response.error) {
+      console.error('Resend payment confirmation email error:', response.error);
+      return { success: false, error: response.error.message };
+    }
+
+    console.log(`Payment ${paymentStatus} email sent to customer:`, order.customer_email);
+    return { success: true, messageId: response.data.id };
+  } catch (error) {
+    console.error('Error sending payment confirmation email:', error);
+    return { success: false, error: error.message };
+  }
+};

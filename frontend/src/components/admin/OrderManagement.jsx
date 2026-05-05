@@ -11,6 +11,9 @@ export default function AdminOrders() {
   const [resending, setResending] = useState(false);
   const [resendMessage, setResendMessage] = useState('');
   const [resendError, setResendError] = useState('');
+  const [sendingPaymentStatus, setSendingPaymentStatus] = useState(false);
+  const [paymentStatusMessage, setPaymentStatusMessage] = useState('');
+  const [paymentStatusError, setPaymentStatusError] = useState('');
 
   useEffect(() => {
     fetchOrders();
@@ -95,6 +98,23 @@ export default function AdminOrders() {
       console.error('Failed to resend confirmation email', err);
     } finally {
       setResending(false);
+    }
+  };
+
+  const handleSendPaymentStatus = async (paymentStatus) => {
+    setSendingPaymentStatus(true);
+    setPaymentStatusMessage('');
+    setPaymentStatusError('');
+    
+    try {
+      const response = await orderAPI.sendPaymentStatusEmail(selectedOrder, paymentStatus);
+      setPaymentStatusMessage(`Payment ${paymentStatus} email sent successfully!`);
+      setTimeout(() => setPaymentStatusMessage(''), 5000);
+    } catch (err) {
+      setPaymentStatusError(err.response?.data?.error || 'Failed to send payment status email. Please try again.');
+      console.error('Failed to send payment status email', err);
+    } finally {
+      setSendingPaymentStatus(false);
     }
   };
 
@@ -349,6 +369,18 @@ export default function AdminOrders() {
                       </div>
                     )}
 
+                    {paymentStatusMessage && (
+                      <div className="bg-green-50 dark:bg-green-900 text-green-700 dark:text-green-200 p-4 rounded-lg border border-green-200 dark:border-green-700 transition">
+                        {paymentStatusMessage}
+                      </div>
+                    )}
+                    
+                    {paymentStatusError && (
+                      <div className="bg-red-50 dark:bg-red-900 text-red-700 dark:text-red-200 p-4 rounded-lg border border-red-200 dark:border-red-700 transition">
+                        {paymentStatusError}
+                      </div>
+                    )}
+
                     <div className="flex gap-3 pt-4 border-t dark:border-gray-700">
                       <button
                         onClick={handleResendEmail}
@@ -363,11 +395,37 @@ export default function AdminOrders() {
                           setOrderDetails(null);
                           setResendMessage('');
                           setResendError('');
+                          setPaymentStatusMessage('');
+                          setPaymentStatusError('');
                         }}
                         className="flex-1 bg-gray-300 dark:bg-gray-700 hover:bg-gray-400 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-100 font-bold py-2 rounded-lg transition"
                       >
                         Close
                       </button>
+                    </div>
+
+                    {/* Payment Confirmation Section */}
+                    <div className="mt-6 pt-6 border-t dark:border-gray-700">
+                      <h4 className="text-lg font-bold mb-4 text-gray-900 dark:text-white">Payment Confirmation</h4>
+                      <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                        Send payment status confirmation email to the customer:
+                      </p>
+                      <div className="flex gap-3">
+                        <button
+                          onClick={() => handleSendPaymentStatus('successful')}
+                          disabled={sendingPaymentStatus}
+                          className="flex-1 bg-green-600 dark:bg-green-700 hover:bg-green-700 dark:hover:bg-green-600 text-white font-bold py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {sendingPaymentStatus ? 'Sending...' : '✓ Payment Successful'}
+                        </button>
+                        <button
+                          onClick={() => handleSendPaymentStatus('unsuccessful')}
+                          disabled={sendingPaymentStatus}
+                          className="flex-1 bg-red-600 dark:bg-red-700 hover:bg-red-700 dark:hover:bg-red-600 text-white font-bold py-2 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed"
+                        >
+                          {sendingPaymentStatus ? 'Sending...' : '✗ Payment Failed'}
+                        </button>
+                      </div>
                     </div>
                   </div>
                 </div>

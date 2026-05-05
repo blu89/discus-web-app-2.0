@@ -1,7 +1,7 @@
 import supabase from '../config/supabase.js';
 import { setStaticCacheHeaders, setNoCacheHeaders, deleteCacheByPattern } from '../utils/cache.js';
 import { getClientIpAddress } from '../utils/ipAddress.js';
-import { sendOrderConfirmationEmail, resendOrderConfirmationEmail } from '../services/emailService.js';
+import { sendOrderConfirmationEmail, resendOrderConfirmationEmail, sendPaymentConfirmationEmail } from '../services/emailService.js';
 
 export const createOrder = async (req, res) => {
   try {
@@ -309,6 +309,49 @@ export const resendConfirmationEmail = async (req, res) => {
     });
   } catch (error) {
     console.error('resendConfirmationEmail exception:', error);
+    res.status(500).json({ error: error.message });
+  }
+};
+
+export const sendPaymentStatusEmail = async (req, res) => {
+  try {
+    const { orderId } = req.params;
+    const { paymentStatus } = req.body;
+
+    // Validate payment status
+    if (!['successful', 'unsuccessful'].includes(paymentStatus)) {
+      return res.status(400).json({ error: 'Invalid payment status. Must be "successful" or "unsuccessful"' });
+    }
+
+    // Fetch the order
+    const { data: order, error: orderError } = await supabase
+      .from('orders')
+      .select('*')
+      .eq('id', orderId)
+      .single();
+
+    if (orderError || !order) {
+      return res.status(404).json({ error: 'Order not found' });
+    }
+
+    // Send payment confirmation email
+    const emailResult = await sendPaymentConfirmationEmail(order, paymentStatus);
+
+    if (!emailResult.success) {
+      return res.status(500).json({ 
+        error: 'Failed to send payment status email',
+        details: emailResult.error 
+      });
+    }
+
+    setNoCacheHeaders(req, res);
+    res.json({ 
+      success: true, 
+      message: `Payment ${paymentStatus} email sent successfully`,
+      messageId: emailResult.messageId 
+    });
+  } catch (error) {
+    console.error('sendPaymentStatusEmail exception:', error);
     res.status(500).json({ error: error.message });
   }
 };

@@ -88,6 +88,7 @@ export const orderAPI = {
   getAll: () => api.get('/orders'),
   updateStatus: (id, status) => api.put(`/orders/${id}/status`, { status }),
   resendConfirmationEmail: (orderId) => api.post(`/orders/${orderId}/resend-confirmation`),
+  sendPaymentStatusEmail: (orderId, paymentStatus) => api.post(`/orders/${orderId}/payment-status`, { paymentStatus }),
 };
 
 export const uploadAPI = {
