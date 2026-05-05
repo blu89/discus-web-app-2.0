@@ -15,6 +15,7 @@ export default function Home() {
   const [currentSlide, setCurrentSlide] = useState(0);
   const [addedToCartId, setAddedToCartId] = useState(null);
   const [categories, setCategories] = useState([]);
+  const [categoryProducts, setCategoryProducts] = useState({});
   const navigate = useNavigate();
   const { addToCart } = useCart();
 
@@ -107,7 +108,23 @@ export default function Home() {
   const fetchCategories = async () => {
     try {
       const response = await categoryAPI.getAll();
-      setCategories(Array.isArray(response.data) ? response.data : []);
+      const cats = Array.isArray(response.data) ? response.data : [];
+      setCategories(cats);
+      
+      // Fetch products for each category to get preview images
+      const products = {};
+      for (const category of cats) {
+        try {
+          const productResponse = await productAPI.getAll(category.id);
+          const catProducts = Array.isArray(productResponse.data) ? productResponse.data : [];
+          if (catProducts.length > 0) {
+            products[category.id] = catProducts[0]; // Store first product as preview
+          }
+        } catch (err) {
+          console.error(`Failed to fetch products for category ${category.id}:`, err);
+        }
+      }
+      setCategoryProducts(products);
     } catch (err) {
       console.error('Failed to fetch categories:', err);
     }
@@ -484,33 +501,42 @@ export default function Home() {
 
             {/* Categories Grid */}
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-7 gap-6 px-2">
-              {categories.map((category) => (
-                <div
-                  key={category.id}
-                  className="flex flex-col items-center cursor-pointer group"
-                  onClick={() => navigate(`/storefront?category=${category.id}`)}
-                >
-                  {/* Category Image - Rounded Square */}
-                  <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mb-3 overflow-hidden rounded-3xl bg-gray-300 dark:bg-gray-700 flex items-center justify-center shadow-md group-hover:shadow-lg transition">
-                    {category.image_url ? (
-                      <img
-                        src={category.image_url}
-                        alt={category.name}
-                        className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
-                      />
-                    ) : (
-                      <div className="text-4xl">📦</div>
-                    )}
-                    {/* Hover Overlay */}
-                    <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition duration-300" />
-                  </div>
+              {categories.map((category) => {
+                const previewProduct = categoryProducts[category.id];
+                return (
+                  <div
+                    key={category.id}
+                    className="flex flex-col items-center cursor-pointer group"
+                    onClick={() => navigate(`/storefront?category=${category.id}`)}
+                  >
+                    {/* Category Image - Rounded Square */}
+                    <div className="relative w-24 h-24 sm:w-28 sm:h-28 md:w-32 md:h-32 mb-3 overflow-hidden rounded-3xl bg-gray-300 dark:bg-gray-700 flex items-center justify-center shadow-md group-hover:shadow-lg transition">
+                      {previewProduct?.image_url ? (
+                        <img
+                          src={previewProduct.image_url}
+                          alt={category.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : category.image_url ? (
+                        <img
+                          src={category.image_url}
+                          alt={category.name}
+                          className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+                        />
+                      ) : (
+                        <div className="text-4xl">📦</div>
+                      )}
+                      {/* Hover Overlay */}
+                      <div className="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-20 transition duration-300" />
+                    </div>
 
-                  {/* Category Name */}
-                  <h3 className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 dark:text-white text-center line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
-                    {category.name}
-                  </h3>
-                </div>
-              ))}
+                    {/* Category Name */}
+                    <h3 className="text-xs sm:text-sm md:text-base font-semibold text-gray-900 dark:text-white text-center line-clamp-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition">
+                      {category.name}
+                    </h3>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </section>
