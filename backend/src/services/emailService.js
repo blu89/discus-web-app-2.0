@@ -181,8 +181,10 @@ export const sendOrderConfirmationEmail = async (order, items) => {
             </p>
 
             <p style="margin-top: 30px; color: #666;">
+              We will send you another email once your payment is successful, including tracking information.
               We'll notify you when your order ships. If you have any questions, please don't hesitate to contact us.
             </p>
+            
           </div>
           <div class="footer">
             <p>&copy; 2026 CharlesDiscus. All rights reserved.</p>
