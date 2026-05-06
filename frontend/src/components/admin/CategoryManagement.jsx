@@ -17,7 +17,7 @@ export default function AdminCategories() {
 
   const fetchCategories = async () => {
     try {
-      const response = await categoryAPI.getAll();
+      const response = await adminCategoryAPI.getAll();
       setCategories(response.data);
     } catch (err) {
       setError('Failed to fetch categories');

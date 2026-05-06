@@ -26,7 +26,7 @@ export default function SupplierManagement() {
 
   const fetchSuppliers = async () => {
     try {
-      const response = await supplierAPI.getAll(search || undefined, statusFilter || undefined);
+      const response = await adminSupplierAPI.getAll(search || undefined, statusFilter || undefined);
       setSuppliers(response.data);
     } catch (err) {
       setError('Failed to fetch suppliers');

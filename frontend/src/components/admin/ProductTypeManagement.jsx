@@ -41,9 +41,15 @@ export default function ProductTypeManagement() {
 
     try {
       if (editingId) {
-        await productTypeAPI.update(editingId, formData);
+        await adminProductTypeAPI.update(editingId, { name: formData.name });
       } else {
-        await productTypeAPI.create(formData);
+        await adminProductTypeAPI.create({ name: formData.name });
+      }
+      // Clear backend cache for product-types after create/update
+      try {
+        await adminApi.post('/debug/clear-cache/product-types');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
       }
       fetchProductTypes();
       setShowForm(false);

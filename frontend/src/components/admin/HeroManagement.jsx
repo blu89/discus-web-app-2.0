@@ -22,7 +22,7 @@ export default function HeroManagement() {
 
   const fetchHeroImages = async () => {
     try {
-      const response = await heroAPI.getAll();
+      const response = await adminHeroAPI.getAll();
       setHeroImages(Array.isArray(response.data) ? response.data : []);
       setError('');
     } catch (err) {

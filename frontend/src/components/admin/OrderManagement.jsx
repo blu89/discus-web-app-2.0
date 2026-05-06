@@ -21,7 +21,7 @@ export default function AdminOrders() {
 
   const fetchOrders = async () => {
     try {
-      const response = await orderAPI.getAll();
+      const response = await adminOrderAPI.getAll();
       console.log('OrderManagement fetchOrders full response:', response);
       console.log('Response.data:', response.data);
       console.log('Response.data type:', typeof response.data);
@@ -62,7 +62,7 @@ export default function AdminOrders() {
   const fetchOrderDetails = async (orderId) => {
     setDetailsLoading(true);
     try {
-      const response = await orderAPI.getById(orderId);
+      const response = await adminOrderAPI.getById(orderId);
       setOrderDetails(response.data);
       setSelectedOrder(orderId);
     } catch (err) {
@@ -113,7 +113,7 @@ export default function AdminOrders() {
     setPaymentStatusError('');
     
     try {
-      const response = await orderAPI.sendPaymentStatusEmail(selectedOrder, paymentStatus);
+      const response = await adminOrderAPI.sendPaymentStatusEmail(selectedOrder, paymentStatus);
       setPaymentStatusMessage(`Payment ${paymentStatus} email sent successfully!`);
       setTimeout(() => setPaymentStatusMessage(''), 5000);
     } catch (err) {
