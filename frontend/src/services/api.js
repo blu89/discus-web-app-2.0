@@ -6,9 +6,22 @@ const API_URL = import.meta.env.VITE_API_URL ||
 
 console.log('API URL:', API_URL);
 
+// Public API instance with cookies and caching support
 const api = axios.create({
   baseURL: API_URL,
   withCredentials: true, // Enable sending cookies with requests
+});
+
+// Admin API instance - NO cookies, NO caching
+const adminApi = axios.create({
+  baseURL: API_URL,
+  withCredentials: false, // Disable cookies for admin operations
+  headers: {
+    // Force no-cache behavior
+    'Cache-Control': 'no-cache, no-store, must-revalidate',
+    'Pragma': 'no-cache',
+    'Expires': '0',
+  }
 });
 
 // Add request interceptor to send token as fallback if cookies don't work
@@ -31,6 +44,25 @@ api.interceptors.response.use(
     }
     return response;
   },
+  (error) => Promise.reject(error)
+);
+
+// Admin API request interceptor - use token from localStorage, add cache-busting params
+adminApi.interceptors.request.use((config) => {
+  const token = localStorage.getItem('authToken');
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
+  }
+  
+  // Add timestamp to force cache miss
+  config.params = { ...config.params, _t: Date.now() };
+  
+  return config;
+});
+
+// Admin API response interceptor - don't store token from admin requests
+adminApi.interceptors.response.use(
+  (response) => response,
   (error) => Promise.reject(error)
 );
 
@@ -109,5 +141,73 @@ export const heroAPI = {
   update: (id, data) => api.put(`/hero/${id}`, data),
   delete: (id) => api.delete(`/hero/${id}`),
 };
+
+// ============================================================================
+// ADMIN API EXPORTS - NO COOKIES, NO CACHING
+// ============================================================================
+
+export const adminProductAPI = {
+  getAll: (categoryId, search) =>
+    adminApi.get('/products', { params: { category_id: categoryId, search } }),
+  getById: (id) => adminApi.get(`/products/${id}`),
+  create: (data) => adminApi.post('/products', data),
+  update: (id, data) => adminApi.put(`/products/${id}`, data),
+  delete: (id) => adminApi.delete(`/products/${id}`),
+};
+
+export const adminCategoryAPI = {
+  getAll: () => adminApi.get('/categories'),
+  create: (data) => adminApi.post('/categories', data),
+  update: (id, data) => adminApi.put(`/categories/${id}`, data),
+  delete: (id) => adminApi.delete(`/categories/${id}`),
+};
+
+export const adminProductTypeAPI = {
+  getAll: () => adminApi.get('/product-types'),
+  create: (data) => adminApi.post('/product-types', data),
+  update: (id, data) => adminApi.put(`/product-types/${id}`, data),
+  delete: (id) => adminApi.delete(`/product-types/${id}`),
+};
+
+export const adminSupplierAPI = {
+  getAll: (search, status) =>
+    adminApi.get('/suppliers', { params: { search, status } }),
+  getById: (id) => adminApi.get(`/suppliers/${id}`),
+  create: (data) => adminApi.post('/suppliers', data),
+  update: (id, data) => adminApi.put(`/suppliers/${id}`, data),
+  delete: (id) => adminApi.delete(`/suppliers/${id}`),
+};
+
+export const adminOrderAPI = {
+  create: (data) => adminApi.post('/orders', data),
+  getById: (id) => adminApi.get(`/orders/${id}`),
+  getUserOrders: () => adminApi.get('/orders/user/orders'),
+  getAll: () => adminApi.get('/orders'),
+  updateStatus: (id, status) => adminApi.put(`/orders/${id}/status`, { status }),
+  resendConfirmationEmail: (orderId) => adminApi.post(`/orders/${orderId}/resend-confirmation`),
+  sendPaymentStatusEmail: (orderId, paymentStatus) => adminApi.post(`/orders/${orderId}/payment-status`, { paymentStatus }),
+};
+
+export const adminUploadAPI = {
+  uploadImage: (file) => {
+    const formData = new FormData();
+    formData.append('image', file);
+    return adminApi.post('/upload/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' }
+    });
+  },
+  deleteImage: (publicId) =>
+    adminApi.delete('/upload/delete', { data: { publicId } }),
+};
+
+export const adminHeroAPI = {
+  getAll: () => adminApi.get('/hero'),
+  create: (data) => adminApi.post('/hero', data),
+  update: (id, data) => adminApi.put(`/hero/${id}`, data),
+  delete: (id) => adminApi.delete(`/hero/${id}`),
+};
+
+// Export adminApi for raw admin API calls (like in ChatManagement and ReviewManagement)
+export { adminApi };
 
 export default api;

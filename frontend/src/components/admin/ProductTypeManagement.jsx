@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { productTypeAPI } from '../../services/api';
+import { adminProductTypeAPI } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function ProductTypeManagement() {
@@ -19,7 +19,7 @@ export default function ProductTypeManagement() {
 
   const fetchProductTypes = async () => {
     try {
-      const response = await productTypeAPI.getAll();
+      const res = await adminProductTypeAPI.getAll();
       setProductTypes(Array.isArray(response.data) ? response.data : []);
       setError('');
     } catch (err) {
@@ -66,7 +66,7 @@ export default function ProductTypeManagement() {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure?')) return;
     try {
-      await productTypeAPI.delete(id);
+      await adminProductTypeAPI.delete(id);
       fetchProductTypes();
     } catch (err) {
       setError('Failed to delete product type');

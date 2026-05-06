@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { categoryAPI } from '../../services/api';
+import { adminCategoryAPI } from '../../services/api';
 
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
@@ -59,7 +59,7 @@ export default function AdminCategories() {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure?')) return;
     try {
-      await categoryAPI.delete(id);
+      await adminCategoryAPI.delete(id);
       fetchCategories();
     } catch (err) {
       setError('Failed to delete category');

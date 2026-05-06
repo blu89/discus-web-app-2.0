@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { heroAPI, uploadAPI } from '../../services/api';
+import { adminHeroAPI, adminUploadAPI } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function HeroManagement() {
@@ -50,7 +50,7 @@ export default function HeroManagement() {
       reader.readAsDataURL(file);
 
       // Upload to Cloudinary
-      const response = await uploadAPI.uploadImage(file);
+      const response = await adminUploadAPI.uploadImage(file);
       setFormData({
         ...formData,
         url: response.data.url
@@ -74,9 +74,9 @@ export default function HeroManagement() {
 
     try {
       if (editingId) {
-        await heroAPI.update(editingId, formData);
+        await adminHeroAPI.update(editingId, formData);
       } else {
-        await heroAPI.create(formData);
+        await adminHeroAPI.create(formData);
       }
       fetchHeroImages();
       setShowForm(false);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '../hooks/useAuth';
-import { productAPI, categoryAPI, orderAPI } from '../services/api';
+import { adminProductAPI, adminCategoryAPI, adminOrderAPI } from '../services/api';
 
 export default function AdminDashboard() {
   const { user } = useAuth();
@@ -26,7 +26,7 @@ export default function AdminDashboard() {
       // Fetch products
       let products = [];
       try {
-        const productsRes = await productAPI.getAll();
+        const productsRes = await adminProductAPI.getAll();
         products = Array.isArray(productsRes.data) ? productsRes.data : [];
       } catch (err) {
         console.error('Error fetching products:', err);
@@ -36,7 +36,7 @@ export default function AdminDashboard() {
       // Fetch categories
       let categories = [];
       try {
-        const categoriesRes = await categoryAPI.getAll();
+        const categoriesRes = await adminCategoryAPI.getAll();
         categories = Array.isArray(categoriesRes.data) ? categoriesRes.data : [];
       } catch (err) {
         console.error('Error fetching categories:', err);
@@ -46,7 +46,7 @@ export default function AdminDashboard() {
       // Fetch orders
       let orders = [];
       try {
-        const ordersRes = await orderAPI.getAll();
+        const ordersRes = await adminOrderAPI.getAll();
         orders = Array.isArray(ordersRes.data) ? ordersRes.data : [];
       } catch (err) {
         console.error('Error fetching orders:', err);

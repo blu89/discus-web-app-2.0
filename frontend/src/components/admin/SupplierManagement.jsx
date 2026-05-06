@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { supplierAPI } from '../../services/api';
+import { adminSupplierAPI } from '../../services/api';
 
 export default function SupplierManagement() {
   const [suppliers, setSuppliers] = useState([]);
@@ -51,9 +51,9 @@ export default function SupplierManagement() {
       }
 
       if (editingId) {
-        await supplierAPI.update(editingId, formData);
+        await adminSupplierAPI.update(editingId, formData);
       } else {
-        await supplierAPI.create(formData);
+        await adminSupplierAPI.create(formData);
       }
       fetchSuppliers();
       setShowForm(false);

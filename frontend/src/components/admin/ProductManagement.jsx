@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { productAPI, categoryAPI, supplierAPI, productTypeAPI, uploadAPI } from '../../services/api';
+import { adminProductAPI, adminCategoryAPI, adminSupplierAPI, adminProductTypeAPI, adminUploadAPI } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function AdminProducts() {
@@ -35,10 +35,10 @@ export default function AdminProducts() {
   const fetchData = async () => {
     try {
       const [productsRes, categoriesRes, suppliersRes, productTypesRes] = await Promise.all([
-        productAPI.getAll(),
-        categoryAPI.getAll(),
-        supplierAPI.getAll(),
-        productTypeAPI.getAll()
+        adminProductAPI.getAll(),
+        adminCategoryAPI.getAll(),
+        adminSupplierAPI.getAll(),
+        adminProductTypeAPI.getAll()
       ]);
       setProducts(Array.isArray(productsRes.data) ? productsRes.data : []);
       setCategories(Array.isArray(categoriesRes.data) ? categoriesRes.data : []);
@@ -128,7 +128,7 @@ export default function AdminProducts() {
       reader.readAsDataURL(file);
 
       // Upload to Cloudinary
-      const response = await uploadAPI.uploadImage(file);
+      const response = await adminUploadAPI.uploadImage(file);
       setFormData({
         ...formData,
         image_url: response.data.url
@@ -165,7 +165,7 @@ export default function AdminProducts() {
         reader.readAsDataURL(file);
 
         // Upload to Cloudinary
-        const response = await uploadAPI.uploadImage(file);
+        const response = await adminUploadAPI.uploadImage(file);
         newImages.push({
           url: response.data.url,
           publicId: response.data.publicId,
@@ -202,9 +202,9 @@ export default function AdminProducts() {
 
     try {
       if (editingId) {
-        await productAPI.update(editingId, formData);
+        await adminProductAPI.update(editingId, formData);
       } else {
-        await productAPI.create(formData);
+        await adminProductAPI.create(formData);
       }
       fetchData();
       setShowForm(false);
@@ -300,7 +300,7 @@ export default function AdminProducts() {
   const handleDelete = async (id) => {
     if (!window.confirm('Are you sure?')) return;
     try {
-      await productAPI.delete(id);
+      await adminProductAPI.delete(id);
       fetchData();
     } catch (err) {
       setError('Failed to delete product');

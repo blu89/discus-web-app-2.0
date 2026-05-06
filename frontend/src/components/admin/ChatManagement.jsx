@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { io } from 'socket.io-client';
 import { useAuth } from '../../hooks/useAuth';
-import api from '../../services/api';
+import { adminApi } from '../../services/api';
 import '../../styles/ChatAdmin.css';
 
 const ChatManagement = () => {
@@ -23,7 +23,7 @@ const ChatManagement = () => {
     const loadConversations = async () => {
       try {
         setIsLoading(true);
-        const response = await api.get('/chat/admin/conversations');
+        const response = await adminApi.get('/chat/admin/conversations');
         setConversations(response.data);
       } catch (error) {
         console.error('Error loading conversations:', error);
@@ -48,7 +48,7 @@ const ChatManagement = () => {
     newGlobalSocket.on('receive_message', async (message) => {
       // Reload conversations to update the list with latest messages
       try {
-        const response = await api.get('/chat/admin/conversations');
+        const response = await adminApi.get('/chat/admin/conversations');
         setConversations(response.data);
       } catch (error) {
         console.error('Error refreshing conversations:', error);
@@ -75,7 +75,7 @@ const ChatManagement = () => {
         setIsLoading(true);
         
         // Load messages
-        const response = await api.get(
+        const response = await adminApi.get(
           `/chat/conversations/${selectedConversation.id}/messages`
         );
         setMessages(response.data);
@@ -139,7 +139,7 @@ const ChatManagement = () => {
       setMessages((prev) => [...prev, optimisticMessage]);
 
       // Save to database
-      await api.post(
+      await adminApi.post(
         `/chat/conversations/${selectedConversation.id}/messages`,
         {
           message: messageText,
