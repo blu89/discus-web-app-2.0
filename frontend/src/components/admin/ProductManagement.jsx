@@ -201,10 +201,15 @@ export default function AdminProducts() {
     setError('');
 
     try {
+      let response;
       if (editingId) {
-        await adminProductAPI.update(editingId, formData);
+        response = await adminProductAPI.update(editingId, formData);
+        // Update product in state immediately
+        setProducts(products.map(p => p.id === editingId ? response.data : p));
       } else {
-        await adminProductAPI.create(formData);
+        response = await adminProductAPI.create(formData);
+        // Add new product to state immediately without waiting for fetchData
+        setProducts([response.data, ...products]);
       }
       // Clear backend cache for products after create/update
       try {
@@ -212,7 +217,6 @@ export default function AdminProducts() {
       } catch (err) {
         console.warn('Cache clear warning:', err);
       }
-      fetchData();
       setShowForm(false);
       setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', additional_images: [], sizes: [] });
       setEditingId(null);

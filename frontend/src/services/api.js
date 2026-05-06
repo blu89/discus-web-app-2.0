@@ -78,8 +78,8 @@ export const authAPI = {
 
 export const productAPI = {
   getAll: (categoryId, search) =>
-    api.get('/products', { params: { category_id: categoryId, search } }),
-  getById: (id) => api.get(`/products/${id}`),
+    api.get('/products', { params: { category_id: categoryId, search, _t: Date.now() } }),
+  getById: (id) => api.get(`/products/${id}`, { params: { _t: Date.now() } }),
   create: (data) => api.post('/products', data),
   update: (id, data) => api.put(`/products/${id}`, data),
   delete: (id) => api.delete(`/products/${id}`),
