@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminOrderAPI } from '../../services/api';
+import { adminOrderAPI, adminApi } from '../../services/api';
 
 export default function AdminOrders() {
   const [orders, setOrders] = useState([]);
@@ -74,7 +74,13 @@ export default function AdminOrders() {
 
   const handleStatusUpdate = async (orderId, newStatus) => {
     try {
-      await orderAPI.updateStatus(orderId, newStatus);
+      await adminOrderAPI.updateStatus(orderId, newStatus);
+      // Clear backend cache for orders after status update
+      try {
+        await adminApi.post('/debug/clear-cache/orders');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       fetchOrders();
       if (selectedOrder === orderId) {
         fetchOrderDetails(orderId);

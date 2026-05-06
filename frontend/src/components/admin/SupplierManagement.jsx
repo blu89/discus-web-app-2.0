@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminSupplierAPI } from '../../services/api';
+import { adminSupplierAPI, adminApi } from '../../services/api';
 
 export default function SupplierManagement() {
   const [suppliers, setSuppliers] = useState([]);
@@ -54,6 +54,12 @@ export default function SupplierManagement() {
         await adminSupplierAPI.update(editingId, formData);
       } else {
         await adminSupplierAPI.create(formData);
+      }
+      // Clear backend cache for suppliers after create/update
+      try {
+        await adminApi.post('/debug/clear-cache/suppliers');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
       }
       fetchSuppliers();
       setShowForm(false);

@@ -57,6 +57,12 @@ export default function ReviewManagement() {
   const handleApprove = async (reviewId) => {
     try {
       await adminApi.put(`/reviews/${reviewId}`, { status: 'approved' });
+      // Clear backend cache for reviews after approval
+      try {
+        await adminApi.post('/debug/clear-cache/reviews');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       setReviews(reviews.map(r => r.id === reviewId ? { ...r, status: 'approved' } : r));
     } catch (err) {
       console.error('Error approving review:', err);
@@ -67,6 +73,12 @@ export default function ReviewManagement() {
   const handleReject = async (reviewId) => {
     try {
       await adminApi.put(`/reviews/${reviewId}`, { status: 'rejected' });
+      // Clear backend cache for reviews after rejection
+      try {
+        await adminApi.post('/debug/clear-cache/reviews');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       setReviews(reviews.map(r => r.id === reviewId ? { ...r, status: 'rejected' } : r));
     } catch (err) {
       console.error('Error rejecting review:', err);
@@ -79,6 +91,12 @@ export default function ReviewManagement() {
 
     try {
       await adminApi.delete(`/reviews/${reviewId}`);
+      // Clear backend cache for reviews after deletion
+      try {
+        await adminApi.post('/debug/clear-cache/reviews');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       setReviews(reviews.filter(r => r.id !== reviewId));
     } catch (err) {
       console.error('Error deleting review:', err);
@@ -94,6 +112,12 @@ export default function ReviewManagement() {
   const saveEdit = async (reviewId) => {
     try {
       await adminApi.put(`/reviews/${reviewId}`, editData);
+      // Clear backend cache for reviews after edit
+      try {
+        await adminApi.post('/debug/clear-cache/reviews');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       setReviews(reviews.map(r => r.id === reviewId ? editData : r));
       setEditingReview(null);
     } catch (err) {

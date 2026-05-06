@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminCategoryAPI } from '../../services/api';
+import { adminCategoryAPI, adminApi } from '../../services/api';
 
 export default function AdminCategories() {
   const [categories, setCategories] = useState([]);
@@ -37,9 +37,15 @@ export default function AdminCategories() {
 
     try {
       if (editingId) {
-        await categoryAPI.update(editingId, formData);
+        await adminCategoryAPI.update(editingId, formData);
       } else {
-        await categoryAPI.create(formData);
+        await adminCategoryAPI.create(formData);
+      }
+      // Clear backend cache for categories after create/update
+      try {
+        await adminApi.post('/debug/clear-cache/categories');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
       }
       fetchCategories();
       setShowForm(false);
@@ -60,6 +66,12 @@ export default function AdminCategories() {
     if (!window.confirm('Are you sure?')) return;
     try {
       await adminCategoryAPI.delete(id);
+      // Clear backend cache for categories after deletion
+      try {
+        await adminApi.post('/debug/clear-cache/categories');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       fetchCategories();
     } catch (err) {
       setError('Failed to delete category');

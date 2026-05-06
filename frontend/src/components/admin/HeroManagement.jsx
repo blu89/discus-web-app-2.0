@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminHeroAPI, adminUploadAPI } from '../../services/api';
+import { adminHeroAPI, adminUploadAPI, adminApi } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function HeroManagement() {
@@ -77,6 +77,12 @@ export default function HeroManagement() {
         await adminHeroAPI.update(editingId, formData);
       } else {
         await adminHeroAPI.create(formData);
+      }
+      // Clear backend cache for hero after create/update
+      try {
+        await adminApi.post('/debug/clear-cache/hero');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
       }
       fetchHeroImages();
       setShowForm(false);

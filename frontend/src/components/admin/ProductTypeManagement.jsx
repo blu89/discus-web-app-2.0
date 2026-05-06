@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminProductTypeAPI } from '../../services/api';
+import { adminProductTypeAPI, adminApi } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function ProductTypeManagement() {
@@ -67,6 +67,12 @@ export default function ProductTypeManagement() {
     if (!window.confirm('Are you sure?')) return;
     try {
       await adminProductTypeAPI.delete(id);
+      // Clear backend cache for product-types after deletion
+      try {
+        await adminApi.post('/debug/clear-cache/product-types');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       fetchProductTypes();
     } catch (err) {
       setError('Failed to delete product type');

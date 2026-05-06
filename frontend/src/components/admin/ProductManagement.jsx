@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { adminProductAPI, adminCategoryAPI, adminSupplierAPI, adminProductTypeAPI, adminUploadAPI } from '../../services/api';
+import { adminProductAPI, adminCategoryAPI, adminSupplierAPI, adminProductTypeAPI, adminUploadAPI, adminApi } from '../../services/api';
 import { useAuth } from '../../hooks/useAuth';
 
 export default function AdminProducts() {
@@ -206,6 +206,12 @@ export default function AdminProducts() {
       } else {
         await adminProductAPI.create(formData);
       }
+      // Clear backend cache for products after create/update
+      try {
+        await adminApi.post('/debug/clear-cache/products');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       fetchData();
       setShowForm(false);
       setFormData({ name: '', description: '', price: '', stock: '', category_id: '', product_type_id: '', supplier_id: '', image_url: '', additional_images: [], sizes: [] });
@@ -301,6 +307,12 @@ export default function AdminProducts() {
     if (!window.confirm('Are you sure?')) return;
     try {
       await adminProductAPI.delete(id);
+      // Clear backend cache for products after deletion
+      try {
+        await adminApi.post('/debug/clear-cache/products');
+      } catch (err) {
+        console.warn('Cache clear warning:', err);
+      }
       fetchData();
     } catch (err) {
       setError('Failed to delete product');
