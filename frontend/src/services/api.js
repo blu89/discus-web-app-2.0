@@ -13,15 +13,10 @@ const api = axios.create({
 });
 
 // Admin API instance - NO cookies, NO caching
+// (Cache busting is handled via _t timestamp parameter in request interceptor)
 const adminApi = axios.create({
   baseURL: API_URL,
   withCredentials: false, // Disable cookies for admin operations
-  headers: {
-    // Force no-cache behavior
-    'Cache-Control': 'no-cache, no-store, must-revalidate',
-    'Pragma': 'no-cache',
-    'Expires': '0',
-  }
 });
 
 // Add request interceptor to send token as fallback if cookies don't work
