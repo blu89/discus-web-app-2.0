@@ -126,7 +126,7 @@ export const sendOrderConfirmationEmail = async (order, items) => {
       <body>
         <div class="container">
           <div class="logo">
-            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Charles Discus Logo">
+            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Imperial Discus Logo">
           </div>
           <div class="header">
             <h1>Order Confirmation</h1>
@@ -283,7 +283,7 @@ export const sendOrderConfirmationEmail = async (order, items) => {
       <body>
         <div class="container">
           <div class="logo">
-            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Charles Discus Logo">
+            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Imperial Discus Logo">
           </div>
           <div class="header">
             <h1>New Order Notification</h1>
@@ -530,7 +530,7 @@ export const sendPaymentConfirmationEmail = async (order, paymentStatus) => {
       <body>
         <div class="container">
           <div class="logo">
-            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Charles Discus Logo">
+            <img src="${process.env.LOGO_URL || 'https://via.placeholder.com/200x60?text=Logo'}" alt="Imperial Discus Logo">
           </div>
           <div class="header">
             <h1>${headerTitle}</h1>
