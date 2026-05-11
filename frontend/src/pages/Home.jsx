@@ -227,7 +227,100 @@ export default function Home() {
 
       
 
-      {/* Latest Products Section */}
+     
+
+      {/* Featured Products Section */}
+      {featuredProducts.length > 0 && (
+        <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
+          <div className="max-w-7xl mx-auto px-4">
+            <h2 className="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-white">Featured Products</h2>
+            <p className="text-center text-gray-600 dark:text-gray-400 mb-12">Handpicked selection of our best products</p>
+
+            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+              {featuredProducts.map((product) => (
+                <div 
+                  key={product.id} 
+                  className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden transition transform hover:-translate-y-1 cursor-pointer border-0"
+                  onClick={() => navigate(`/product/${product.id}`)}
+                >
+                  {/* Product Image */}
+                  <div className="relative h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
+                    {product.image_url ? (
+                      <img 
+                        src={product.image_url} 
+                        alt={product.name}
+                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-b-lg"
+                      />
+                    ) : (
+                      <div className="text-4xl">📦</div>
+                    )}
+                    <div className="absolute top-2 right-2 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold">
+                      ⭐ Featured
+                    </div>
+                  </div>
+
+                  {/* Product Info */}
+                  <div className="p-2">
+                    <div className="flex justify-between items-start gap-2 mb-2">
+                      <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate flex-1">
+                        {product.name}
+                      </h3>
+                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
+                        ${product.price.toFixed(0)}
+                      </span>
+                    </div>
+                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
+                      {product.description || 'No description available'}
+                    </p>
+
+                    <div className="flex justify-between items-center mb-3 gap-2">
+                      <span className={`text-xs px-2 py-1 rounded-full ${
+                        product.stock > 0 
+                          ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
+                          : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
+                      }`}>
+                        {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
+                      </span>
+
+                      <button
+                        onClick={(e) => handleAddToCart(product, e)}
+                        disabled={product.stock <= 0}
+                        title={addedToCartId === product.id ? 'Added to cart' : product.stock > 0 ? 'Add to cart' : 'Out of stock'}
+                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center ${
+                          addedToCartId === product.id
+                            ? 'bg-green-500 text-white'
+                            : product.stock > 0
+                            ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
+                            : 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                        }`}
+                      >
+                        {addedToCartId === product.id ? (
+                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                          </svg>
+                        ) : (
+                          <img src={addToCartSvg} alt="Add to cart" className="w-5 h-5" style={{ filter: 'brightness(0) invert(1)' }} />
+                        )}
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="text-center mt-12">
+              <a 
+                href="/storefront" 
+                className="inline-block bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition"
+              >
+                Shop All Featured
+              </a>
+            </div>
+          </div>
+        </section>
+      )}
+
+       {/* Latest Products Section */}
       <section className="py-16 bg-white dark:bg-gray-950">
         <div className="max-w-7xl mx-auto px-4">
           <h2 className="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-white">Latest Products</h2>
@@ -333,97 +426,6 @@ export default function Home() {
           )}
         </div>
       </section>
-
-      {/* Featured Products Section */}
-      {featuredProducts.length > 0 && (
-        <section className="py-16 bg-gradient-to-r from-blue-50 to-purple-50 dark:from-gray-900 dark:to-gray-800">
-          <div className="max-w-7xl mx-auto px-4">
-            <h2 className="text-3xl font-bold text-center mb-4 text-gray-900 dark:text-white">Featured Products</h2>
-            <p className="text-center text-gray-600 dark:text-gray-400 mb-12">Handpicked selection of our best products</p>
-
-            <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-              {featuredProducts.map((product) => (
-                <div 
-                  key={product.id} 
-                  className="bg-white dark:bg-gray-800 rounded-lg overflow-hidden transition transform hover:-translate-y-1 cursor-pointer border-0"
-                  onClick={() => navigate(`/product/${product.id}`)}
-                >
-                  {/* Product Image */}
-                  <div className="relative h-48 bg-gray-200 dark:bg-gray-700 flex items-center justify-center overflow-hidden">
-                    {product.image_url ? (
-                      <img 
-                        src={product.image_url} 
-                        alt={product.name}
-                        className="w-full h-full object-cover hover:scale-110 transition-transform duration-300 rounded-b-lg"
-                      />
-                    ) : (
-                      <div className="text-4xl">📦</div>
-                    )}
-                    <div className="absolute top-2 right-2 bg-yellow-500 text-white px-3 py-1 rounded-full text-xs font-bold">
-                      ⭐ Featured
-                    </div>
-                  </div>
-
-                  {/* Product Info */}
-                  <div className="p-2">
-                    <div className="flex justify-between items-start gap-2 mb-2">
-                      <h3 className="text-lg font-bold text-gray-900 dark:text-white truncate flex-1">
-                        {product.name}
-                      </h3>
-                      <span className="text-xl font-bold text-blue-600 dark:text-blue-400 whitespace-nowrap">
-                        ${product.price.toFixed(0)}
-                      </span>
-                    </div>
-                    <p className="text-gray-600 dark:text-gray-400 text-sm mb-2 line-clamp-2">
-                      {product.description || 'No description available'}
-                    </p>
-
-                    <div className="flex justify-between items-center mb-3 gap-2">
-                      <span className={`text-xs px-2 py-1 rounded-full ${
-                        product.stock > 0 
-                          ? 'bg-green-100 dark:bg-green-900 text-green-800 dark:text-green-200' 
-                          : 'bg-red-100 dark:bg-red-900 text-red-800 dark:text-red-200'
-                      }`}>
-                        {product.stock > 0 ? `${product.stock} in stock` : 'Out of stock'}
-                      </span>
-
-                      <button
-                        onClick={(e) => handleAddToCart(product, e)}
-                        disabled={product.stock <= 0}
-                        title={addedToCartId === product.id ? 'Added to cart' : product.stock > 0 ? 'Add to cart' : 'Out of stock'}
-                        className={`w-10 h-10 rounded-full transition transform hover:scale-110 active:scale-95 flex items-center justify-center ${
-                          addedToCartId === product.id
-                            ? 'bg-green-500 text-white'
-                            : product.stock > 0
-                            ? 'bg-blue-500 hover:bg-blue-600 dark:bg-blue-600 dark:hover:bg-blue-700 text-white'
-                            : 'bg-gray-400 text-gray-600 cursor-not-allowed'
-                        }`}
-                      >
-                        {addedToCartId === product.id ? (
-                          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-                            <polyline points="20 6 9 17 4 12"></polyline>
-                          </svg>
-                        ) : (
-                          <img src={addToCartSvg} alt="Add to cart" className="w-5 h-5" style={{ filter: 'brightness(0) invert(1)' }} />
-                        )}
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-
-            <div className="text-center mt-12">
-              <a 
-                href="/storefront" 
-                className="inline-block bg-blue-500 dark:bg-blue-600 hover:bg-blue-600 dark:hover:bg-blue-700 text-white px-8 py-3 rounded-lg font-bold transition"
-              >
-                Shop All Featured
-              </a>
-            </div>
-          </div>
-        </section>
-      )}
       {/* About Section */}
       <section className="py-16 bg-gray-50 dark:bg-gray-900">
         <div className="max-w-7xl mx-auto px-4">
