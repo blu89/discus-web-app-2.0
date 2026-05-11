@@ -60,7 +60,7 @@ export default function Reviews() {
             Customer Reviews
           </h1>
           <p className="text-gray-600 dark:text-gray-400">
-            Read what our customers think about CharlesDiscus
+            Read what our customers think about ImperialDiscus
           </p>
         </div>
 

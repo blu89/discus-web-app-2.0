@@ -187,7 +187,7 @@ export const sendOrderConfirmationEmail = async (order, items) => {
             
           </div>
           <div class="footer">
-            <p>&copy; 2026 CharlesDiscus. All rights reserved.</p>
+            <p>&copy; 2026 ImperialDiscus. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -343,7 +343,7 @@ export const sendOrderConfirmationEmail = async (order, items) => {
             </p>
           </div>
           <div class="footer">
-            <p>&copy; 2026 CharlesDiscus. All rights reserved.</p>
+            <p>&copy; 2026 ImperialDiscus. All rights reserved.</p>
           </div>
         </div>
       </body>
@@ -568,7 +568,7 @@ export const sendPaymentConfirmationEmail = async (order, paymentStatus) => {
             }
           </div>
           <div class="footer">
-            <p>&copy; 2026 CharlesDiscus. All rights reserved.</p>
+            <p>&copy; 2026 ImperialDiscus. All rights reserved.</p>
           </div>
         </div>
       </body>
