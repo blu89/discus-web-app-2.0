@@ -5,6 +5,7 @@ import { AuthProvider } from './context/AuthContext';
 import { CartProvider } from './context/CartContext';
 import { ThemeProvider } from './context/ThemeContext';
 import { useAuth } from './hooks/useAuth';
+import { Analytics } from '@vercel/analytics/react';
 
 import Header from './components/storefront/Header';
 import Footer from './components/storefront/Footer';
@@ -53,6 +54,7 @@ function AppContent() {
 
   return (
     <>
+      <Analytics />
       <Header />
       <ScrollToTop />
       <main className="pt-13">
