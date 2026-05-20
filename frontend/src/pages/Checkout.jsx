@@ -4,11 +4,58 @@ import { orderAPI } from '../services/api';
 import { useNavigate } from 'react-router-dom';
 import { validateCard, formatCardNumber, formatExpiryDate, formatCVV, getCardType } from '../utils/cardValidator';
 
+const SHIPPING_OPTIONS = {
+  domestic: [
+    { id: 'standard', name: 'Standard Shipping', cost: 5.99, days: '5-7', description: 'Delivery in 5-7 business days (USA)' },
+    { id: 'express', name: 'Express Shipping', cost: 14.99, days: '2-3', description: 'Delivery in 2-3 business days (USA)' },
+    { id: 'overnight', name: 'Overnight Shipping', cost: 29.99, days: '1', description: 'Next business day delivery (USA)' },
+    { id: 'pickup', name: 'Local Pickup', cost: 0, days: '0', description: 'Free pickup at our location' }
+  ],
+  international: {
+    canada: [
+      { id: 'intl-canada-standard', name: 'Standard to Canada', cost: 19.99, days: '7-10', description: 'Delivery in 7-10 business days' },
+      { id: 'intl-canada-express', name: 'Express to Canada', cost: 39.99, days: '3-5', description: 'Delivery in 3-5 business days' }
+    ],
+    europe: [
+      { id: 'intl-europe-standard', name: 'Standard to Europe', cost: 34.99, days: '10-14', description: 'Delivery in 10-14 business days' },
+      { id: 'intl-europe-express', name: 'Express to Europe', cost: 64.99, days: '5-7', description: 'Delivery in 5-7 business days' }
+    ],
+    uk: [
+      { id: 'intl-uk-standard', name: 'Standard to UK', cost: 24.99, days: '8-12', description: 'Delivery in 8-12 business days' },
+      { id: 'intl-uk-express', name: 'Express to UK', cost: 49.99, days: '4-6', description: 'Delivery in 4-6 business days' }
+    ],
+    australia: [
+      { id: 'intl-australia-standard', name: 'Standard to Australia', cost: 44.99, days: '12-18', description: 'Delivery in 12-18 business days' },
+      { id: 'intl-australia-express', name: 'Express to Australia', cost: 79.99, days: '7-10', description: 'Delivery in 7-10 business days' }
+    ],
+    asia: [
+      { id: 'intl-asia-standard', name: 'Standard to Asia', cost: 39.99, days: '12-16', description: 'Delivery in 12-16 business days' },
+      { id: 'intl-asia-express', name: 'Express to Asia', cost: 69.99, days: '6-8', description: 'Delivery in 6-8 business days' }
+    ],
+    other: [
+      { id: 'intl-other-standard', name: 'Standard International', cost: 49.99, days: '14-21', description: 'Delivery in 14-21 business days' },
+      { id: 'intl-other-express', name: 'Express International', cost: 84.99, days: '8-12', description: 'Delivery in 8-12 business days' }
+    ]
+  }
+};
+
+const DESTINATION_REGIONS = [
+  { id: 'domestic', name: 'United States', flag: '🇺🇸' },
+  { id: 'canada', name: 'Canada', flag: '🇨🇦' },
+  { id: 'uk', name: 'United Kingdom', flag: '🇬🇧' },
+  { id: 'europe', name: 'Europe', flag: '🇪🇺' },
+  { id: 'australia', name: 'Australia', flag: '🇦🇺' },
+  { id: 'asia', name: 'Asia', flag: '🌏' },
+  { id: 'other', name: 'Other', flag: '🌍' }
+];
+
 export default function Checkout() {
   const [formData, setFormData] = useState({
     customerName: '',
     customerEmail: '',
     shippingAddress: '',
+    shippingDestination: 'domestic',
+    shippingMethod: 'standard',
     billingAddress: '',
     billingCity: '',
     billingState: '',
@@ -25,6 +72,34 @@ export default function Checkout() {
   const { cart, total, clearCart } = useCart();
   const navigate = useNavigate();
 
+  const getShippingCost = () => {
+    const destination = formData.shippingDestination;
+    let options = [];
+    
+    if (destination === 'domestic') {
+      options = SHIPPING_OPTIONS.domestic;
+    } else {
+      options = SHIPPING_OPTIONS.international[destination] || SHIPPING_OPTIONS.international.other;
+    }
+    
+    const option = options.find(opt => opt.id === formData.shippingMethod);
+    return option ? option.cost : 0;
+  };
+
+  const getAvailableShippingOptions = () => {
+    const destination = formData.shippingDestination;
+    
+    if (destination === 'domestic') {
+      return SHIPPING_OPTIONS.domestic;
+    } else {
+      return SHIPPING_OPTIONS.international[destination] || SHIPPING_OPTIONS.international.other;
+    }
+  };
+
+  const getTotalWithShipping = () => {
+    return total + getShippingCost();
+  };
+
   const handleChange = (e) => {
     let { name, value } = e.target;
 
@@ -33,7 +108,12 @@ export default function Checkout() {
     else if (name === 'cardCVV') value = formatCVV(value);
     else if (name === 'billingZip') value = value.replace(/\D/g, '');
 
-    setFormData({ ...formData, [name]: value });
+    // Reset shipping method when destination changes
+    if (name === 'shippingDestination') {
+      setFormData({ ...formData, [name]: value, shippingMethod: '' });
+    } else {
+      setFormData({ ...formData, [name]: value });
+    }
 
     if (validationErrors[name]) {
       setValidationErrors({ ...validationErrors, [name]: '' });
@@ -137,7 +217,10 @@ export default function Checkout() {
         customer_email: formData.customerEmail,
         customer_name: formData.customerName,
         shipping_address: formData.shippingAddress,
-        total_price: total,
+        shipping_destination: formData.shippingDestination,
+        shipping_method: formData.shippingMethod,
+        shipping_cost: getShippingCost(),
+        total_price: getTotalWithShipping(),
         card_number: formData.cardNumber,
         card_name: formData.cardName,
         card_expiry: formData.cardExpiry,
@@ -228,6 +311,66 @@ export default function Checkout() {
                 {validationErrors.shippingAddress && <p className="text-red-500 text-sm mt-1">{validationErrors.shippingAddress}</p>}
               </div>
             </div>
+
+            {/* Shipping Options Section */}
+            <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 mb-6 transition">
+              <h2 className="text-2xl font-bold mb-4 text-gray-900 dark:text-white">Shipping Destination</h2>
+
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-6">
+                {DESTINATION_REGIONS.map((region) => (
+                  <button
+                    key={region.id}
+                    type="button"
+                    onClick={() => setFormData({ ...formData, shippingDestination: region.id, shippingMethod: '' })}
+                    className={`p-3 rounded-lg border-2 transition text-sm font-medium ${
+                      formData.shippingDestination === region.id
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300'
+                        : 'border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:border-blue-300'
+                    }`}
+                  >
+                    <span className="text-lg mr-1">{region.flag}</span>
+                    {region.name}
+                  </button>
+                ))}
+              </div>
+
+              <h3 className="text-xl font-bold mb-4 text-gray-900 dark:text-white">Shipping Method</h3>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                {getAvailableShippingOptions().map((option) => (
+                  <div
+                    key={option.id}
+                    onClick={() => setFormData({ ...formData, shippingMethod: option.id })}
+                    className={`p-4 border-2 rounded-lg cursor-pointer transition ${
+                      formData.shippingMethod === option.id
+                        ? 'border-blue-500 bg-blue-50 dark:bg-blue-900/20'
+                        : 'border-gray-300 dark:border-gray-600 hover:border-blue-300'
+                    }`}
+                  >
+                    <div className="flex items-start gap-3">
+                      <div className="flex-shrink-0 mt-1">
+                        <div
+                          className={`w-4 h-4 rounded-full border-2 transition ${
+                            formData.shippingMethod === option.id
+                              ? 'border-blue-500 bg-blue-500'
+                              : 'border-gray-300 dark:border-gray-600'
+                          }`}
+                        />
+                      </div>
+                      <div className="flex-1">
+                        <div className="flex justify-between items-start mb-1">
+                          <p className="font-semibold text-gray-900 dark:text-white">{option.name}</p>
+                          <p className="text-lg font-bold text-blue-600 dark:text-blue-400">
+                            {option.cost === 0 ? 'FREE' : `$${option.cost.toFixed(2)}`}
+                          </p>
+                        </div>
+                        <p className="text-sm text-gray-600 dark:text-gray-400">{option.description}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-500 mt-1">Estimated: {option.days} business day(s)</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
 
             {/* Card Details Section */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 mb-6 transition">
@@ -421,8 +564,23 @@ export default function Checkout() {
               </div>
             ))}
             <div className="flex justify-between font-bold text-lg mt-4 pt-4 border-t dark:border-gray-700 text-gray-900 dark:text-white">
-              <span>Total:</span>
+              <span>Subtotal:</span>
               <span>${total.toFixed(0)}</span>
+            </div>
+            {formData.shippingMethod && (
+              <>
+                <div className="flex justify-between font-semibold text-sm mt-3 text-gray-700 dark:text-gray-300">
+                  <span>Shipping to {DESTINATION_REGIONS.find(r => r.id === formData.shippingDestination)?.name}:</span>
+                  <span>${getShippingCost().toFixed(2)}</span>
+                </div>
+                <div className="text-xs text-gray-600 dark:text-gray-400 mt-1">
+                  {getAvailableShippingOptions().find(opt => opt.id === formData.shippingMethod)?.name}
+                </div>
+              </>
+            )}
+            <div className="flex justify-between font-bold text-xl mt-4 pt-4 border-t dark:border-gray-700 text-gray-900 dark:text-white">
+              <span>Total:</span>
+              <span>${getTotalWithShipping().toFixed(0)}</span>
             </div>
           </div>
         </div>
