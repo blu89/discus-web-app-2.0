@@ -371,6 +371,7 @@ export default function Checkout() {
                   </div>
                 ))}
               </div>
+            </div>
 
             {/* Card Details Section */}
             <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow dark:shadow-gray-700 mb-6 transition">
