@@ -37,9 +37,9 @@ export const submitRefund = async (req, res) => {
     } = req.body;
 
     // Validate required fields
-    if (!customer_email || !refund_amount || !source) {
+    if (!customer_email || !refund_amount) {
       return res.status(400).json({ 
-        error: 'Missing required fields: customer_email, refund_amount, source' 
+        error: 'Missing required fields: customer_email, refund_amount' 
       });
     }
 
