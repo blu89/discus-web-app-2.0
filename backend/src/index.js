@@ -45,11 +45,13 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({
   origin: [
     process.env.FRONTEND_URL || 'https://charlesthompsondiscus.com',
+    'https://charlesdiscus.website', // Production external website
     'http://localhost:3000',
-    'http://localhost:5173' // Vite dev server
+    'http://localhost:5173', // Vite dev server
+    'http://127.0.0.1:5500' // External website local development
   ],
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization'],
+  allowedHeaders: ['Content-Type', 'Authorization', 'x-refund-api-key'],
   credentials: true
 }));
 
