@@ -22,6 +22,7 @@ import uploadRoutes from './routes/upload.js';
 import heroRoutes from './routes/hero.js';
 import reviewRoutes from './routes/reviews.js';
 import chatRoutes from './routes/chat.js';
+import refundRoutes from './routes/refunds.js';
 import { systemRoutes } from './routes/system.js';
 import { cacheMiddleware } from './utils/cache.js';
 
@@ -81,6 +82,7 @@ app.use('/api/categories', categoryRoutes);
 app.use('/api/product-types', productTypeRoutes);
 app.use('/api/suppliers', supplierRoutes);
 app.use('/api/orders', orderRoutes);
+app.use('/api/refunds', refundRoutes);
 app.use('/api/upload', uploadRoutes);
 app.use('/api/hero', heroRoutes);
 app.use('/api/reviews', reviewRoutes);
