@@ -105,6 +105,7 @@ export const submitRefund = async (req, res) => {
 
     res.status(201).json({
       message: 'Refund submitted successfully',
+      request_id: refund[0].id,
       refund: refund[0]
     });
   } catch (error) {
